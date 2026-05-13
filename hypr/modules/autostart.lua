@@ -1,0 +1,5 @@
+hl.on("hyprland.start", function()
+	hl.exec_cmd("swww-daemon -f xrgb")
+	hl.exec_cmd("waybar")
+	hl.exec_cmd("dusnt")
+end)

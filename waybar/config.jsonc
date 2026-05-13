@@ -1,5 +1,8 @@
 // -*- mode: jsonc -*-
 {
+    "output": [
+        "VGA-1"
+    ],
     "layer": "top",
     "height": 35,
     "margin-top": 5,
@@ -8,7 +11,7 @@
     "margin-right": 10,
     "spacing": 0,
     "modules-left": [
-        "hyprland/workspaces"
+        "hyprland/workspaces",
     ],
     "modules-center": [
         "clock"
@@ -134,6 +137,14 @@
         "format-wifi": "<span color='#90cdfa'>  </span>{essid}({signalStrength}%)",
         "format-ethernet": "{ipaddr}/{cidr} ",
         "format-disconnected": "<span color='#ff005f'>󰖪 </span>No Network",
-        "on-click": "kitty nmtui"
+        "on-click": "alacritty -e nmtui"
+    },
+    "custom/pomobar": {
+        "format": "{}",
+        "interval": 1,
+        "exec": "/home/ruben/Documents/pomobar/pomobar-client status",
+        "on-click": "/home/ruben/Documents/pomobar/pomobar-client pause",
+        "on-click-middle": "/home/ruben/Documents/pomobar/pomobar-client reset",
+        "return-type": "json"
     },
 }
