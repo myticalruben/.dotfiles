@@ -7,7 +7,8 @@ local menu          = "rofi -show drun -show-icons -theme launchpad"
 hl.bind(mod .. " + q"                   , hl.dsp.window.close())
 hl.bind(mod .. " + return"              , hl.dsp.exec_cmd(terminal))
 hl.bind(mod .. " + SHIFT + q"           , hl.dsp.exec_cmd("command shutdown now"))
-hl.bind(mod .. " + SHIFT + m"           , hl.dsp.exec_cmd(" command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"))
+hl.bind(mod .. " + SHIFT + m"           , hl.dsp.exit())
+hl.bind(mod .. " + SHIFT + r"           , hl.dsp.force_renderer_reload())
 
 hl.bind(mod .. " + space"               , hl.dsp.exec_cmd(menu))
 
@@ -32,8 +33,8 @@ hl.bind("XF86AudioPrev"                 , hl.dsp.exec_cmd("playerctl previous"),
 hl.bind("XF86AudioPause"                , hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPlay"                 , hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 
-for i = 1, 9 do
-	local key = i % 9
+for i = 1, 10 do
+	local key = i % 10
 	hl.bind(mod .. " + "          .. key  , hl.dsp.focus({ workspace = i }))
 	hl.bind(mod .. " + SHIFT + "  .. key  , hl.dsp.window.move({ workspace = i }))
 end
