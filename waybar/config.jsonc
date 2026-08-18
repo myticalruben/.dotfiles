@@ -1,150 +1,155 @@
 // -*- mode: jsonc -*-
 {
-    "output": [
-        "VGA-1"
-    ],
-    "layer": "top",
-    "height": 35,
-    "margin-top": 5,
-    "margin-left": 10,
-    "margin-bottom": 0,
-    "margin-right": 10,
-    "spacing": 0,
-    "modules-left": [
-        "hyprland/workspaces",
-    ],
-    "modules-center": [
-        "clock"
-    ],
-    "modules-right": [
-        "tray",
-        "network",
-        "cpu",
-        "memory",
-        "battery"
-    ],
-    // Modules configuration
-    // "sway/workspaces": {
-    //     "disable-scroll": true,
-    //     "all-outputs": true,
-    //     "warp-on-scroll": false,
-    //     "format": "{name}: {icon}",
-    //     "format-icons": {
-    //         "1": "",
-    //         "2": "",
-    //         "3": "",
-    //         "4": "",
-    //         "5": "",
-    //         "urgent": "",
-    //         "focused": "",
-    //         "default": ""
-    //     }
-    // },
-    "hyprland/workspaces": {
-        "format": "{icon}",
-        "on-click": "activate",
-        "all-outputs": true,
-        "persistent_workspaces": {
-            "1": [],
-            "2": [],
-            "3": [],
-            "4": [],
-            "5": [],
-            "6": [],
-            "7": [],
-            "8": [],
-            "9": [],
-            "10": []
-        },
-        "format-icons": {
-            "1": "1",
-            "2": "2",
-            "3": "3",
-            "4": "4",
-            "5": "5",
-            "6": "6",
-            "7": "7",
-            "8": "8",
-            "9": "9",
-            "10": "10"
-        }
+  "output": [
+    "eDP-1"
+  ],
+  "layer": "top",
+  "height": 24,
+  "spacing": 2,
+  "exclusive": false,
+  "modules-left": [
+    "cpu",
+    "memory",
+    "temperature",
+    "battery"
+  ],
+  "modules-center": [
+    "clock"
+  ],
+  "modules-right": [
+    "tray",
+
+    "network",
+
+    "pulseaudio",
+
+    "custom/power"
+  ],
+  // Modules configuration
+  // "sway/workspaces": {
+  //     "disable-scroll": true,
+  //     "all-outputs": true,
+  //     "warp-on-scroll": false,
+  //     "format": "{name}: {icon}",
+  //     "format-icons": {
+  //         "1": "",
+  //         "2": "",
+  //         "3": "",
+  //         "4": "",
+  //         "5": "",
+  //         "urgent": "",
+  //         "focused": "",
+  //         "default": ""
+  //     }
+  // },
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "all-outputs": true,
+    "persistent_workspaces": {
+      "1": [],
+      "2": [],
+      "3": [],
+      "4": [],
+      "5": [],
+      "6": [],
+      "7": [],
+      "8": [],
+      "9": [],
+      "10": [],
     },
-    "tray": {
-        // "icon-size": 21,
-        "spacing": 10,
-        // "icons": {
-        //   "blueman": "bluetooth",
-        //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
-        // }
+    "format-icons": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4",
+      "5": "5",
+      "6": "6",
+      "7": "7",
+      "8": "8",
+      "9": "9",
+      "10": "10",
     },
-    "clock": {
-        // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
-    },
-    "cpu": {
-        "format": "{usage}% ",
-        "tooltip": false
-    },
-    "memory": {
-        "format": "{}% "
-    },
-    "temperature": {
-        // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+  },
+  "tray": {
+    // "icon-size": 21,
+    "spacing": 10,
+    // "icons": {
+    //   "blueman": "bluetooth",
+    //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
+    // }
+  },
+  "clock": {
+        "format": "{:%H:%M}",
+        "tooltip-format": "<tt>{:%a %d %b %Y}</tt>"
+  },
+  "cpu": {
+        "format": "CPU {usage}%",
+        "interval": 2
+  },
+  "memory": {
+          "format": "RAM {percentage}%",
+        "tooltip-format": "{used} / {total}GiB",
+        "interval": 2
+  },
+  "temperature": {
+        "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",
         "critical-threshold": 80,
-        // "format-critical": "{temperatureC}°C {icon}",
-        "format": "{temperatureC}°C {icon}",
-        "format-icons": [
-            "",
-            "",
-            ""
-        ]
+        "format": " {temperatureC}°C",
+        "format-critical": " {temperatureC}°C",
+        "tooltip": true,
+        "tooltip-format": "CPU Temp: {temperatureC}°C",
+        "interval": 2
+  },
+
+  "battery": {
+    "states": {
+      // "good": 95,
+      "warning": 10,
+      "critical": 5,
     },
-    "battery": {
-        "states": {
-            // "good": 95,
-            "warning": 10,
-            "critical": 5
+    "format": " {capacity}% ",
+    "format-full": " {capacity}%",
+    "format-plugged": " {capacity}% ",
+    "format-alt": " {time} {icon}",
+    // "format-good": "", // An empty format will hide the module
+    // "format-full": "",
+    "format-charging": "<span color='#a8cd76'></span> {capacity}%",
+  },
+  
+  "battery#bat2": {
+    "bat": "BAT2",
+  },
+
+  "network": {
+    //"interface": "wlo1",
+    "format": "{ifname}",
+    "format-wifi": "<span color='#90cdfa'></span>{essid}({signalStrength}%)",
+    "format-ethernet": "{ipaddr}/{cidr} ",
+    "format-disconnected": "<span color='#ff005f'></span>No Network",
+    "on-click": "alacritty -e nmtui",
+  },
+  "custom/pomobar": {
+    "format": "{}",
+    "interval": 1,
+    "exec": "/home/ruben/Documents/pomobar/pomobar-client status",
+    "on-click": "/home/ruben/Documents/pomobar/pomobar-client pause",
+    "on-click-middle": "/home/ruben/Documents/pomobar/pomobar-client reset",
+    "return-type": "json",
+  },
+  "custom/power": {
+    "format": "⏻",
+    "tooltip": false,
+    "on-click": "wlogout -b 1 -c 20 -r 20 -L 1700 -R 1700 -T 325 -B 325"
+  },
+  "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "format-muted": "Muted",
+        "format-icons": {
+            "default": ["", "", ""]
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-charging": "<span color='#a8cd76'></span> {capacity}%",
-        "format-icons": [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
-        ],
-    },
-    "battery#bat2": {
-        "bat": "BAT2"
-    },
-    "network": {
-        //"interface": "wlo1",
-        "format": "{ifname}",
-        "format-wifi": "<span color='#90cdfa'>  </span>{essid}({signalStrength}%)",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "format-disconnected": "<span color='#ff005f'>󰖪 </span>No Network",
-        "on-click": "alacritty -e nmtui"
-    },
-    "custom/pomobar": {
-        "format": "{}",
-        "interval": 1,
-        "exec": "/home/ruben/Documents/pomobar/pomobar-client status",
-        "on-click": "/home/ruben/Documents/pomobar/pomobar-client pause",
-        "on-click-middle": "/home/ruben/Documents/pomobar/pomobar-client reset",
-        "return-type": "json"
-    },
+        "tooltip": false,
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+  },
 }

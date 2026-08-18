@@ -1,95 +1,113 @@
-/* # By knightfall01 on Github as a part of https://github.com/Knightfall01/Hyprland-config */
-
-
+/* General */
 * {
-  border: none;
-  font-family: 'JetBrainsMono Nerd Font' , 'Symbols Only';
-  font-size: 16px;
-  font-feature-settings: '"zero", "ss01", "ss02", "ss03", "ss04", "ss05", "cv31"';
-  min-height: 30px;
-  /* height: 30px; */
+    font-family: 'JetBrainsMono Nerd Font' , 'Symbols Only';
+    font-size: 11px;
+    min-height: 0;
 }
 
 window#waybar {
-  background: transparent;
+    min-height: 10px;
+    background-color: rgba(20, 20, 20, 0);
+    color: #ffffff;
 }
 
-#custom-arch, #workspaces {
-  border-radius: 10px;
-  background-color: #191a24;
-  color: #c0caf5;
-  margin-top: 5px;
-	margin-right: 15px;
-  padding-top: 1px;
-  padding-left: 10px;
-  padding-right: 10px;
+/* LEFT */
+.modules-left {
+    background-color: rgba(20, 20, 20, 0.5);
+    border-radius: 10px;
+    margin: 3px 0 3px 6px;
 }
 
-#custom-arch {
-  font-size: 20px;
-	margin-left: 15px;
+/* CENTER */
+.modules-center {
+    background-color: rgba(20, 20, 20, 0.5);
+    border-radius: 10px;
+    margin: 3px 0;
 }
 
-#workspaces button {
-  background: #191a24;
-  color: #c0caf5;
+/* RIGHT */
+.modules-right {
+    background-color: rgba(20, 20, 20, 0.5);
+    border-radius: 10px;
+    margin: 3px 6px 3px 0;
 }
 
-#workspaces button.active {
-  color: #2ac3de;
+/* Module spacing */
+#cpu,
+#memory,
+#custom-gpu,
+#clock,
+#pulseaudio,
+#mpris,
+#custom-power,
+#temperature ,
+#battery,
+#network{
+    padding: 0 10px;
+    margin: 0 2px;
 }
 
-#clock, #backlight, #custom-cava,#temperature, #cpu, #pulseaudio, #network, #battery, #memory ,#custom-playerctl{
-  border-radius: 10px;
-  background-color: #191a24;
-  color: #c0caf5;
-  margin-top: 5px;
-  padding-left: 9px;
-  padding-right: 9px;
-  margin-right: 15px;
+/* Power */
+#custom-power {
+    color: #ffffff;
+    font-size: 15px;
+    margin-right: 10px;
 }
 
-#tray{
-  margin-top: 5px;
-  padding-left: 9px;
-  padding-right: 9px;
-  margin-right: 15px;
+/* MPRIS */
+#mpris {
+    min-width: 0;
 }
 
-@keyframes blink {
-  to {
-    background-color: #ffffff;
-    color: black;
-  }
+/* Clock */
+#clock {
+    font-weight: bold;
 }
 
-#battery.warning:not(.charging) {
-  background: #f38ba8;
-  color: white;
-  animation-name: blink;
-  animation-duration: 0.5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
+/* Temperature */
+#temperature.critical {
+    color: #ff5555;
 }
 
-/* #pulseaudio { */
-/*   font-size: 20px; */
-/* 	margin-left: 15px; */
-/* } */
-
-#tray{
-  padding-right: 8px;
-  padding-left: 10px;
+/* Tooltip */
+tooltip {
+    background-color: rgba(20, 20, 20, 0.4);
+    color: #ffffff;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0);
+    border-radius: 25px;
 }
 
-/* #pulseaudio { */
-/*   border-radius: 10px; */
-/*   background-color: #11111b; */
-/*   color: #cba6f7; */
-/*   margin-top: 15px; */
-/* 	margin-right: 15px; */
-/*   padding-top: 1px; */
-/*   padding-left: 10px; */
-/*   padding-right: 10px; */
-/* } */
+tooltip label {
+    color: #ffffff;
+    font-size: 11px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Interactive hover effect */
+#cpu,
+#memory,
+#custom-gpu,
+#temperature,
+#clock,
+#pulseaudio,
+#mpris,
+#custom-power,
+#network,
+#battery {
+    transition: font-size 0.15s ease;
+}
+
+#cpu:hover,
+#memory:hover,
+#custom-gpu:hover,
+#temperature:hover,
+#clock:hover,
+#pulseaudio:hover,
+#mpris:hover,
+#custom-power:hover,
+#network:hover,
+#baterry:hover {
+    font-size: 14px;
+}
