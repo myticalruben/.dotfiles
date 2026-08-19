@@ -58,7 +58,10 @@ el AUR.
 Debian **stable** no aparece en la tabla a propósito: Hyprland es demasiado
 nuevo para él. Trixie o sid, o nada.
 
-Ver `manual.md` para qué hacer con cada entrada de "compilar".
+Ver `manual.md` para qué hacer con cada entrada de "compilar", y para el
+detalle del `PATH` que decide si algo de esto se puede lanzar siquiera desde
+la sesión: instalar un programa y que el atajo lo encuentre son dos problemas
+distintos.
 
 ## Añadir una dependencia
 

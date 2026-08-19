@@ -31,27 +31,70 @@ echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 Después, desde el repositorio:
 
 ```sh
-nix run home-manager/master -- switch --flake .#ruben-alexander -b backup
+nix run home-manager/master -- switch --flake .#ruben -b backup
 ```
 
 `-b backup` renombra a `.backup` cualquier archivo que estorbe, en vez de
 borrarlo. Tras la primera activación basta con
-`home-manager switch --flake .#ruben-alexander`.
+`home-manager switch --flake .#ruben`.
 
-## Cierra la sesión después de activar
+## El `PATH` de la sesión
 
-Una sesión de Hyprland ya en marcha heredó su `PATH` del momento en que
-entraste. Si instalaste Nix después, ese `PATH` no incluye
-`~/.nix-profile/bin`, y tus atajos seguirán abriendo los binarios de la
-distro aunque la activación haya ido bien.
+Nix instala todo en `~/.nix-profile/bin`, y **la sesión no tiene ese
+directorio en el `PATH`**. Conviene decirlo claro porque la respuesta
+intuitiva es la equivocada: esto **no** se arregla cerrando sesión. No es que
+el `PATH` se haya quedado viejo, es que nadie lo pone ahí nunca.
 
-Cierra sesión y vuelve a entrar. Para comprobarlo:
+El gestor de acceso ejecuta `/usr/bin/start-hyprland` directamente, sin ningún
+shell de login por medio. Así que `~/.profile` no se lee, el
+`hm-session-vars.sh` que escribe home-manager no se carga, y Hyprland arranca
+con el `PATH` pelado del sistema. Como `exec-once` y los atajos pasan por
+`/bin/sh -c`, todo lo que solo vive en Nix falla al arrancar **sin decir
+nada**: ni error en el log, ni notificación.
 
-```sh
-tr '\0' '\n' < /proc/$(pgrep -x Hyprland)/environ | grep ^PATH= | tr ':' '\n' | grep nix-profile
+El síntoma es una sesión a medio arrancar, que es justo lo que despista.
+`dunst`, `waybar`, `nm-applet` y `cliphist` sí salen, pero no desde Nix, sino
+desde la copia que Ubuntu deja en `/usr/bin`. Lo que se queda muerto es lo que
+solo aporta Nix —`awww` y `awww-daemon`, o sea ningún fondo de pantalla, y
+`quickshell` (SUPER+W)— más lo que vive en `~/.local/bin`: `hyprshot`
+(SUPER+O) y el script `volume`.
+
+`hypr/modules/envs.lua` lo arregla en la única capa que siempre se ejecuta, la
+config del propio compositor:
+
+```lua
+local extra = home .. "/.nix-profile/bin:" .. home .. "/.local/bin"
+if not path:find(extra, 1, true) then
+    hl.env("PATH", extra .. ":" .. path)
+end
 ```
 
-Si no imprime nada, la sesión todavía no ve los paquetes de Nix.
+Tres detalles que conviene no perder:
+
+- **Se calcula, no se escribe a mano.** El valor se construye a partir del
+  `PATH` con el que arrancó Hyprland, así que la misma línea no hace nada en
+  una máquina de `setup.py`, donde esos dos directorios no existen.
+- **Nix va primero**, para que gane la versión clavada sobre lo que la distro
+  dejara en `/usr/bin`, que es el propósito entero de este directorio.
+- **El guard no es adorno.** `env` fija la variable en el compositor y
+  sobrevive a `hyprctl reload`, que vuelve a leer la config. Sin el `find`,
+  cada reload apilaba otra copia del prefijo.
+
+`hl.env` llega a los procesos que lanza Hyprland, así que cubre por igual los
+`exec-once` y los atajos. Lo que **no** basta es un `home-manager switch`: la
+variable se fija cuando el compositor lee su config, de modo que hace falta un
+`hyprctl reload` o una sesión nueva.
+
+Para comprobarlo hay que mirar un proceso *hijo*, no el compositor:
+
+```sh
+tr '\0' '\n' < /proc/$(pgrep -x dunst)/environ | grep ^PATH= | tr ':' '\n' | grep nix-profile
+```
+
+Sobre `/proc/$(pgrep -x Hyprland)/environ` no sirve, y esa es una trampa fácil
+de pisar: ese archivo es una foto del entorno con el que se ejecutó el
+proceso, y no refleja los `setenv` posteriores. Saldría vacío aunque todo esté
+bien.
 
 ## En otra máquina
 
@@ -142,13 +185,14 @@ La solución es activar home-manager ahí:
 
 ```sh
 cd ~/.dotfiles
-nix run home-manager/master -- switch --flake .#ruben-alexander -b backup
+nix run home-manager/master -- switch --flake .#ruben -b backup
 ```
 
-Si el usuario de esa máquina no es `ruben-alexander`, cambia antes `username`
-y `homeDirectory` en `flake.nix`.
+Si el usuario de esa máquina no es `ruben`, cambia antes `username` y
+`homeDirectory` en `flake.nix`.
 
-Después, cierra sesión y vuelve a entrar (ver arriba), y compruébalo con:
+Después, `hyprctl reload` o una sesión nueva (ver **El `PATH` de la
+sesión**), y compruébalo con:
 
 ```sh
 command -v quickshell awww awww-daemon
@@ -168,4 +212,5 @@ Déjala como está.
 El closure completo ronda los **4.4 GiB**. `hyprshot` está deliberadamente
 fuera: depende de `hyprland`, que arrastra Qt 6 a través de
 `hyprland-qtutils`, así que un script de capturas de 60 KB costaba 640 MiB
-medidos. Lo aporta el paquete de la distro.
+medidos. Lo aporta el script suelto en `~/.local/bin`, que por eso está en el
+`PATH` que añade `envs.lua`.
