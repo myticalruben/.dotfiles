@@ -1,68 +1,156 @@
 # dotfiles
 
-Hyprland desktop configuration: Hyprland (Lua config), waybar, rofi, dunst,
-wlogout, quickshell, btop, kitty and neovim.
+Configuración de escritorio Hyprland: Hyprland (config en Lua), waybar, rofi,
+dunst, wlogout, quickshell, btop, kitty y neovim.
 
-## Install
+## Instalación
+
+Hay dos caminos. **Son alternativas, no capas**: los dos quieren ser dueños de
+`~/.config`, así que elige uno.
+
+### Con Nix (versiones clavadas)
+
+Instala las dependencias con las versiones exactas que registra `flake.lock`,
+de modo que otra máquina recibe *lo mismo*, no lo que traiga la distro esa
+semana. Ver [`nix/`](nix/README.md).
 
 ```sh
 git clone git@github.com:myticalruben/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./install.sh                # report what is missing, change nothing
-./install.sh --install      # install dependencies, then link the configs
+nix run home-manager/master -- switch --flake .#ruben-alexander -b backup
 ```
 
-`install.sh` detects Ubuntu, Debian and Arch. Only `--install` touches the
-system, and it asks before adding a third-party repository.
+Hyprland en sí **no** viene de Nix: sigue instalándose desde la distro. El
+porqué está explicado en [`nix/README.md`](nix/README.md).
 
-To link the configs without installing anything:
+### Con paquetes de la distro
 
 ```sh
-python3 setup.py            # safe to re-run; never deletes
-python3 setup.py --force    # also repoint symlinks aiming elsewhere
+./install.sh                # informa qué falta, no toca nada
+./install.sh --install      # instala dependencias y enlaza las configs
 ```
 
-`setup.py` symlinks each directory into `~/.config` (and `scripts/volume` into
-`~/.local/bin`). It refuses to touch real files and directories, so a machine
-with existing configs is never silently overwritten.
+`install.sh` detecta Ubuntu, Debian y Arch. Solo `--install` modifica el
+sistema, y pregunta antes de añadir un repositorio de terceros.
 
-## Per-machine settings
+Para enlazar las configs sin instalar nada:
 
-Everything in this repo is portable: no absolute paths, no hardcoded monitor
-names. Anything tied to one machine goes in one place:
+```sh
+python3 setup.py            # se puede repetir; nunca borra
+python3 setup.py --force    # además reapunta symlinks que apunten a otro sitio
+```
+
+## Atajos de teclado
+
+`MOD` es la tecla **Súper** (Windows). Definidos en
+[`hypr/modules/keysbindings.lua`](hypr/modules/keysbindings.lua).
+
+### Aplicaciones
+
+| Atajo | Acción |
+|---|---|
+| `MOD` + `Return` | Terminal (kitty) |
+| `MOD` + `D` | Lanzador de aplicaciones (rofi) |
+| `MOD` + `V` | Historial del portapapeles (cliphist + rofi) |
+| `MOD` + `W` | Selector de fondos de pantalla (quickshell) |
+| `MOD` + `O` | Captura de una región (hyprshot) |
+| `MOD` + `Tab` | Bloquear la pantalla (hyprlock) |
+| `MOD` + `` ` `` | Menú de apagado (wlogout) |
+| `MOD` + `Shift` + `W` | Mostrar u ocultar la waybar |
+
+### Capturas de pantalla
+
+| Atajo | Acción |
+|---|---|
+| `MOD` + `Impr` | Pantalla completa → `~/Pictures/<marca de tiempo>.png` |
+| `Impr` | Seleccionar región → `~/Pictures/<marca de tiempo>.png` |
+
+### Ventanas
+
+| Atajo | Acción |
+|---|---|
+| `MOD` + `Q` | Cerrar la ventana |
+| `MOD` + `F` | Pantalla completa |
+| `MOD` + `Shift` + `T` | Alternar flotante |
+| `MOD` + `Espacio` | Alternar flotante, y centrarla al 70% de la pantalla |
+| `MOD` + `H` `J` `K` `L` | Mover el foco: izquierda, abajo, arriba, derecha |
+| `MOD` + `Shift` + `H` `J` `K` `L` | Desplazar la ventana en esa dirección |
+| `MOD` + `Ctrl` + `H` `J` `K` `L` | Redimensionar en pasos de 10 px |
+| `MOD` + arrastrar con botón izquierdo | Mover la ventana |
+| `MOD` + arrastrar con botón derecho | Redimensionar la ventana |
+
+### Escritorios
+
+| Atajo | Acción |
+|---|---|
+| `MOD` + `1`…`0` | Ir al escritorio 1–10 |
+| `MOD` + `Shift` + `1`…`0` | Enviar la ventana a ese escritorio |
+| `MOD` + rueda del ratón | Escritorio anterior / siguiente |
+| `MOD` + `S` | Mostrar u ocultar el escritorio especial (*magic*) |
+| `MOD` + `Shift` + `S` | Enviar la ventana al escritorio especial |
+
+### Sesión
+
+| Atajo | Acción |
+|---|---|
+| `MOD` + `Shift` + `M` | Salir de Hyprland |
+| `MOD` + `Shift` + `R` | Reiniciar el equipo |
+| `MOD` + `Shift` + `Q` | Apagar el equipo |
+| `MOD` + `Ctrl` + `S` | Suspender |
+
+### Teclas multimedia y de hardware
+
+Funcionan también con la pantalla bloqueada.
+
+| Tecla | Acción |
+|---|---|
+| Subir / bajar volumen | `wpctl`, en pasos del 5% |
+| Silenciar | Silencia la salida de audio |
+| Silenciar micrófono | Silencia la entrada de audio |
+| Brillo arriba / abajo | `brightnessctl`, en pasos del 5% |
+| Reproducir / pausa | `playerctl` |
+| Pista anterior / siguiente | `playerctl` |
+
+### Desactivados
+
+Están en el archivo pero comentados: `MOD` + `F` para el gestor de archivos
+(choca con pantalla completa) y `MOD` + `O` para el selector de opacidad
+(choca con la captura de región).
+
+## Ajustes por máquina
+
+Todo el repositorio es portable: sin rutas absolutas, sin nombres de monitor
+fijos. Lo que depende de una máquina concreta va en un único sitio:
 
 ```sh
 cp hypr/modules/local.lua.example hypr/modules/local.lua
 ```
 
-`local.lua` is gitignored and loaded last, so it overrides the shared
-defaults. Use it for connector names, resolutions, scale and the wallpaper.
-Without it, the config still works: `modules/monitors.lua` applies a catch-all
-rule to every output.
+`local.lua` está en `.gitignore` y se carga el último, así que sobrescribe los
+valores compartidos. Sirve para nombres de conector, resoluciones, escala,
+fondo de pantalla y para fijar escritorios a monitores concretos.
 
-## Two ways to install
+Sin ese archivo la config también funciona: `modules/monitors.lua` aplica una
+regla comodín que vale para cualquier salida de vídeo.
 
-| | |
+## Dependencias
+
+Ver [`packages/`](packages/README.md). En resumen: ninguna distro las trae
+todas. Con Nix el problema casi desaparece;
+[`packages/manual.md`](packages/manual.md) cubre lo que hay que compilar a
+mano si vas por el camino de la distro.
+
+## Estructura
+
+| Ruta | |
 |---|---|
-| `install.sh` + `setup.py` | Distro packages, symlinked configs. What most machines here use. |
-| Nix + home-manager | Pinned versions via `flake.lock` — see [`nix/`](nix/README.md). |
+| `hypr/` | Hyprland, en Lua, dividido en `modules/` |
+| `waybar/`, `rofi/`, `dunst/`, `wlogout/` | Barra, lanzador, notificaciones, menú de apagado |
+| `quickshell/hyprquickpaper/` | Selector de fondos (`MOD` + `W`) |
+| `nvim/`, `btop/` | Editor y monitor del sistema |
+| `scripts/`, `hypr/scripts/` | Scripts auxiliares |
+| `packages/` | Manifiestos de dependencias por distro |
+| `nix/` | Configuración de home-manager |
 
-They are alternatives, not layers: both want to own `~/.config`, so pick one.
-
-## Dependencies
-
-See [`packages/`](packages/README.md). Short version: no distro packages
-everything. Ubuntu needs a PPA plus a handful of source builds, Arch leans on
-the AUR, and Debian stable is too old for Hyprland entirely.
-[`packages/manual.md`](packages/manual.md) covers what has to be built by hand.
-
-## Layout
-
-| Path | |
-|---|---|
-| `hypr/` | Hyprland, in Lua, split into `modules/` |
-| `waybar/`, `rofi/`, `dunst/`, `wlogout/` | bar, launcher, notifications, power menu |
-| `quickshell/hyprquickpaper/` | SUPER+W wallpaper picker |
-| `nvim/`, `btop/` | editor and system monitor |
-| `scripts/`, `hypr/scripts/` | helper scripts |
-| `packages/` | dependency manifests per distro |
+Los comentarios dentro del código siguen en inglés, que es el idioma de los
+proyectos que configuran; esta documentación está en español.

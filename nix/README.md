@@ -1,136 +1,216 @@
 # Nix + home-manager
 
-An alternative to `setup.py` that manages the same `~/.config` files, but with
-pinned versions: `flake.lock` records exact revisions of nixpkgs and
-home-manager, so another machine gets *the same* tools, not "whatever the
-distro ships today".
+Alternativa a `setup.py` que gestiona los mismos archivos de `~/.config`, pero
+con versiones clavadas: `flake.lock` registra revisiones exactas de nixpkgs y
+home-manager, así que otra máquina recibe *las mismas* herramientas, no "lo
+que traiga la distro hoy".
 
-**Pick one.** Do not run `setup.py` and home-manager at the same time - both
-want to own `~/.config/hypr` and home-manager refuses to clobber a symlink it
-did not create. Remove the `setup.py` links first (they are only symlinks;
-deleting them touches nothing in the repo).
+**Elige uno de los dos caminos.** No ejecutes `setup.py` y home-manager a la
+vez: ambos quieren ser dueños de `~/.config/hypr`, y home-manager se niega a
+pisar un symlink que no creó él. Si vienes de `setup.py`, borra antes sus
+enlaces: son solo symlinks, borrarlos no toca nada del repositorio.
 
-## Setup
+## Puesta en marcha
 
-Nix is not installed by this repo: it needs root, creates `/nix`, and adds a
-daemon. Install it yourself first - the Determinate installer is the usual
-choice, and unlike the upstream one it enables flakes by default:
+Este repositorio no instala Nix: necesita root, crea `/nix` y añade un daemon.
+Instálalo tú primero. El instalador de Determinate es el habitual y, a
+diferencia del oficial, deja los flakes activados de serie:
 
 ```sh
 curl -fsSL https://install.determinate.systems/nix | sh -s -- install
 ```
 
-Then, from the repo:
+Si usaste el instalador oficial, activa los flakes a mano o tendrás que pasar
+la bandera en cada comando:
 
 ```sh
-nix run home-manager/master -- switch --flake .#ruben-alexander
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 ```
 
-After the first activation, `home-manager switch --flake .#ruben-alexander` is
-enough. `nix develop` gives you a shell with home-manager on PATH without
-installing it into your profile.
+Después, desde el repositorio:
 
-## On another machine
+```sh
+nix run home-manager/master -- switch --flake .#ruben -b backup
+```
 
-Change `username` and `homeDirectory` in `flake.nix`, or add a second
-`homeConfigurations` entry and select it by name. `dotfiles` in `home.nix`
-assumes the checkout is at `~/.dotfiles`.
+`-b backup` renombra a `.backup` cualquier archivo que estorbe, en vez de
+borrarlo. Tras la primera activación basta con
+`home-manager switch --flake .#ruben`.
 
-## The configs stay editable
+## El `PATH` de la sesión
 
-`home.nix` links with `mkOutOfStoreSymlink`, not the default copy-into-the-
-store. So `~/.config/hypr/hyprland.lua` still points back into this repo and
-editing it still edits the checkout - the same workflow `setup.py` gave you.
+Nix instala todo en `~/.nix-profile/bin`, y **la sesión no tiene ese
+directorio en el `PATH`**. Conviene decirlo claro porque la respuesta
+intuitiva es la equivocada: esto **no** se arregla cerrando sesión. No es que
+el `PATH` se haya quedado viejo, es que nadie lo pone ahí nunca.
 
-The usual home-manager behaviour would copy the files into `/nix/store` as
-read-only, and every edit would mean `home-manager switch`. That is more
-rigorous and much more annoying for a config you tune daily.
+El gestor de acceso ejecuta `/usr/bin/start-hyprland` directamente, sin ningún
+shell de login por medio. Así que `~/.profile` no se lee, el
+`hm-session-vars.sh` que escribe home-manager no se carga, y Hyprland arranca
+con el `PATH` pelado del sistema. Como `exec-once` y los atajos pasan por
+`/bin/sh -c`, todo lo que solo vive en Nix falla al arrancar **sin decir
+nada**: ni error en el log, ni notificación.
 
-## How the packages are split
+El síntoma es una sesión a medio arrancar, que es justo lo que despista.
+`dunst`, `waybar`, `nm-applet` y `cliphist` sí salen, pero no desde Nix, sino
+desde la copia que Ubuntu deja en `/usr/bin`. Lo que se queda muerto es lo que
+solo aporta Nix —`awww` y `awww-daemon`, o sea ningún fondo de pantalla, y
+`quickshell` (SUPER+W)— más lo que vive en `~/.local/bin`: `hyprshot`
+(SUPER+O) y el script `volume`.
 
-Everything the configs invoke now comes from Nix, in two groups.
+`hypr/modules/envs.lua` lo arregla en la única capa que siempre se ejecuta, la
+config del propio compositor:
 
-**No GPU involved** — installed as-is: `cliphist`, `wl-clipboard`, `grim`,
-`slurp`, `playerctl`, `brightnessctl`, `pulseaudio` (pactl), `wireplumber`
-(wpctl), `jq`, `imagemagick`, `btop`, `neovim`, `awww`.
+```lua
+local extra = home .. "/.nix-profile/bin:" .. home .. "/.local/bin"
+if not path:find(extra, 1, true) then
+    hl.env("PATH", extra .. ":" .. path)
+end
+```
 
-**Opens windows** — wrapped with [nixGL](https://github.com/nix-community/nixGL):
+Tres detalles que conviene no perder:
+
+- **Se calcula, no se escribe a mano.** El valor se construye a partir del
+  `PATH` con el que arrancó Hyprland, así que la misma línea no hace nada en
+  una máquina de `setup.py`, donde esos dos directorios no existen.
+- **Nix va primero**, para que gane la versión clavada sobre lo que la distro
+  dejara en `/usr/bin`, que es el propósito entero de este directorio.
+- **El guard no es adorno.** `env` fija la variable en el compositor y
+  sobrevive a `hyprctl reload`, que vuelve a leer la config. Sin el `find`,
+  cada reload apilaba otra copia del prefijo.
+
+`hl.env` llega a los procesos que lanza Hyprland, así que cubre por igual los
+`exec-once` y los atajos. Lo que **no** basta es un `home-manager switch`: la
+variable se fija cuando el compositor lee su config, de modo que hace falta un
+`hyprctl reload` o una sesión nueva.
+
+Para comprobarlo hay que mirar un proceso *hijo*, no el compositor:
+
+```sh
+tr '\0' '\n' < /proc/$(pgrep -x dunst)/environ | grep ^PATH= | tr ':' '\n' | grep nix-profile
+```
+
+Sobre `/proc/$(pgrep -x Hyprland)/environ` no sirve, y esa es una trampa fácil
+de pisar: ese archivo es una foto del entorno con el que se ejecutó el
+proceso, y no refleja los `setenv` posteriores. Saldría vacío aunque todo esté
+bien.
+
+## En otra máquina
+
+Cambia `username` y `homeDirectory` en `flake.nix`, o añade una segunda
+entrada en `homeConfigurations` y selecciónala por nombre. `home.nix` da por
+supuesto que el repositorio está en `~/.dotfiles`.
+
+## Las configs se siguen editando en su sitio
+
+`home.nix` enlaza con `mkOutOfStoreSymlink`, no copiando al store. Así
+`~/.config/hypr/hyprland.lua` sigue apuntando al repositorio y editarlo sigue
+editando el checkout: el mismo flujo que daba `setup.py`.
+
+El comportamiento normal de home-manager sería copiar los archivos a
+`/nix/store` en solo lectura, y entonces cada retoque exigiría un `switch`.
+Más riguroso y mucho más incómodo para una configuración que tocas a diario.
+
+Efecto secundario: `~/.config` sigue **la rama de git que tengas activa**.
+
+## Cómo se reparten los paquetes
+
+Todo lo que invocan las configs viene de Nix, en dos grupos.
+
+**Sin GPU de por medio**, instalados tal cual: `cliphist`, `wl-clipboard`,
+`grim`, `slurp`, `playerctl`, `brightnessctl`, `pulseaudio` (pactl),
+`wireplumber` (wpctl), `jq`, `imagemagick`, `btop`, `neovim`, `awww`.
+
+**Abren ventanas**, envueltos con [nixGL](https://github.com/nix-community/nixGL):
 `waybar`, `rofi`, `kitty`, `alacritty`, `dunst`, `wlogout`, `quickshell`,
 `pavucontrol`, `networkmanagerapplet`, `brave`.
 
-The wrapping matters because this is not NixOS. Those programs were built
-against nixpkgs' Mesa, while the kernel and drivers come from Ubuntu; without
-nixGL they typically die at startup with a GL or EGL error. `wrapGL` in
-`home.nix` replaces each binary with a shim that execs it through
-`nixGLIntel`, and symlinks everything else (`.desktop` files, icons, shares)
-through untouched.
+El envoltorio importa porque esto no es NixOS. Esos programas se compilaron
+contra la Mesa de nixpkgs, mientras que el núcleo y los drivers vienen de
+Ubuntu; sin nixGL se caen al arrancar con un error de GL o EGL. `wrapGL`, en
+`home.nix`, sustituye cada binario por un shim que lo lanza a través de
+`nixGLIntel`, y deja pasar intacto todo lo demás: archivos `.desktop`, iconos
+y datos compartidos.
 
-Both machines here use integrated graphics, which is the case Mesa and nixGL
-handle cleanly. NVIDIA is where this gets painful, and would need
-`nixGLNvidia` and a driver version that matches the host exactly.
+Ambas máquinas usan gráficos integrados, que es el caso que Mesa y nixGL
+resuelven limpio. Con NVIDIA esto se complica bastante: haría falta
+`nixGLNvidia` y una versión de driver que coincida exactamente con la del
+sistema.
 
-## Why the compositor is not in that list
+### Comprobado
 
-Hyprland itself still comes from Ubuntu, and this is deliberate. It is not
-missing from nixpkgs - it is there, the same 0.56.2 - the reason is the
-failure mode. A terminal that will not start is an annoyance you fix from
-another terminal. A compositor that will not start leaves you with no session
-to fix it from.
+Medido en esta máquina, no supuesto:
 
-It also has to be found by the login manager, which reads session files from
-`/usr/share/wayland-sessions`. That is outside both home-manager's reach and
-this repo's `~/.config` scope.
+| | Sin envolver | Envuelto en nixGL |
+|---|---|---|
+| alacritty | `exit=1`, `NotSupported("provided display handle is not supported")` | `exit=0` |
+| kitty | `exit=1` | `exit=0` |
 
-To move it anyway: add `hyprland` to the wrapped list, write a session file
-pointing at the wrapped binary, and **keep the Ubuntu package installed** so
-there is always a session that boots.
+La prueba en una máquina nueva es esa misma: lanzar `alacritty -e true` por
+las dos vías y comparar los códigos de salida.
 
-## On the desktop machine
+## Por qué el compositor no está en esa lista
 
-Ubuntu with integrated graphics, so the same split applies unchanged. Clone to
-`~/.dotfiles`, adjust `username` and `homeDirectory` in `flake.nix` if the
-account differs, and activate. Hyprland itself still comes from
-`packages/ubuntu.txt` (the `cppiber` PPA).
+Hyprland se sigue instalando desde la distro, y es a propósito. No es que
+falte en nixpkgs —está, la misma versión 0.56.2—; el motivo es el modo de
+fallo. Un terminal que no arranca es una molestia que arreglas desde otro
+terminal. Un compositor que no arranca te deja sin sesión desde la que
+arreglarlo.
+
+Además tiene que encontrarlo el gestor de sesión, que lee los archivos de
+`/usr/share/wayland-sessions`. Eso queda fuera del alcance de home-manager y
+fuera del `~/.config` que cubre este repositorio.
+
+Si aun así lo quieres desde Nix: añade `hyprland` a la lista envuelta, escribe
+un archivo de sesión que apunte al binario envuelto y **mantén instalado el
+paquete de la distro**, para tener siempre una sesión que arranque.
+
+## Solución de problemas
+
+### `install.sh` dice que faltan quickshell, awww o awww-daemon
+
+No faltan: los trae home-manager. `install.sh` solo mira los paquetes de la
+distro, no sabe nada de Nix, así que los da por ausentes hasta que activas
+home-manager en esa máquina.
+
+Los tres salen de dos paquetes de este `home.nix`:
+
+| Comando | Paquete de Nix |
+|---|---|
+| `quickshell`, `qs` | `quickshell`, envuelto en nixGL |
+| `awww`, `awww-daemon` | `awww` (nixpkgs renombró `swww` a `awww`) |
+
+La solución es activar home-manager ahí:
+
+```sh
+cd ~/.dotfiles
+nix run home-manager/master -- switch --flake .#ruben -b backup
+```
+
+Si el usuario de esa máquina no es `ruben`, cambia antes `username` y
+`homeDirectory` en `flake.nix`.
+
+Después, `hyprctl reload` o una sesión nueva (ver **El `PATH` de la
+sesión**), y compruébalo con:
+
+```sh
+command -v quickshell awww awww-daemon
+```
+
+Las tres rutas deben empezar por `~/.nix-profile/bin`.
 
 ## stateVersion
 
-`home.stateVersion = "24.11"` in `home.nix` is **not** "the version I want".
-It is the release whose defaults this config was written against, and changing
-it later can silently alter behaviour. Leave it.
+`home.stateVersion = "24.11"` en `home.nix` **no** significa "la versión que
+quiero". Es la release contra cuyos valores por defecto se escribió esta
+configuración, y cambiarla después puede alterar comportamientos en silencio.
+Déjala como está.
 
-## Verification
+## Tamaño
 
-Evaluated in a `nixos/nix` container and then activated for real on the Ubuntu
-machine:
-
-- the flake resolves its inputs and evaluates to the same derivation path in
-  the container and on the host - deterministic across machines
-- controls confirm the evaluation is meaningful: a bogus option fails with
-  ``The option `xdg.opcionQueNoExiste' does not exist``, and a bogus package
-  name fails too
-- all 11 CLI packages resolve to concrete versions at the locked revision
-- `activate` ran and the generation is live. The six configs setup.py already
-  owned were reported "skipped since they are the same", confirming the two
-  approaches produce identical link targets
-- the out-of-store design holds: `~/.config/hypr` resolves through the store
-  back to `~/.dotfiles/hypr`, `hyprland.lua` has the **same inode** as the
-  file in the checkout, and it is writable. Editing through `~/.config` still
-  edits the repo
-- `hyprland --verify-config` still passes after activation
-
-### A wrinkle worth knowing
-
-`hyprshot` depends on `hyprland`, which pulls `hyprland-qtutils` and with it
-Qt 6 - so a 60 KB screenshot script drags in the compositor. It has been
-dropped from `home.packages`; the distro package at `/usr/local/bin` provides
-it instead.
-
-Measured, not estimated:
-
-| | Closure |
-|---|---|
-| with `hyprshot` | 1.6 GiB |
-| without | **1005 MiB** |
-
-So it cost about 640 MiB in practice, less than the 1.2 GiB its own closure
-suggests, because `imagemagick`, `cliphist` and GTK share much of the rest.
+El closure completo ronda los **4.4 GiB**. `hyprshot` está deliberadamente
+fuera: depende de `hyprland`, que arrastra Qt 6 a través de
+`hyprland-qtutils`, así que un script de capturas de 60 KB costaba 640 MiB
+medidos. Lo aporta el script suelto en `~/.local/bin`, que por eso está en el
+`PATH` que añade `envs.lua`.
