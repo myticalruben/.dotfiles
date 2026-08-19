@@ -87,14 +87,31 @@ it later can silently alter behaviour. Leave it.
 
 ## Verification
 
-Everything here was checked in a `nixos/nix` container, never on this machine:
+Evaluated in a `nixos/nix` container and then activated for real on the Ubuntu
+machine:
 
-- the flake resolves its inputs and the configuration evaluates to a
-  derivation, deterministically before and after `flake.lock`
+- the flake resolves its inputs and evaluates to the same derivation path in
+  the container and on the host - deterministic across machines
 - controls confirm the evaluation is meaningful: a bogus option fails with
   ``The option `xdg.opcionQueNoExiste' does not exist``, and a bogus package
   name fails too
 - all 11 CLI packages resolve to concrete versions at the locked revision
+- `activate` ran and the generation is live. The six configs setup.py already
+  owned were reported "skipped since they are the same", confirming the two
+  approaches produce identical link targets
+- the out-of-store design holds: `~/.config/hypr` resolves through the store
+  back to `~/.dotfiles/hypr`, `hyprland.lua` has the **same inode** as the
+  file in the checkout, and it is writable. Editing through `~/.config` still
+  edits the repo
+- `hyprland --verify-config` still passes after activation
 
-Not verified: an actual `home-manager switch`, which needs Nix installed on a
-real machine.
+### A wrinkle worth knowing
+
+The closure is **1.6 GiB**, and `hyprshot` alone accounts for 1.2 GiB of it:
+it depends on `hyprland` (1.1 GiB), which pulls `hyprland-qtutils` and with it
+Qt 6. A 60 KB screenshot script drags in the compositor.
+
+Ubuntu already provides `hyprshot` at `/usr/local/bin`. Dropping it from
+`home.packages` cuts the closure to roughly 400 MiB, at the cost of that one
+tool no longer being pinned. It is left in for now - the trade is a judgement
+call, not an obvious win either way.
