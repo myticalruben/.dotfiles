@@ -10,3 +10,8 @@ require("modules.animations")
 require("modules.window_rules")
 require("modules.keysbindings")
 require("modules.workspaces_rules")
+
+-- Machine-specific overrides. Not versioned, optional: pcall keeps the config
+-- working on a fresh machine where modules/local.lua does not exist yet.
+-- See modules/local.lua.example.
+pcall(require, "modules.local")

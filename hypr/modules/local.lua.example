@@ -1,0 +1,31 @@
+-- Machine-specific settings.
+--
+--   cp modules/local.lua.example modules/local.lua
+--
+-- local.lua is gitignored on purpose: it is the ONLY file that should ever
+-- contain values tied to one particular machine (connector names, resolutions,
+-- scale factors, absolute paths). Everything else in this repo must stay
+-- portable so the same commit works on every box.
+--
+-- The file is loaded last, so anything here overrides the shared defaults.
+
+-- Startup wallpaper. Defaults to ~/Pictures/Wallpapers/01.png.
+-- wallpaper = os.getenv("HOME") .. "/Pictures/Wallpapers/01.png"
+
+-- Monitor overrides. modules/monitors.lua already applies a catch-all rule to
+-- every output, so you only need this when a specific screen needs specific
+-- settings. Run `hyprctl monitors` to see the connector names on this machine.
+--
+-- hl.monitor({
+-- 	output = "eDP-1",
+-- 	mode = "1920x1080@60",
+-- 	position = "auto",
+-- 	scale = "1",
+-- })
+--
+-- hl.monitor({
+-- 	output = "HDMI-A-1",
+-- 	mode = "preferred",
+-- 	position = "auto-right",
+-- 	scale = "1",
+-- })
