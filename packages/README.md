@@ -1,63 +1,67 @@
-# Dependencies
+# Dependencias
 
-Linking the configs is the easy half. The hard half is that these dotfiles
-depend on ~30 programs, and the set of distros that package all of them is
-empty. This directory is the honest map of that gap.
+Enlazar las configuraciones es la mitad fácil. La difícil es que estos
+dotfiles dependen de unos 30 programas, y el conjunto de distros que empaqueta
+todos ellos está vacío. Este directorio es el mapa honesto de ese hueco.
 
-## Files
+Si usas el camino de Nix, casi todo esto deja de importarte: ver
+[`../nix/README.md`](../nix/README.md).
 
-| File | What it is |
+## Archivos
+
+| Archivo | Qué es |
 |---|---|
-| `required-commands.txt` | Runtime deps as **commands**, not package names. The source of truth: `install.sh --check` reads it. |
-| `ubuntu.txt` | apt names for Ubuntu 24.04. **Verified** against `apt-cache` on a working machine. |
-| `ubuntu-ppa.txt` | PPAs `ubuntu.txt` depends on. |
-| `debian.txt` | apt names for Debian trixie/sid. **Unverified.** |
-| `arch.txt` | pacman names. **Unverified.** |
-| `arch-aur.txt` | AUR names. **Unverified.** `install.sh` prints these rather than installing them. |
-| `manual.md` | The ones no distro packages at all. |
+| `required-commands.txt` | Dependencias como **comandos**, no como nombres de paquete. Es la fuente de verdad: `install.sh --check` lo lee. |
+| `ubuntu.txt` | Nombres de apt para Ubuntu 24.04. **Verificados** con `apt-cache` en una máquina real. |
+| `ubuntu-ppa.txt` | PPAs de los que depende `ubuntu.txt`. |
+| `debian.txt` | Nombres de apt para Debian trixie/sid. **Nombres verificados, instalación sin probar** (ver el propio archivo). |
+| `arch.txt` | Nombres de pacman. **Sin verificar.** |
+| `arch-aur.txt` | Nombres del AUR. **Sin verificar.** `install.sh` los imprime en vez de instalarlos. |
+| `manual.md` | Los que ninguna distro empaqueta. |
 
-"Unverified" means the names were derived, not checked on that distro. Run
-`./install.sh --verify-names` on the target machine: it reports every name the
-local package manager cannot resolve, changes nothing, and turns the guesswork
-into a fixed list.
+"Sin verificar" significa que los nombres se dedujeron, no se comprobaron en
+esa distro. Ejecuta `./install.sh --verify-names` en la máquina destino: lista
+todos los nombres que el gestor de paquetes local no sabe resolver, no cambia
+nada, y convierte la conjetura en una lista concreta.
 
-## Usage
+## Uso
 
 ```sh
-./install.sh              # report what is missing, change nothing
-./install.sh --verify-names   # check the package names resolve here
-./install.sh --install    # add repos, install, then link the configs
+./install.sh                  # informa qué falta, no toca nada
+./install.sh --verify-names   # comprueba que los nombres resuelven aquí
+./install.sh --install        # añade repos, instala y enlaza las configs
 ```
 
-`--install` is the only mode that touches the system, and it asks before
-adding a PPA.
+`--install` es el único modo que modifica el sistema, y pregunta antes de
+añadir un PPA.
 
-## Availability
+## Disponibilidad
 
-The uncomfortable summary: **no distro gets you all the way**. Ubuntu needs a
-PPA plus five manual builds; Arch covers the most but leans on the AUR.
+El resumen incómodo: **ninguna distro te lleva hasta el final**. Ubuntu
+necesita un PPA y cinco compilaciones a mano; Arch cubre más, pero se apoya en
+el AUR.
 
-| Dependency | Ubuntu 24.04 | Debian trixie | Arch |
+| Dependencia | Ubuntu 24.04 | Debian trixie | Arch |
 |---|---|---|---|
 | hyprland, hyprlock | PPA `cppiber` | repos | repos |
-| waybar | PPA (0.14; archive has older) | repos | repos |
+| waybar | PPA (0.14; el archivo trae una anterior) | repos | repos |
 | wlogout, cliphist, dunst | universe | repos | AUR (wlogout) / repos |
 | kitty, thunar, btop, grim, slurp, jq | universe | repos | repos |
 | alacritty | PPA `aslatter` | repos | repos |
-| rofi **(Wayland fork)** | build from source | build from source | `rofi-wayland` |
-| quickshell | build from source | build from source | AUR |
-| awww / swww | build from source | build from source | AUR (`swww`) |
-| hyprshot | drop in the script | drop in the script | AUR |
-| neovim (recent enough) | upstream tarball | repos | repos |
-| brave | own apt repo | own apt repo | AUR |
+| rofi **(fork con Wayland)** | compilar | compilar | `rofi-wayland` |
+| quickshell | compilar | compilar | AUR |
+| awww / swww | compilar | compilar | AUR (`swww`) |
+| hyprshot | copiar el script | copiar el script | AUR |
+| neovim (suficientemente nuevo) | tarball oficial | repos | repos |
+| brave | repo apt propio | repo apt propio | AUR |
 
-Debian **stable** is not on this table on purpose: Hyprland is far too new for
-it. Trixie or sid, or nothing.
+Debian **stable** no aparece en la tabla a propósito: Hyprland es demasiado
+nuevo para él. Trixie o sid, o nada.
 
-See `manual.md` for what to do about each build-from-source entry.
+Ver `manual.md` para qué hacer con cada entrada de "compilar".
 
-## Adding a dependency
+## Añadir una dependencia
 
-1. Add the command to `required-commands.txt` with what breaks without it.
-2. Add the package name to each distro file that has one.
-3. If no distro packages it, write it up in `manual.md` instead.
+1. Añade el comando a `required-commands.txt`, con qué se rompe sin él.
+2. Añade el nombre de paquete a cada archivo de distro que lo tenga.
+3. Si ninguna distro lo empaqueta, documéntalo en `manual.md`.
