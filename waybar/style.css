@@ -42,7 +42,8 @@ window#waybar {
 #custom-power,
 #temperature ,
 #battery,
-#network{
+#network,
+#tray{
     padding: 0 10px;
     margin: 0 2px;
 }
@@ -95,7 +96,8 @@ tooltip label {
 #mpris,
 #custom-power,
 #network,
-#battery {
+#battery,
+#tray {
     transition: font-size 0.15s ease;
 }
 
@@ -108,6 +110,7 @@ tooltip label {
 #mpris:hover,
 #custom-power:hover,
 #network:hover,
-#baterry:hover {
+#baterry:hover,
+#tray:hover {
     font-size: 14px;
 }

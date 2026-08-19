@@ -19,8 +19,6 @@
   "modules-right": [
     "tray",
 
-    "network",
-
     "pulseaudio",
 
     "custom/power"
