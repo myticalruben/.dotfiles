@@ -1,0 +1,11 @@
+# Arch AUR packages. install.sh does NOT install these: it prints them and
+# leaves the choice of helper (paru, yay, makepkg) to you, because an AUR
+# helper builds and runs arbitrary upstream PKGBUILDs.
+#
+# UNVERIFIED, same caveat as arch.txt.
+
+wlogout
+hyprshot
+quickshell-git
+swww
+brave-bin
