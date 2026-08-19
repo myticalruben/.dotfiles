@@ -24,7 +24,7 @@
       };
 
       # Change these two on a new machine, or add a second entry below.
-      username = "ruben-alexander";
+      username = "ruben";
       homeDirectory = "/home/${username}";
     in
     {
