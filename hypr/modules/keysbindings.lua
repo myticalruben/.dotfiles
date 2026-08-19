@@ -40,7 +40,7 @@ hl.bind(mod .. " + W", hl.dsp.exec_cmd("quickshell -c hyprquickpaper"))
 
 
 -- Toggle waybar
-hl.bind(mod .. " + SHIFT + W"			, hl.dsp.exec_cmd("sh -c 'pgrep -x waybar >/dev/null && pkill waybar || nohup waybar >/dev/null 2>&1 &'"))
+hl.bind(mod .. " + SHIFT + W"			, hl.dsp.exec_cmd("sh -c 'pkill waybar || nohup waybar >/dev/null 2>&1 &'"))
 
 -- Screenshots
 hl.bind(mod .. " + Print"				, hl.dsp.exec_cmd("grim " .. home .. "/Pictures/$(date +%s).png"))
