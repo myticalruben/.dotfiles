@@ -107,11 +107,17 @@ machine:
 
 ### A wrinkle worth knowing
 
-The closure is **1.6 GiB**, and `hyprshot` alone accounts for 1.2 GiB of it:
-it depends on `hyprland` (1.1 GiB), which pulls `hyprland-qtutils` and with it
-Qt 6. A 60 KB screenshot script drags in the compositor.
+`hyprshot` depends on `hyprland`, which pulls `hyprland-qtutils` and with it
+Qt 6 - so a 60 KB screenshot script drags in the compositor. It has been
+dropped from `home.packages`; the distro package at `/usr/local/bin` provides
+it instead.
 
-Ubuntu already provides `hyprshot` at `/usr/local/bin`. Dropping it from
-`home.packages` cuts the closure to roughly 400 MiB, at the cost of that one
-tool no longer being pinned. It is left in for now - the trade is a judgement
-call, not an obvious win either way.
+Measured, not estimated:
+
+| | Closure |
+|---|---|
+| with `hyprshot` | 1.6 GiB |
+| without | **1005 MiB** |
+
+So it cost about 640 MiB in practice, less than the 1.2 GiB its own closure
+suggests, because `imagemagick`, `cliphist` and GTK share much of the rest.
