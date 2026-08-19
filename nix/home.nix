@@ -35,40 +35,74 @@ in
   home.file.".local/bin/volume".source = link "scripts/volume";
 
   # ------------------------------------------------------------ packages ---
-  # Only command-line tools here. See the note below before adding GUI apps.
+  # Everything the configs invoke, from Nix. Split in two because a non-NixOS
+  # host makes one half harder than the other.
 
-  # hyprshot is deliberately absent: it depends on hyprland, which pulls in Qt 6
-  # via hyprland-qtutils, so a 60 KB screenshot script costs 1.2 GiB of closure.
-  # The distro package provides it instead - see ../packages/manual.md.
-  home.packages = with pkgs; [
-    # clipboard, screenshots, media, audio, power
-    cliphist
-    wl-clipboard
-    grim
-    slurp
-    playerctl
-    brightnessctl
-    pulseaudio      # provides pactl, used by scripts/volume
-    # misc tooling the configs shell out to
-    jq
-    imagemagick     # provides "magick"; cache.sh accepts either name
-    btop
-  ];
+  home.packages =
+    let
+      # Programs that open a window need the host's GPU drivers, not the Mesa
+      # that nixpkgs built them against. nixGL injects the former at launch.
+      # This machine and the desktop both use integrated graphics, which is
+      # the case Mesa/nixGL handles cleanly.
+      nixGL = lib.getExe pkgs.nixgl.nixGLIntel;
 
-  # --- Why the GUI applications are not in that list -----------------------
+      wrapGL = pkg: pkgs.runCommand "${pkg.name}-nixgl" { } ''
+        mkdir -p $out/bin
+        # Keep everything except bin/ as-is: .desktop files, icons, shares.
+        for d in ${pkg}/*; do
+          [ "$(basename "$d")" = bin ] || ln -s "$d" "$out/$(basename "$d")"
+        done
+        for bin in ${pkg}/bin/*; do
+          out_bin="$out/bin/$(basename "$bin")"
+          printf '#!/bin/sh\nexec %s "%s" "$@"\n' ${nixGL} "$bin" > "$out_bin"
+          chmod +x "$out_bin"
+        done
+      '';
+    in
+    # --- no GPU involved: safe as-is ---
+    (with pkgs; [
+      cliphist
+      wl-clipboard
+      grim
+      slurp
+      playerctl
+      brightnessctl
+      pulseaudio        # pactl, used by scripts/volume
+      wireplumber       # wpctl, used by the volume keybinds
+      jq
+      imagemagick
+      btop
+      neovim
+      awww              # the fork the config calls; nixpkgs renamed swww to this
+    ])
+    ++
+    # --- opens windows: wrapped so it finds the host drivers ---
+    (map wrapGL (with pkgs; [
+      waybar
+      rofi
+      kitty
+      alacritty
+      dunst
+      wlogout
+      quickshell
+      pavucontrol
+      networkmanagerapplet   # nm-applet
+      brave
+    ]));
+
+  # --- The compositor is deliberately NOT here ---------------------------
   #
-  # This is a non-NixOS machine, so anything that talks to the GPU (the
-  # compositor, terminals, quickshell, waybar) would be built against the
-  # nixpkgs Mesa while the running kernel and drivers come from Ubuntu. The
-  # usual symptom is a GL/EGL failure at startup rather than a clean error.
+  # Hyprland itself still comes from Ubuntu. Not because it is missing from
+  # nixpkgs - it is there, same 0.56.2 - but because of the failure mode: a
+  # compositor that will not start leaves you with no session to fix it from,
+  # while a terminal that will not start is an annoyance you fix from another
+  # terminal.
   #
-  # The fix is nixGL (github:nix-community/nixGL), which wraps a program so it
-  # picks up the host's drivers. This machine is Intel/Mesa, which is the case
-  # nixGL handles best - NVIDIA is where it gets painful.
+  # It also has to be found by the login manager, which reads session files
+  # from /usr/share/wayland-sessions. That is outside home-manager's scope
+  # and outside the ~/.config scope of this repo.
   #
-  # Deliberate split: keep the compositor and GUI apps coming from Ubuntu's
-  # packages (packages/ubuntu.txt), and let Nix own the configs and the CLI
-  # tools. That is the boring combination that works. Moving the compositor
-  # itself into Nix is a separate project, and on a laptop you actually use
-  # daily it is worth doing on a spare machine first.
+  # If you do want it from Nix: add `hyprland` to the wrapped list above, then
+  # write a session file pointing at the wrapped binary, and keep the Ubuntu
+  # package installed so you always have a session that boots.
 }

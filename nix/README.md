@@ -46,38 +46,51 @@ The usual home-manager behaviour would copy the files into `/nix/store` as
 read-only, and every edit would mean `home-manager switch`. That is more
 rigorous and much more annoying for a config you tune daily.
 
-## Why the GUI apps are not managed here
+## How the packages are split
 
-This is Ubuntu, not NixOS. Anything that talks to the GPU - the compositor,
-terminals, waybar, quickshell - would be built against nixpkgs' Mesa while the
-kernel and drivers come from Ubuntu. It usually fails at startup with a GL or
-EGL error.
+Everything the configs invoke now comes from Nix, in two groups.
 
-[nixGL](https://github.com/nix-community/nixGL) wraps a program so it picks up
-the host drivers. This machine is Intel/Mesa, which is the case nixGL handles
-best; NVIDIA is where it gets painful.
+**No GPU involved** — installed as-is: `cliphist`, `wl-clipboard`, `grim`,
+`slurp`, `playerctl`, `brightnessctl`, `pulseaudio` (pactl), `wireplumber`
+(wpctl), `jq`, `imagemagick`, `btop`, `neovim`, `awww`.
 
-The split here is deliberate: **Ubuntu keeps the compositor and the GUI apps,
-Nix owns the configs and the CLI tools.** That is the combination that just
-works. Moving the compositor into Nix is a separate project - and worth trying
-on a spare machine before a laptop you use daily.
+**Opens windows** — wrapped with [nixGL](https://github.com/nix-community/nixGL):
+`waybar`, `rofi`, `kitty`, `alacritty`, `dunst`, `wlogout`, `quickshell`,
+`pavucontrol`, `networkmanagerapplet`, `brave`.
 
-## What Nix would solve, if you did go further
+The wrapping matters because this is not NixOS. Those programs were built
+against nixpkgs' Mesa, while the kernel and drivers come from Ubuntu; without
+nixGL they typically die at startup with a GL or EGL error. `wrapGL` in
+`home.nix` replaces each binary with a shim that execs it through
+`nixGLIntel`, and symlinks everything else (`.desktop` files, icons, shares)
+through untouched.
 
-Five of the six build-it-yourself dependencies in `../packages/manual.md`
-already exist in nixpkgs, verified at the pinned revision:
+Both machines here use integrated graphics, which is the case Mesa and nixGL
+handle cleanly. NVIDIA is where this gets painful, and would need
+`nixGLNvidia` and a driver version that matches the host exactly.
 
-| From manual.md | In nixpkgs |
-|---|---|
-| quickshell (source build) | `quickshell` 0.3.0 |
-| awww / swww (source build) | `swww` — resolves to **awww 0.12.1**, your fork |
-| hyprshot (drop in a script) | `hyprshot` 1.3.0 |
-| neovim (upstream tarball) | `neovim` 0.12.4 |
-| brave (own apt repo) | `brave` 1.93.136 |
-| rofi Wayland fork (source build) | `rofi` **2.0.0** - 2.x has Wayland upstream, but it is a big jump from the 1.7.8 this repo's `.rasi` files were written for |
+## Why the compositor is not in that list
 
-So the dependency problem from `packages/` mostly dissolves under Nix. The GPU
-boundary above is what stops it being a clean win today.
+Hyprland itself still comes from Ubuntu, and this is deliberate. It is not
+missing from nixpkgs - it is there, the same 0.56.2 - the reason is the
+failure mode. A terminal that will not start is an annoyance you fix from
+another terminal. A compositor that will not start leaves you with no session
+to fix it from.
+
+It also has to be found by the login manager, which reads session files from
+`/usr/share/wayland-sessions`. That is outside both home-manager's reach and
+this repo's `~/.config` scope.
+
+To move it anyway: add `hyprland` to the wrapped list, write a session file
+pointing at the wrapped binary, and **keep the Ubuntu package installed** so
+there is always a session that boots.
+
+## On the desktop machine
+
+Ubuntu with integrated graphics, so the same split applies unchanged. Clone to
+`~/.dotfiles`, adjust `username` and `homeDirectory` in `flake.nix` if the
+account differs, and activate. Hyprland itself still comes from
+`packages/ubuntu.txt` (the `cppiber` PPA).
 
 ## stateVersion
 
