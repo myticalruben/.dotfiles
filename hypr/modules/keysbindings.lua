@@ -6,7 +6,27 @@ terminal      = "kitty"
 fileManager   = "thunar"
 hyprshot      = "hyprshot -m region"
 menu          = "rofi -show drun"
-browser       = "brave"
+-- The apt package installs "brave-browser", the AUR one installs "brave", so
+-- neither name is portable. Pick the first that actually exists on this box.
+--
+-- This walks $PATH instead of shelling out: Hyprland reaps its own children,
+-- so os.execute always returns nil/"No child processes" inside the config and
+-- cannot be used to probe for a command.
+local function first_available(...)
+	local candidates = { ... }
+	for _, cmd in ipairs(candidates) do
+		for dir in (os.getenv("PATH") or ""):gmatch("[^:]+") do
+			local f = io.open(dir .. "/" .. cmd, "r")
+			if f then
+				f:close()
+				return cmd
+			end
+		end
+	end
+	return candidates[1]
+end
+
+browser       = first_available("brave", "brave-browser", "firefox")
 
 hl.bind(mod .. " + return"              , hl.dsp.exec_cmd(terminal))
 hl.bind(mod .. " + o"                   , hl.dsp.exec_cmd(hyprshot))
