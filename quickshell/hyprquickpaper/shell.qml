@@ -27,6 +27,14 @@ PanelWindow {
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
 
+    // config.json keeps paths with a leading "~" so the file stays portable
+    // across machines. Nothing in QML expands it, so resolve it here.
+    function expandHome(path) {
+        if (path && path.charAt(0) === "~")
+            return Quickshell.env("HOME") + path.substring(1)
+        return path
+    }
+
     Component.onCompleted: {
         Quickshell.execDetached(["bash", Quickshell.shellPath("cache.sh"), Quickshell.shellDir])
     }
@@ -47,7 +55,7 @@ PanelWindow {
 
     FolderListModel {
         id: folderModel
-        folder: "file://" + configs.wallpaper_path
+        folder: "file://" + main.expandHome(configs.wallpaper_path)
         showDirs: false
         nameFilters: ["*.png", "*.jpg"]
         sortField: FolderListModel.Name
@@ -165,7 +173,7 @@ PanelWindow {
                     cache: false
                     smooth: true
 
-                    source: "file://" + configs.cache_path + fileName
+                    source: "file://" + main.expandHome(configs.cache_path) + fileName
 
                     // Decode once at the largest size this image will ever be shown at
                     // (the active/zoomed size), rather than tracking the animating
