@@ -1,0 +1,7 @@
+# PPAs required by ubuntu.txt. install.sh adds these before installing, and
+# asks first - a PPA is a third-party source of system packages.
+#
+# Format: ppa | what it provides
+
+ppa:cppiber/hyprland | hyprland, hyprlock, waybar, xdg-desktop-portal-hyprland
+ppa:aslatter/ppa     | alacritty

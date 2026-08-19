@@ -1,0 +1,39 @@
+# Runtime dependencies as commands, not package names: package names differ per
+# distro but the command the config invokes is the same everywhere. install.sh
+# --check reads this file to report what is missing on the current machine.
+#
+# Format:  command | what breaks without it
+# A "cmd_a/cmd_b" alternative means either one satisfies the dependency.
+
+Hyprland          | the compositor itself
+hyprctl           | opacity.sh reloads the config through it
+hyprlock          | SUPER+Tab lock screen
+hyprshot          | SUPER+O region screenshot
+waybar            | the status bar
+dunst             | notification daemon
+dunstify          | scripts/volume notifications (ships with dunst)
+rofi              | SUPER+D launcher, clipboard picker, opacity.sh menu
+kitty             | SUPER+Return terminal
+thunar            | file manager keybind (currently commented out)
+brave-browser     | browser keybind
+wlogout           | SUPER+GRAVE power menu
+quickshell        | SUPER+W wallpaper picker
+awww              | sets the wallpaper
+awww-daemon       | wallpaper daemon started at login
+cliphist          | clipboard history
+wl-paste          | clipboard watching (wl-clipboard)
+wl-copy           | clipboard writing (wl-clipboard)
+grim              | Print screenshots
+slurp             | region selection for screenshots
+jq                | quickshell cache.sh reads config.json with it
+pactl             | scripts/volume
+wpctl             | volume and mute keybinds (wireplumber)
+playerctl         | media keys
+brightnessctl     | brightness keys
+nm-applet         | network tray icon
+pavucontrol       | waybar audio click
+alacritty         | waybar network click runs "alacritty -e nmtui"
+btop              | system monitor
+magick/convert    | quickshell thumbnails (ImageMagick 7 or 6)
+nvim              | editor config in this repo
+python3           | setup.py links the configs with it

@@ -1,0 +1,51 @@
+# Debian 13 (trixie) or sid. Hyprland is too new for stable/bookworm.
+#
+# NAMES VERIFIED in a debian:sid container: every name below resolves, and the
+# versions are current - hyprland 0.56.2, waybar 0.15.0, wlogout 1.2.2.
+#
+# INSTALL NOT YET PROVEN. A full "apt-get install" of this list currently fails
+# in sid, and not because of a name in this file:
+#
+#   network-manager-gnome 1.36.0-4 depends on network-manager-applet
+#   (= 1.36.0-4), which apt reports as having no installable candidate.
+#
+# Everything else in the failure output is cascading fallout from that single
+# conflict. This looks like ordinary sid churn rather than a problem with this
+# manifest, but it has NOT been confirmed, and installing the rest of the list
+# without network-manager-gnome has not been tested either - that run was cut
+# short. Treat the list as name-correct and install-unproven until someone
+# finishes that test.
+#
+# Re-check names after editing with:  ./install.sh --verify-names
+#
+# Note sid ships ImageMagick 7 ("magick"), unlike Ubuntu 24.04 which is still
+# on 6 ("convert"); quickshell's cache.sh handles either.
+#
+# Not covered here - see manual.md: rofi-wayland, quickshell, awww/swww,
+# hyprshot, neovim, brave-browser.
+
+hyprland
+hyprlock
+xdg-desktop-portal-hyprland
+waybar
+dunst
+wlogout
+cliphist
+wl-clipboard
+grim
+slurp
+jq
+kitty
+thunar
+alacritty
+pulseaudio-utils
+wireplumber
+playerctl
+brightnessctl
+network-manager-gnome
+pavucontrol
+polkit-kde-agent-1
+btop
+imagemagick
+fonts-jetbrains-mono
+python3
