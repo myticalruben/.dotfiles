@@ -1,0 +1,33 @@
+# Arch Linux, official repos (pacman).
+#
+# UNVERIFIED: written from the command list, not checked against a live Arch
+# machine. Run ./install.sh --verify-names on Arch to find names that do not
+# resolve, then correct this file.
+
+hyprland
+hyprlock
+hyprland-qtutils
+xdg-desktop-portal-hyprland
+waybar
+dunst
+rofi-wayland
+kitty
+thunar
+alacritty
+wl-clipboard
+cliphist
+grim
+slurp
+jq
+libpulse
+wireplumber
+playerctl
+brightnessctl
+network-manager-applet
+pavucontrol
+polkit-kde-agent
+btop
+imagemagick
+ttf-jetbrains-mono-nerd
+neovim
+python

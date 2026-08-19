@@ -1,0 +1,11 @@
+-- No monitor binding by default.
+--
+-- This used to pin workspaces 1-9 to "eDP-1", the laptop's internal panel.
+-- On any machine without that connector - a desktop, an external-only setup -
+-- the rules matched nothing, which is exactly the kind of breakage the rest of
+-- this config was cleaned up to avoid.
+--
+-- With a single monitor there is nothing to decide: workspaces land on the only
+-- output there is. Pinning workspaces to specific screens is a multi-monitor
+-- preference, so it belongs in modules/local.lua, which is per-machine and not
+-- versioned. See modules/local.lua.example for a worked example.

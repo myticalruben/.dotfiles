@@ -1,36 +1,42 @@
 {
-  description = "A very basic flake";
+  description = "Hyprland desktop configuration, managed with home-manager";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
-		url = "github:nix-community/home-manager/release-25.05";
-    	inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # Wraps GPU-touching programs so they use the host's drivers instead of
+    # nixpkgs' Mesa. Needed on any non-NixOS machine; see nix/README.md.
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
-	let 
-		userName = "myticalruben";
-		system = "x86_64-linux";
-	in{
-  		nixosConfigurations."${userName}" = nixpkgs.lib.nixosSystem {
-			inherit system;
+  outputs = { nixpkgs, home-manager, nixgl, ... }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ nixgl.overlay ];
+      };
 
-			specialArgs = {inherit self userName;};
-			modules = [
-				./pc-config/nixosconfig/configuration.nix
-			];
-		};
+      # Change these two on a new machine, or add a second entry below.
+      username = "ruben-alexander";
+      homeDirectory = "/home/${username}";
+    in
+    {
+      homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs = { inherit username homeDirectory; };
+        modules = [ ./nix/home.nix ];
+      };
 
-		homeConfigurations."${userName}" = home-manager.lib.homeManagerConfiguration {
-			pkgs = nixpkgs.legacyPackages."${system}";
-
-			extraSpecialArgs = {inherit self userName;};
-			modules = [
-				./pc-config/homemanager/home.nix
-			];
-		};
-  	};
+      # Lets you run `nix develop` to get home-manager without installing it.
+      devShells.${system}.default = pkgs.mkShell {
+        packages = [ home-manager.packages.${system}.default ];
+      };
+    };
 }

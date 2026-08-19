@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+STEP=5
+
+case "$1" in
+    up)
+        pactl set-sink-volume @DEFAULT_SINK@ +${STEP}%
+        ;;
+    down)
+        pactl set-sink-volume @DEFAULT_SINK@ -${STEP}%
+        ;;
+    mute)
+        pactl set-sink-mute @DEFAULT_SINK@ toggle
+        ;;
+esac
+
+# Obtener volumen actual
+VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | head -n1 | tr -d '%')
+MUTED=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
+
+if [ "$MUTED" = "yes" ]; then
+    dunstify -a "volume" -u low -r 9993 -h int:value:0 "🔇 Muted"
+else
+    dunstify -a "volume" -u low -r 9993 -h int:value:$VOLUME "🔊 Volume: ${VOLUME}%"
+fi
