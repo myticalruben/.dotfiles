@@ -40,6 +40,15 @@ defaults. Use it for connector names, resolutions, scale and the wallpaper.
 Without it, the config still works: `modules/monitors.lua` applies a catch-all
 rule to every output.
 
+## Two ways to install
+
+| | |
+|---|---|
+| `install.sh` + `setup.py` | Distro packages, symlinked configs. What most machines here use. |
+| Nix + home-manager | Pinned versions via `flake.lock` — see [`nix/`](nix/README.md). |
+
+They are alternatives, not layers: both want to own `~/.config`, so pick one.
+
 ## Dependencies
 
 See [`packages/`](packages/README.md). Short version: no distro packages
