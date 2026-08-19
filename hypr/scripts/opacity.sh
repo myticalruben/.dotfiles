@@ -13,6 +13,9 @@ case "$choice" in
     *) exit 0 ;;
 esac
 
-sed -i "s/^local window_opacity = .*/local window_opacity = $opacity/" ~/.config/hypr/rules.lua
+# The value lives in modules/window_rules.lua (this used to point at a
+# rules.lua that does not exist, so the script silently did nothing).
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/hypr"
+sed -i "s/^local window_opacity = .*/local window_opacity = $opacity/" "$config_dir/modules/window_rules.lua"
 
 hyprctl reload
