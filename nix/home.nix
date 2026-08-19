@@ -37,13 +37,15 @@ in
   # ------------------------------------------------------------ packages ---
   # Only command-line tools here. See the note below before adding GUI apps.
 
+  # hyprshot is deliberately absent: it depends on hyprland, which pulls in Qt 6
+  # via hyprland-qtutils, so a 60 KB screenshot script costs 1.2 GiB of closure.
+  # The distro package provides it instead - see ../packages/manual.md.
   home.packages = with pkgs; [
     # clipboard, screenshots, media, audio, power
     cliphist
     wl-clipboard
     grim
     slurp
-    hyprshot
     playerctl
     brightnessctl
     pulseaudio      # provides pactl, used by scripts/volume

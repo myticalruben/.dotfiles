@@ -29,3 +29,12 @@
 -- 	position = "auto-right",
 -- 	scale = "1",
 -- })
+
+-- Pin workspaces to specific monitors. Only meaningful with more than one
+-- screen; with a single output, workspaces land there regardless.
+-- `hyprctl monitors` lists the connector names on this machine.
+--
+-- for x = 1, 8 do
+-- 	hl.workspace_rule({ workspace = x, monitor = "DP-1", default = true })
+-- end
+-- hl.workspace_rule({ workspace = 9, monitor = "HDMI-A-1", default = true })

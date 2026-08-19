@@ -89,7 +89,11 @@
         "interval": 2
   },
   "temperature": {
-        "hwmon-path": "/sys/class/hwmon/hwmon5/temp1_input",
+        // No "hwmon-path": the hwmon index is not stable across machines or even
+    // across boots (hwmon5 was dell_smm on the laptop this was written on, and
+    // coretemp was hwmon7). Without it waybar falls back to the default
+    // thermal zone, which works anywhere. Set "thermal-zone" if you want a
+    // specific sensor on a specific machine.
         "critical-threshold": 80,
         "format": " {temperatureC}°C",
         "format-critical": " {temperatureC}°C",
