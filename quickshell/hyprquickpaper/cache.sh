@@ -9,6 +9,23 @@ wallpaper_path=$(jq -r '.wallpaper_path' "$CONFIG")
 cache_path=$(jq -r '.cache_path' "$CONFIG")
 cache_batch_size=$(jq -r '.cache_batch_size' "$CONFIG")
 
+# config.json stores paths with a leading "~" so they stay portable. Bash only
+# expands a tilde written literally in the source, never one that arrives inside
+# a variable, so expand it here or mkdir would create a directory named "~".
+wallpaper_path="${wallpaper_path/#\~/$HOME}"
+cache_path="${cache_path/#\~/$HOME}"
+
+# ImageMagick 7 installs "magick"; ImageMagick 6 - still what Debian ships -
+# installs "convert". Pick whichever exists instead of assuming one.
+if command -v magick >/dev/null 2>&1; then
+    magick_cmd=(magick)
+elif command -v convert >/dev/null 2>&1; then
+    magick_cmd=(convert)
+else
+    echo "Error: ImageMagick not found (needs 'magick' or 'convert')." >&2
+    exit 1
+fi
+
 mkdir -p "$cache_path"
 
 echo "Wallpaper path: $wallpaper_path"
@@ -30,7 +47,7 @@ find "$wallpaper_path" -type f \( \
     echo "Generating thumbnail for $filename"
 
 
-    convert "$img" -thumbnail x500 -strip -quality 85 "$out" &
+    "${magick_cmd[@]}" "$img" -thumbnail x500 -strip -quality 85 "$out" &
 
     # Only limit jobs if batch_size > 0
     if (( cache_batch_size > 0 )); then

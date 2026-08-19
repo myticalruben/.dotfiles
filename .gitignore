@@ -1,1 +1,7 @@
-./.git
+# Python bytecode from setup.py / utils.py
+__pycache__/
+*.py[cod]
+
+# Machine-specific Hyprland settings: monitors, wallpaper, anything tied to one
+# box. Copy hypr/modules/local.lua.example to create it.
+hypr/modules/local.lua

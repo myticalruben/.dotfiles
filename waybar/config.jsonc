@@ -1,8 +1,6 @@
 // -*- mode: jsonc -*-
 {
-  "output": [
-    "eDP-1"
-  ],
+  // No "output" key: the bar shows on every monitor. Set it per-machine if needed.
   "layer": "top",
   "height": 24,
   "spacing": 2,
@@ -130,9 +128,9 @@
   "custom/pomobar": {
     "format": "{}",
     "interval": 1,
-    "exec": "/home/ruben/Documents/pomobar/pomobar-client status",
-    "on-click": "/home/ruben/Documents/pomobar/pomobar-client pause",
-    "on-click-middle": "/home/ruben/Documents/pomobar/pomobar-client reset",
+    "exec": "$HOME/Documents/pomobar/pomobar-client status",
+    "on-click": "$HOME/Documents/pomobar/pomobar-client pause",
+    "on-click-middle": "$HOME/Documents/pomobar/pomobar-client reset",
     "return-type": "json",
   },
   "custom/power": {
