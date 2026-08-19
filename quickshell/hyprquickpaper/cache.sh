@@ -15,8 +15,9 @@ cache_batch_size=$(jq -r '.cache_batch_size' "$CONFIG")
 wallpaper_path="${wallpaper_path/#\~/$HOME}"
 cache_path="${cache_path/#\~/$HOME}"
 
-# ImageMagick 7 installs "magick"; ImageMagick 6 - still what Debian ships -
-# installs "convert". Pick whichever exists instead of assuming one.
+# ImageMagick 7 installs "magick", ImageMagick 6 installs "convert", and which
+# one you get depends on the distro: Debian sid ships 7, Ubuntu 24.04 still
+# ships 6. Pick whichever exists instead of assuming one.
 if command -v magick >/dev/null 2>&1; then
     magick_cmd=(magick)
 elif command -v convert >/dev/null 2>&1; then

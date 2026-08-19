@@ -72,6 +72,19 @@ read_list() {
 
 have() { command -v "$1" >/dev/null 2>&1; }
 
+# Minimal container and chroot images run as root with no sudo installed, so
+# hardcoding sudo breaks exactly the environment you would test this in.
+as_root() {
+    if [[ $EUID -eq 0 ]]; then
+        "$@"
+    elif have sudo; then
+        sudo "$@"
+    else
+        echo "Need root: run as root or install sudo." >&2
+        return 1
+    fi
+}
+
 # A manifest entry may offer alternatives as "a/b": either satisfies it.
 have_any() {
     local IFS=/ alt
@@ -160,12 +173,18 @@ install_ubuntu_ppas() {
     echo
     confirm "Add these PPAs?" || { echo "Skipped."; return 0; }
 
+    if ! have add-apt-repository; then
+        echo "==> installing software-properties-common (provides add-apt-repository)"
+        as_root apt-get update
+        as_root apt-get install -y software-properties-common || return 1
+    fi
+
     while IFS= read -r line; do
         ppa="${line%%|*}"; ppa="${ppa//[[:space:]]/}"
         echo "==> add-apt-repository $ppa"
-        sudo add-apt-repository -y "$ppa" || echo "  failed: $ppa"
+        as_root add-apt-repository -y "$ppa" || echo "  failed: $ppa"
     done < <(read_list "$ppa_file")
-    sudo apt-get update
+    as_root apt-get update
 }
 
 do_install() {
@@ -178,14 +197,14 @@ do_install() {
         ubuntu)
             install_ubuntu_ppas
             echo "==> apt-get install (${#pkgs[@]} packages)"
-            sudo apt-get install -y "${pkgs[@]}" ;;
+            as_root apt-get install -y "${pkgs[@]}" ;;
         debian)
             echo "Note: Hyprland needs Debian trixie or sid; it is not in stable."
             echo "==> apt-get install (${#pkgs[@]} packages)"
-            sudo apt-get install -y "${pkgs[@]}" ;;
+            as_root apt-get install -y "${pkgs[@]}" ;;
         arch)
             echo "==> pacman -S --needed (${#pkgs[@]} packages)"
-            sudo pacman -S --needed "${pkgs[@]}"
+            as_root pacman -S --needed "${pkgs[@]}"
             if [[ -r "$pkg_dir/arch-aur.txt" ]]; then
                 echo
                 echo "Also needed from the AUR - install with your own helper,"

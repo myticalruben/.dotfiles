@@ -29,3 +29,4 @@ polkit-kde-agent-1
 btop
 imagemagick
 fonts-jetbrains-mono
+python3

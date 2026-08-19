@@ -30,3 +30,4 @@ btop
 imagemagick
 ttf-jetbrains-mono-nerd
 neovim
+python

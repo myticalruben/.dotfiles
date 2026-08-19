@@ -36,3 +36,4 @@ alacritty         | waybar network click runs "alacritty -e nmtui"
 btop              | system monitor
 magick/convert    | quickshell thumbnails (ImageMagick 7 or 6)
 nvim              | editor config in this repo
+python3           | setup.py links the configs with it
