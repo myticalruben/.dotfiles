@@ -27,8 +27,8 @@
       username = "ruben";
       homeDirectory = "/home/${username}";
 
-      # The account inside the test VM. Separate from `username` so the two
-      # never have to be the same machine's.
+      # The account on the machine being tested, VM or otherwise. Separate
+      # from `username` so the two never have to be the same machine's.
       vmUsername = "ruben";
 
       # The two configurations below differ only in the arguments they pass,
@@ -58,12 +58,24 @@
         # flake alone. That is the claim the VM exists to test.
         #
         # Change vmUsername above if the account inside the VM is not `ruben`;
-        # nix/vm/bootstrap.sh checks it and stops early rather than letting
+        # nix/setup/bootstrap.sh checks it and stops early rather than letting
         # home-manager fail halfway through activation.
         vm = mkHome {
           username = vmUsername;
           homeDirectory = "/home/${vmUsername}";
           mutableConfigs = false;
+          compositorFromNix = true;
+        };
+
+        # Real hardware. Same compositor-from-Nix as the VM, but the configs
+        # stay symlinked to the checkout: on a machine you actually use, the
+        # point of the immutable variant - proving it boots from the flake
+        # alone - has already been made, and being able to edit and reload
+        # matters more.
+        pc = mkHome {
+          username = vmUsername;
+          homeDirectory = "/home/${vmUsername}";
+          mutableConfigs = true;
           compositorFromNix = true;
         };
       };

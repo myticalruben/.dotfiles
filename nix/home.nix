@@ -88,24 +88,133 @@ let
   '';
 
   # The one step home-manager cannot take: the greeter reads its session list
-  # as root, long before this user exists to it. /usr/local/share is used
-  # rather than /usr/share so a distro upgrade never fights over the file.
+  # as root, long before this user exists to it.
+  #
+  # Which directory it reads is not the same everywhere, and guessing wrong
+  # means the entry simply never appears - no error, just a session that is
+  # not offered. So it is detected rather than assumed. See the case below.
   installSession = pkgs.writeShellScriptBin "install-hyprland-session" ''
     set -eu
-    dest=/usr/local/share/wayland-sessions
+
+    dry_run=0
+    forced_dir=""
+
+    for arg in "$@"; do
+      case "$arg" in
+        --dry-run) dry_run=1 ;;
+        --dir=*)   forced_dir="''${arg#*=}" ;;
+        -h|--help)
+          echo "Uso: install-hyprland-session [--dry-run] [--dir=RUTA]"
+          echo
+          echo "Registra la sesion \"Hyprland (Nix)\" donde el gestor de acceso"
+          echo "de esta maquina la vaya a leer. Sin argumentos lo detecta solo."
+          echo
+          echo "  --dry-run   dice que haria, sin escribir y sin necesitar root"
+          echo "  --dir=RUTA  salta la deteccion y usa RUTA"
+          exit 0 ;;
+        *) echo "opcion desconocida: $arg" >&2; exit 2 ;;
+      esac
+    done
+
+    # SDDM: SessionDir, en /etc/sddm.conf o en /etc/sddm.conf.d/*.conf.
+    sddm_dir() {
+      d="$(cat /etc/sddm.conf /etc/sddm.conf.d/*.conf 2>/dev/null \
+           | grep -E '^[[:space:]]*SessionDir[[:space:]]*=' \
+           | tail -n1 | cut -d= -f2- | tr -d '[:space:]')" || true
+      d="''${d%%,*}"
+      printf '%s' "''${d:-/usr/share/wayland-sessions}"
+    }
+
+    # LightDM: sessions-directory, que es una lista separada por ':'.
+    lightdm_dir() {
+      d="$(cat /etc/lightdm/lightdm.conf /etc/lightdm/lightdm.conf.d/*.conf 2>/dev/null \
+           | grep -E '^[[:space:]]*sessions-directory[[:space:]]*=' \
+           | tail -n1 | cut -d= -f2- | tr -d '[:space:]')" || true
+      case "$d" in
+        *wayland-sessions*)
+          printf '%s' "$d" | tr ':' '\n' | grep wayland-sessions | head -n1 ;;
+        *)
+          printf '%s' /usr/share/wayland-sessions ;;
+      esac
+    }
+
+    # Cual manda de verdad. systemd mantiene display-manager.service como
+    # alias del que este activado, y esa es la unica respuesta que vale igual
+    # en Ubuntu, Mint y Arch.
+    dm=""
+    if command -v systemctl >/dev/null 2>&1; then
+      dm="$(systemctl show display-manager.service -p Id --value 2>/dev/null)" || true
+    fi
+    if [ -z "$dm" ] && [ -r /etc/X11/default-display-manager ]; then
+      dm="$(basename "$(cat /etc/X11/default-display-manager)")"
+    fi
+    dm="$(printf '%s' "$dm" | sed 's/\.service$//')"
+
+    # GDM es un programa GLib: pega "wayland-sessions" a los directorios de
+    # datos del sistema, y esos incluyen /usr/local/share. Ahi es donde debe
+    # ir, fuera del territorio de la distro.
+    #
+    # SDDM y LightDM no funcionan asi. Cada uno lee una lista explicita de su
+    # propia configuracion, y ninguna incluye /usr/local/share por defecto,
+    # de modo que ahi el archivo tiene que ir a /usr/share/wayland-sessions.
+    # El nombre hyprland-nix.desktop es solo nuestro, asi que no pisa nada de
+    # lo que traiga la distro.
+    case "$dm" in
+      gdm|gdm3)
+        dir=/usr/local/share/wayland-sessions
+        why="GDM lee XDG_DATA_DIRS, que incluye /usr/local/share" ;;
+      sddm)
+        dir="$(sddm_dir)"
+        why="SDDM usa el SessionDir de su configuracion" ;;
+      lightdm)
+        dir="$(lightdm_dir)"
+        why="LightDM usa el sessions-directory de su configuracion" ;;
+      "")
+        dir=/usr/local/share/wayland-sessions
+        why="no se detecto gestor de acceso" ;;
+      *)
+        dir=/usr/share/wayland-sessions
+        why="gestor no reconocido ($dm): se usa la ruta estandar" ;;
+    esac
+
+    if [ -n "$forced_dir" ]; then
+      dir="$forced_dir"
+      why="forzado con --dir"
+    fi
+
+    target="$dir/hyprland-nix.desktop"
+
+    echo "Gestor de acceso : ''${dm:-ninguno detectado}"
+    echo "Directorio       : $dir"
+    echo "Motivo           : $why"
+    echo "Archivo          : $target"
+
+    if [ "$dry_run" -eq 1 ]; then
+      echo
+      echo "(--dry-run: no se ha escrito nada)"
+      exit 0
+    fi
 
     if [ "$(id -u)" -ne 0 ]; then
-      echo "Hace falta root: sudo install-hyprland-session" >&2
+      echo >&2
+      echo "Hace falta root para escribir en $dir:" >&2
+      echo "  sudo install-hyprland-session" >&2
       exit 1
     fi
 
-    mkdir -p "$dest"
-    cp ${sessionDesktop} "$dest/hyprland-nix.desktop"
-    chmod 0644 "$dest/hyprland-nix.desktop"
+    mkdir -p "$dir"
+    cp ${sessionDesktop} "$target"
+    chmod 0644 "$target"
 
-    echo "Instalado    $dest/hyprland-nix.desktop"
-    echo "Apunta a     ${homeDirectory}/.nix-profile/bin/hyprland-session"
-    echo "Reinicia el gestor de acceso para que lo lea."
+    echo
+    echo "Instalado. Apunta a ${homeDirectory}/.nix-profile/bin/hyprland-session"
+    if [ -z "$dm" ]; then
+      echo
+      echo "Sin gestor de acceso detectado. Arranca desde una TTY con:"
+      echo "  hyprland-session"
+    else
+      echo "Reinicia $dm (o la maquina) para que lo lea."
+    fi
   '';
 in
 {

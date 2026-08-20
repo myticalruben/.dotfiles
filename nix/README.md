@@ -190,8 +190,14 @@ El segundo necesita root y por eso no puede formar parte de la activación.
 Solo hay que ejecutarlo una vez: la entrada apunta a `~/.nix-profile/bin`, que
 sigue tus generaciones, y no a la ruta del store que fuera la actual ese día.
 
-Antes de encenderlo en la máquina que usas a diario, pruébalo en una VM:
-ver [`vm/README.md`](vm/README.md).
+La entrada se registra donde el gestor de acceso de esa máquina la vaya a
+leer, que no es el mismo sitio en todas: GDM hereda `XDG_DATA_DIRS` y encuentra
+`/usr/local/share`, mientras que SDDM y LightDM leen listas explícitas de su
+propia configuración. `install-hyprland-session` lo detecta en vez de suponerlo;
+`--dry-run` te lo cuenta sin tocar nada ni pedir root.
+
+Todo el procedimiento, para VM o para hardware real, está en
+[`setup/README.md`](setup/README.md).
 
 ## Solución de problemas
 
