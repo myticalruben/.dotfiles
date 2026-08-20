@@ -162,9 +162,36 @@ Además tiene que encontrarlo el gestor de sesión, que lee los archivos de
 `/usr/share/wayland-sessions`. Eso queda fuera del alcance de home-manager y
 fuera del `~/.config` que cubre este repositorio.
 
-Si aun así lo quieres desde Nix: añade `hyprland` a la lista envuelta, escribe
-un archivo de sesión que apunte al binario envuelto y **mantén instalado el
-paquete de la distro**, para tener siempre una sesión que arranque.
+Esa decisión sigue siendo la de esta configuración por defecto, pero ya no hay
+que improvisar para cambiarla: el interruptor `compositorFromNix` de `home.nix`
+lo hace, y la configuración `.#vm` del flake lo trae activado.
+
+Cuando se enciende, aparecen tres cosas nuevas en el perfil:
+
+| | |
+|---|---|
+| `Hyprland` | el paquete de nixpkgs, envuelto en nixGL como los demás |
+| `hyprland-session` | el arranque de sesión: prepara el `PATH` y el entorno, y luego lanza el compositor |
+| `install-hyprland-session` | registra la entrada en el gestor de acceso; necesita root |
+
+El punto que importa es que **no sustituye a la sesión de Ubuntu, se pone al
+lado**. La entrada va a `/usr/local/share/wayland-sessions` con otro nombre
+("Hyprland (Nix)"), así que las dos aparecen en la pantalla de acceso y una
+sesión de Nix que no levante te cuesta un cierre de sesión, no la máquina.
+
+Son dos pasos, no uno:
+
+```sh
+home-manager switch --flake .#ruben   # lo instala
+sudo install-hyprland-session         # hace que el gestor lo ofrezca
+```
+
+El segundo necesita root y por eso no puede formar parte de la activación.
+Solo hay que ejecutarlo una vez: la entrada apunta a `~/.nix-profile/bin`, que
+sigue tus generaciones, y no a la ruta del store que fuera la actual ese día.
+
+Antes de encenderlo en la máquina que usas a diario, pruébalo en una VM:
+ver [`vm/README.md`](vm/README.md).
 
 ## Solución de problemas
 
@@ -209,7 +236,10 @@ Déjala como está.
 
 ## Tamaño
 
-El closure completo ronda los **4.4 GiB**. `hyprshot` está deliberadamente
+El closure completo ronda los **4.4 GiB**, y **4.7 GiB** con
+`compositorFromNix` encendido: Hyprland cuesta unos 300 MiB en la práctica,
+aunque su closure aislado sean 3.0 GiB, porque comparte Mesa y Qt con lo que
+ya estaba. `hyprshot` está deliberadamente
 fuera: depende de `hyprland`, que arrastra Qt 6 a través de
 `hyprland-qtutils`, así que un script de capturas de 60 KB costaba 640 MiB
 medidos. Lo aporta el script suelto en `~/.local/bin`, que por eso está en el
