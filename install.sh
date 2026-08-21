@@ -193,18 +193,23 @@ do_install() {
     mapfile -t pkgs < <(read_list "$pkg_dir/$distro.txt")
     (( ${#pkgs[@]} )) || { echo "packages/$distro.txt is empty." >&2; return 1; }
 
+    # This script deliberately does not use `set -e`: several helpers above
+    # rely on checking a status themselves. So the package step's exit code
+    # has to be caught by hand - without this, a failed install fell straight
+    # through to linking the configs and the run still looked like it worked.
+    local rc=0
     case "$distro" in
         ubuntu)
             install_ubuntu_ppas
             echo "==> apt-get install (${#pkgs[@]} packages)"
-            as_root apt-get install -y "${pkgs[@]}" ;;
+            as_root apt-get install -y "${pkgs[@]}" || rc=$? ;;
         debian)
             echo "Note: Hyprland needs Debian trixie or sid; it is not in stable."
             echo "==> apt-get install (${#pkgs[@]} packages)"
-            as_root apt-get install -y "${pkgs[@]}" ;;
+            as_root apt-get install -y "${pkgs[@]}" || rc=$? ;;
         arch)
             echo "==> pacman -S --needed (${#pkgs[@]} packages)"
-            as_root pacman -S --needed "${pkgs[@]}"
+            as_root pacman -S --needed "${pkgs[@]}" || rc=$?
             if [[ -r "$pkg_dir/arch-aur.txt" ]]; then
                 echo
                 echo "Also needed from the AUR - install with your own helper,"
@@ -212,6 +217,17 @@ do_install() {
                 read_list "$pkg_dir/arch-aur.txt" | sed 's/^/  /'
             fi ;;
     esac
+
+    if (( rc != 0 )); then
+        echo >&2
+        echo "The package manager exited with $rc, so the configs were NOT" >&2
+        echo "linked: a half-installed system plus symlinked configs is a" >&2
+        echo "session that starts and then breaks in ways that look unrelated." >&2
+        echo >&2
+        echo "Fix the errors above and re-run, or link by hand once the" >&2
+        echo "packages are in place:  python3 setup.py" >&2
+        return "$rc"
+    fi
 
     echo
     echo "==> linking configs (setup.py)"

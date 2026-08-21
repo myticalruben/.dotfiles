@@ -61,12 +61,15 @@ python3 setup.py --force    # además reapunta symlinks que apunten a otro sitio
 |---|---|
 | `MOD` + `Return` | Terminal (kitty) |
 | `MOD` + `D` | Lanzador de aplicaciones (rofi) |
+| `MOD` + `B` | Navegador (brave, o firefox si no está) |
+| `MOD` + `E` | Gestor de archivos (thunar) |
 | `MOD` + `V` | Historial del portapapeles (cliphist + rofi) |
 | `MOD` + `W` | Selector de fondos de pantalla (quickshell) |
 | `MOD` + `O` | Captura de una región (hyprshot) |
 | `MOD` + `Tab` | Bloquear la pantalla (hyprlock) |
-| `MOD` + `` ` `` | Menú de apagado (wlogout) |
+| `MOD` + `` ` `` | Menú de sesión (wlogout) |
 | `MOD` + `Shift` + `W` | Mostrar u ocultar la waybar |
+| `MOD` + `Shift` + `O` | Elegir la opacidad de las ventanas |
 
 ### Capturas de pantalla
 
@@ -104,9 +107,23 @@ python3 setup.py --force    # además reapunta symlinks que apunten a otro sitio
 | Atajo | Acción |
 |---|---|
 | `MOD` + `Shift` + `M` | Salir de Hyprland |
-| `MOD` + `Shift` + `R` | Reiniciar el equipo |
-| `MOD` + `Shift` + `Q` | Apagar el equipo |
 | `MOD` + `Ctrl` + `S` | Suspender |
+
+**Apagar y reiniciar no tienen atajo**, y es a propósito: `MOD` + `Q` cierra la
+ventana, así que tenerlos en `MOD` + `Shift` + `Q` significaba que un `Shift`
+de más apagaba el equipo sin preguntar. Están los dos en wlogout
+(`MOD` + `` ` ``), junto con bloquear, suspender y cerrar sesión:
+
+| Botón | Acción |
+|---|---|
+| Bloquear | `hyprlock` |
+| Suspender | `systemctl suspend` |
+| Cerrar sesión | `hyprctl dispatch exit` |
+| Reiniciar | `systemctl reboot` |
+| Apagar | `systemctl poweroff` |
+
+Van de menos a más destructivo, de modo que un `Enter` que se escape bloquea
+la pantalla en vez de apagar el equipo.
 
 ### Teclas multimedia y de hardware
 
@@ -114,18 +131,12 @@ Funcionan también con la pantalla bloqueada.
 
 | Tecla | Acción |
 |---|---|
-| Subir / bajar volumen | `wpctl`, en pasos del 5% |
-| Silenciar | Silencia la salida de audio |
+| Subir / bajar volumen | `scripts/volume`, en pasos del 5%, con notificación |
+| Silenciar | Silencia la salida de audio, con notificación |
 | Silenciar micrófono | Silencia la entrada de audio |
 | Brillo arriba / abajo | `brightnessctl`, en pasos del 5% |
 | Reproducir / pausa | `playerctl` |
 | Pista anterior / siguiente | `playerctl` |
-
-### Desactivados
-
-Están en el archivo pero comentados: `MOD` + `F` para el gestor de archivos
-(choca con pantalla completa) y `MOD` + `O` para el selector de opacidad
-(choca con la captura de región).
 
 ## Ajustes por máquina
 
