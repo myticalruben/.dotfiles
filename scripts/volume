@@ -1,25 +1,65 @@
 #!/usr/bin/env bash
+#
+# Sube, baja o silencia el volumen, y enseña una notificación con barra.
+#
+# Existe por la barra: `wpctl set-volume` hace el trabajo igual de bien, pero
+# no dice nada, así que subir el volumen a ciegas era la única forma de saber
+# dónde estabas. Lo llaman las teclas XF86Audio* desde modules/keysbindings.lua.
+
+set -u
 
 STEP=5
+MAX=100
+SINK="@DEFAULT_SINK@"
 
-case "$1" in
-    up)
-        pactl set-sink-volume @DEFAULT_SINK@ +${STEP}%
-        ;;
-    down)
-        pactl set-sink-volume @DEFAULT_SINK@ -${STEP}%
-        ;;
-    mute)
-        pactl set-sink-mute @DEFAULT_SINK@ toggle
-        ;;
+# El id 9993 es arbitrario, pero fijo: dunst reemplaza la notificación
+# anterior en vez de apilar una por pulsación al mantener la tecla.
+NOTIFY_ID=9993
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+have pactl || { echo "pactl no está en el PATH" >&2; exit 1; }
+
+# "Volume: front-left: 39321 / 60% / -13.33 dB, front-right: ..." -> 60
+# Vale igual para un sink mono, donde la línea trae un solo canal.
+current_volume() {
+    pactl get-sink-volume "$SINK" 2>/dev/null \
+        | awk 'NR==1 { for (i = 1; i <= NF; i++) if ($i ~ /%$/) { sub(/%/, "", $i); print $i; exit } }'
+}
+
+is_muted() {
+    [[ "$(pactl get-sink-mute "$SINK" 2>/dev/null | awk '{print $2}')" == "yes" ]]
+}
+
+# pactl no sabe limitarse: "+5%" sigue subiendo por encima del 100% y eso
+# distorsiona. Se calcula el valor absoluto y se recorta antes de aplicarlo.
+set_relative() {
+    local delta="$1" vol
+    vol="$(current_volume)"
+    [[ -n "$vol" ]] || return 1
+
+    vol=$(( vol + delta ))
+    (( vol < 0 ))    && vol=0
+    (( vol > MAX ))  && vol=$MAX
+
+    pactl set-sink-volume "$SINK" "${vol}%"
+}
+
+case "${1:-}" in
+    up)   set_relative "$STEP" ;;
+    down) set_relative "-$STEP" ;;
+    mute) pactl set-sink-mute "$SINK" toggle ;;
+    "")   ;;   # sin argumento: solo mostrar el estado actual
+    *)    echo "uso: volume [up|down|mute]" >&2; exit 2 ;;
 esac
 
-# Obtener volumen actual
-VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | head -n1 | tr -d '%')
-MUTED=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
+# Sin dunstify no hay notificación, pero el volumen ya está puesto: eso es lo
+# que importa, así que se sale en silencio en vez de dar un error.
+have dunstify || exit 0
 
-if [ "$MUTED" = "yes" ]; then
-    dunstify -a "volume" -u low -r 9993 -h int:value:0 "🔇 Muted"
+if is_muted; then
+    dunstify -a volume -u low -r "$NOTIFY_ID" -h int:value:0 "🔇 Silenciado"
 else
-    dunstify -a "volume" -u low -r 9993 -h int:value:$VOLUME "🔊 Volume: ${VOLUME}%"
+    volume="$(current_volume)"
+    dunstify -a volume -u low -r "$NOTIFY_ID" -h "int:value:${volume:-0}" "🔊 Volumen: ${volume:-?}%"
 fi

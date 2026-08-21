@@ -1,4 +1,12 @@
-/* bind = $mod, Escape, exec, wlogout -b 1 -c 20 -r 20 -L 1700 -R 1700 -T 325 -B 325 */
+/* Lo lanza SUPER + ` desde hypr/modules/keysbindings.lua, y el boton de la
+   waybar, los dos con:  wlogout -b 5 -c 20 -r 20 -n
+
+   Sin margenes en pixeles a proposito. Antes llevaba -L 1700 -R 1700 -T 325
+   -B 325, numeros atados a una pantalla concreta y a los tres botones que
+   habia entonces; con cinco botones ya no cabian. Sin margenes wlogout centra
+   solo, y el tamano lo decide el min-width/min-height de aqui abajo, asi que
+   vale igual en cualquier resolucion. -n lo deja en el monitor activo en vez
+   de estirarlo por los dos. */
 * { 
     background-image: none;
     box-shadow: none;
@@ -36,6 +44,14 @@ button:active {
     background-color: rgba(255, 255, 255, 0.12);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
     outline: none;
+}
+
+#lock {
+    background-image: url("icons/lock.png");
+}
+
+#suspend {
+    background-image: url("icons/suspend.png");
 }
 
 #shutdown {

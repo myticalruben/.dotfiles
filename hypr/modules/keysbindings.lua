@@ -32,7 +32,7 @@ hl.bind(mod .. " + return"              , hl.dsp.exec_cmd(terminal))
 hl.bind(mod .. " + o"                   , hl.dsp.exec_cmd(hyprshot))
 --hl.bind(mod .. " + f"                   , hl.dsp.exec_cmd(fileManager))
 hl.bind(mod .. " + Tab"					, hl.dsp.exec_cmd("hyprlock"))
-hl.bind(mod .. " + GRAVE"				, hl.dsp.exec_cmd("wlogout -b 1 -c 20 -r 20 -L 1700 -R 1700 -T 325 -B 325"))
+hl.bind(mod .. " + GRAVE"				, hl.dsp.exec_cmd("wlogout -b 5 -c 20 -r 20 -n"))
 hl.bind(mod .. " + W", hl.dsp.exec_cmd("quickshell -c hyprquickpaper"))
 
 
@@ -59,6 +59,7 @@ hl.bind(mod .. " + SHIFT + m"           , hl.dsp.exit())
 
 
 hl.bind(mod .. " + D"                   , hl.dsp.exec_cmd(menu))
+hl.bind(mod .. " + B"                   , hl.dsp.exec_cmd(browser))
 
 hl.bind(mod .. " + S"                   , hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mod .. " + SHIFT + S"           , hl.dsp.window.move({ workspace = "special:magic" }))
@@ -92,9 +93,12 @@ hl.bind(mod .. " + CTRL + K", hl.dsp.window.resize({ x = 0, y = -10 }), { repeat
 hl.bind(mod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = 10 }), { repeating = true })
 
 
-hl.bind("XF86AudioRaiseVolume"          , hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume"          , hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
-hl.bind("XF86AudioMute"                 , hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true })
+-- Via scripts/volume (enlazado en ~/.local/bin) en vez de wpctl directo: hace
+-- lo mismo y ademas ensena la notificacion con barra, que es la unica forma
+-- de saber donde esta el volumen sin abrir pavucontrol.
+hl.bind("XF86AudioRaiseVolume"          , hl.dsp.exec_cmd("volume up"),                                      { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume"          , hl.dsp.exec_cmd("volume down"),                                    { locked = true, repeating = true })
+hl.bind("XF86AudioMute"                 , hl.dsp.exec_cmd("volume mute"),                                    { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute"              , hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessUp"           , hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown"         , hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
