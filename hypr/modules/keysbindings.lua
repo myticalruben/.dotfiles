@@ -1,11 +1,13 @@
 local home = os.getenv("HOME")
 
 
-mod           = "SUPER"
-terminal      = "kitty"
-fileManager   = "thunar"
-hyprshot      = "hyprshot -m region"
-menu          = "rofi -show drun"
+-- Locales, no globales: solo los usa este archivo, y dejarlos sueltos en el
+-- entorno global de la config es pedirle a otro modulo que los pise sin querer.
+local mod         = "SUPER"
+local terminal    = "kitty"
+local fileManager = "thunar"
+local hyprshot    = "hyprshot -m region"
+local menu        = "rofi -show drun"
 -- The apt package installs "brave-browser", the AUR one installs "brave", so
 -- neither name is portable. Pick the first that actually exists on this box.
 --
@@ -26,17 +28,18 @@ local function first_available(...)
 	return candidates[1]
 end
 
-browser       = first_available("brave", "brave-browser", "firefox")
+local browser = first_available("brave-browser", "firefox")
 
 hl.bind(mod .. " + return"              , hl.dsp.exec_cmd(terminal))
 hl.bind(mod .. " + o"                   , hl.dsp.exec_cmd(hyprshot))
---hl.bind(mod .. " + f"                   , hl.dsp.exec_cmd(fileManager))
+hl.bind(mod .. " + E"                   , hl.dsp.exec_cmd(fileManager))
 hl.bind(mod .. " + Tab"					, hl.dsp.exec_cmd("hyprlock"))
-hl.bind(mod .. " + GRAVE"				, hl.dsp.exec_cmd("wlogout -b 1 -c 20 -r 20 -L 1700 -R 1700 -T 325 -B 325"))
+hl.bind(mod .. " + GRAVE"				, hl.dsp.exec_cmd("wlogout -b 5 -c 20 -r 20 -n"))
 hl.bind(mod .. " + W", hl.dsp.exec_cmd("quickshell -c hyprquickpaper"))
 
-
---hl.bind(mod .. " + O", hl.dsp.exec_cmd(home .. "/.dotfiles/hypr/scripts/opacity.sh"))
+-- Ruta via XDG, no "~/.dotfiles": el checkout no tiene por que estar ahi.
+hl.bind(mod .. " + SHIFT + O", hl.dsp.exec_cmd(
+    (os.getenv("XDG_CONFIG_HOME") or (home .. "/.config")) .. "/hypr/scripts/opacity.sh"))
 
 
 -- Toggle waybar
@@ -52,13 +55,16 @@ hl.bind(mod .. " + V", hl.dsp.exec_cmd(
 ))
 
 
-hl.bind(mod .. " + SHIFT + r"           , hl.dsp.exec_cmd("command reboot"))
-hl.bind(mod .. " + SHIFT + q"           , hl.dsp.exec_cmd("command shutdown now"))
-hl.bind(mod .. " + CONTROL + s"         , hl.dsp.exec_cmd("command systemctl suspend"))
+-- Apagar y reiniciar NO estan aqui a proposito: SUPER+Q cierra la ventana, y
+-- tener el apagado en SUPER+SHIFT+Q significaba que un SHIFT de mas te apagaba
+-- el equipo sin preguntar. Los dos estan en wlogout (SUPER + `), que ademas
+-- pasa por systemctl y respeta polkit y los inhibidores.
+hl.bind(mod .. " + CONTROL + s"         , hl.dsp.exec_cmd("systemctl suspend"))
 hl.bind(mod .. " + SHIFT + m"           , hl.dsp.exit())
 
 
 hl.bind(mod .. " + D"                   , hl.dsp.exec_cmd(menu))
+hl.bind(mod .. " + B"                   , hl.dsp.exec_cmd(browser))
 
 hl.bind(mod .. " + S"                   , hl.dsp.workspace.toggle_special("magic"))
 hl.bind(mod .. " + SHIFT + S"           , hl.dsp.window.move({ workspace = "special:magic" }))
@@ -86,18 +92,18 @@ hl.bind(mod .. " + SHIFT + J"			, hl.dsp.window.move({ direction = "down" }))
 hl.bind(mod .. " + SHIFT + K"			, hl.dsp.window.move({ direction = "up" }))
 hl.bind(mod .. " + SHIFT + L"			, hl.dsp.window.move({ direction = "right" }))
 
-hl.bind(mod .. " + CTRL + H", hl.dsp.window.resize({ x = -10, y = 0 }), { repeating = true })
-hl.bind(mod .. " + CTRL + L", hl.dsp.window.resize({ x = 10, y = 0 }), { repeating = true })
-hl.bind(mod .. " + CTRL + K", hl.dsp.window.resize({ x = 0, y = -10 }), { repeating = true })
-hl.bind(mod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = 10 }), { repeating = true })
+hl.bind(mod .. " + CTRL + H", hl.dsp.window.resize({ x = -10, y = 0, relative = true }), { repeating = true })
+hl.bind(mod .. " + CTRL + L", hl.dsp.window.resize({ x = 10, y = 0, relative = true }), { repeating = true })
+hl.bind(mod .. " + CTRL + K", hl.dsp.window.resize({ x = 0, y = -10, relative = true }), { repeating = true })
+hl.bind(mod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = 10, relative = true }), { repeating = true })
 
 
-hl.bind(mod .. " + CONTROL + h"         , hl.dsp.window.resize())
-
-
-hl.bind("XF86AudioRaiseVolume"          , hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume"          , hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
-hl.bind("XF86AudioMute"                 , hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true })
+-- Via scripts/volume (enlazado en ~/.local/bin) en vez de wpctl directo: hace
+-- lo mismo y ademas ensena la notificacion con barra, que es la unica forma
+-- de saber donde esta el volumen sin abrir pavucontrol.
+hl.bind("XF86AudioRaiseVolume"          , hl.dsp.exec_cmd("volume up"),                                      { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume"          , hl.dsp.exec_cmd("volume down"),                                    { locked = true, repeating = true })
+hl.bind("XF86AudioMute"                 , hl.dsp.exec_cmd("volume mute"),                                    { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute"              , hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessUp"           , hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown"         , hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })

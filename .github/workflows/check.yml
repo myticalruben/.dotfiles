@@ -1,0 +1,53 @@
+name: check
+
+# Estos dotfiles fallan casi siempre en silencio: un script que no existe deja
+# un hueco en la pantalla de bloqueo, un módulo sin colocar simplemente no se
+# pinta, una fuente que falta cae a otra sin avisar. Nada de eso da un error,
+# así que la única forma de enterarse era mirar. Esto mira por nosotros.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  referencias:
+    name: referencias entre configs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/check-config.py
+
+  shell:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y shellcheck
+      # scripts/volume no lleva extensión .sh: es un ejecutable que se enlaza
+      # en ~/.local/bin, así que hay que nombrarlo aparte.
+      - run: shellcheck --shell=bash $(git ls-files '*.sh') scripts/volume
+
+  lua:
+    name: luacheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y lua-check
+      - run: luacheck hypr/
+
+  python:
+    name: python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m compileall -q setup.py utils.py tools/
+
+  nix:
+    name: nix flake check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+      - run: nix flake check --no-build

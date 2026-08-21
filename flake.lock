@@ -75,11 +75,32 @@
         "type": "github"
       }
     },
+    "nvim": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787339034,
+        "narHash": "sha256-eT7YEalQtynHrxd1I4hFhaEtVwYqf/GBthmKqwqSt1Y=",
+        "owner": "myticalruben",
+        "repo": "nvim",
+        "rev": "85b485dfe8923a6b34c853820d46ac6fd7295175",
+        "type": "github"
+      },
+      "original": {
+        "owner": "myticalruben",
+        "repo": "nvim",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixgl": "nixgl",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "nvim": "nvim"
       }
     },
     "systems": {

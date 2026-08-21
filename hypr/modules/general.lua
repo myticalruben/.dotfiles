@@ -7,6 +7,6 @@ hl.config({
         allow_tearing = false,
         layout = "dwindle",
     },
+	-- master vive en modules/master.lua, no aqui.
 	dwindle = { preserve_split = true },
-	master = { new_status = "master" },
 })

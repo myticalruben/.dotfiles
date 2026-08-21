@@ -2,23 +2,26 @@
 {
   // No "output" key: the bar shows on every monitor. Set it per-machine if needed.
   "layer": "top",
-  "height": 24,
+  // Sin "height": waybar la calcula a partir del CSS. Antes ponia 24 y waybar
+  // respondia "Requested height: 24 is less than the minimum height: 27
+  // required by the modules" y usaba 27 igualmente, asi que el numero no
+  // describia nada: solo parecia que si.
   "spacing": 2,
   "exclusive": false,
   "modules-left": [
+    "hyprland/workspaces",
     "cpu",
     "memory",
     "temperature",
-    "battery"
+    "custom/battery"
   ],
   "modules-center": [
     "clock"
   ],
   "modules-right": [
     "tray",
-
+    "network",
     "pulseaudio",
-
     "custom/power"
   ],
   // Modules configuration
@@ -102,25 +105,19 @@
         "interval": 2
   },
 
-  "battery": {
-    "states": {
-      // "good": 95,
-      "warning": 10,
-      "critical": 5,
-    },
-    "format": " {capacity}% ",
-    "format-full": " {capacity}%",
-    "format-plugged": " {capacity}% ",
-    "format-alt": " {time} {icon}",
-    // "format-good": "", // An empty format will hide the module
-    // "format-full": "",
-    "format-charging": "<span color='#a8cd76'></span> {capacity}%",
+  // Modulo custom y no el `battery` de serie a proposito: la misma config
+  // corre en un portatil y en un PC de mesa. El de serie no sabe de eso -
+  // en el PC avisaba "No batteries." en cada arranque y dejaba un widget
+  // vacio ocupando sitio. waybar oculta por completo un modulo custom que no
+  // imprime nada, asi que scripts/battery.sh se calla donde no hay bateria y
+  // la deteccion no cuesta ni un ajuste por maquina.
+  "custom/battery": {
+    "exec": "${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/battery.sh",
+    "return-type": "json",
+    "interval": 30,
+    "tooltip": true,
   },
   
-  "battery#bat2": {
-    "bat": "BAT2",
-  },
-
   "network": {
     //"interface": "wlo1",
     "format": "{ifname}",
@@ -140,7 +137,7 @@
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
-    "on-click": "wlogout -b 1 -c 20 -r 20 -L 1700 -R 1700 -T 325 -B 325"
+    "on-click": "wlogout -b 5 -c 20 -r 20 -n"
   },
   "pulseaudio": {
         "format": "{icon}  {volume}%",

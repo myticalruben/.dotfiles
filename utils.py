@@ -21,7 +21,17 @@ local_bin_dir = Path.home() / ".local" / "bin"
 # never touched, so a mistake here cannot destroy anything that is not a link.
 force = "--force" in sys.argv
 
-_results = {"linked": 0, "ok": 0, "skipped": 0}
+# Says what it would do and touches nothing. Worth having for a script whose
+# whole job is to put symlinks in the directory your session reads.
+dry_run = "--dry-run" in sys.argv
+
+# Removes the links this script made, and only those. The README says the Nix
+# path and the setup.py path both want to own ~/.config and that you have to
+# delete one before using the other - this is that step, instead of a rm the
+# reader has to compose correctly on the first try.
+unlink = "--unlink" in sys.argv
+
+_results = {"linked": 0, "ok": 0, "skipped": 0, "removed": 0}
 
 
 class Type(Enum):
@@ -30,38 +40,78 @@ class Type(Enum):
     BIN = 3
 
 
+def _say(prefix: str, message: str) -> None:
+    print(f"  {'(en seco) ' if dry_run else ''}{prefix} {message}")
+
+
+def _link_target(path: Path) -> Path:
+    """Where a symlink points, made absolute.
+
+    os.readlink can return a relative path, which is meaningless on its own:
+    it is relative to the directory the link lives in, not to the cwd.
+    """
+    raw = Path(os.readlink(path))
+    return raw if raw.is_absolute() else (path.parent / raw)
+
+
+def _remove(source: Path, target: Path) -> None:
+    name = target.name
+
+    if not target.is_symlink():
+        if target.exists():
+            _say("!!", f"{name}: no es un symlink, se deja como está")
+            _results["skipped"] += 1
+        return
+
+    current = _link_target(target)
+    # Solo se borra lo que apunta a ESTE checkout. Un symlink que puso otra
+    # cosa - home-manager, o tú a mano - no es nuestro para borrarlo.
+    if current != source:
+        _say("!!", f"{name}: apunta a {current}, no a este repositorio; se deja")
+        _results["skipped"] += 1
+        return
+
+    if not dry_run:
+        target.unlink()
+    _say("xx", f"{name}: enlace eliminado")
+    _results["removed"] += 1
+
+
 def _link(source: Path, target: Path) -> None:
     name = target.name
 
     if not source.exists():
-        print(f"  !! {name}: missing in the repo ({source}), skipped")
+        _say("!!", f"{name}: missing in the repo ({source}), skipped")
         _results["skipped"] += 1
         return
 
-    target.parent.mkdir(parents=True, exist_ok=True)
+    if not dry_run:
+        target.parent.mkdir(parents=True, exist_ok=True)
 
     if target.is_symlink():
-        current = Path(os.readlink(target))
+        current = _link_target(target)
         if current == source:
-            print(f"  == {name}: already linked")
+            _say("==", f"{name}: already linked")
             _results["ok"] += 1
             return
         if not force:
-            print(f"  !! {name}: symlink points at {current}")
+            _say("!!", f"{name}: symlink points at {current}")
             print("     re-run with --force to repoint it")
             _results["skipped"] += 1
             return
-        target.unlink()
-        print(f"  ~~ {name}: replacing link to {current}")
+        if not dry_run:
+            target.unlink()
+        _say("~~", f"{name}: replacing link to {current}")
     elif target.exists():
         kind = "directory" if target.is_dir() else "file"
-        print(f"  !! {name}: a real {kind} is already there, left untouched")
+        _say("!!", f"{name}: a real {kind} is already there, left untouched")
         print(f"     move or delete {target} and re-run")
         _results["skipped"] += 1
         return
 
-    target.symlink_to(source)
-    print(f"  -> {name}: linked")
+    if not dry_run:
+        target.symlink_to(source)
+    _say("->", f"{name}: linked")
     _results["linked"] += 1
 
 
@@ -70,15 +120,21 @@ def ccf(name: str, type: Type) -> None:
     if type is Type.BIN:
         # Link name is the basename, so ccf("scripts/volume") lands on
         # ~/.local/bin/volume rather than ~/.local/bin/scripts/volume.
-        _link(source, local_bin_dir / source.name)
+        target = local_bin_dir / source.name
     else:
-        _link(source, config_dir / name)
+        target = config_dir / name
+
+    _remove(source, target) if unlink else _link(source, target)
 
 
 def summary() -> int:
     print()
-    print(f"linked: {_results['linked']}   already ok: {_results['ok']}   "
-          f"skipped: {_results['skipped']}")
+    if unlink:
+        print(f"eliminados: {_results['removed']}   "
+              f"omitidos: {_results['skipped']}")
+    else:
+        print(f"linked: {_results['linked']}   already ok: {_results['ok']}   "
+              f"skipped: {_results['skipped']}")
     if _results["skipped"]:
         print("Some entries were skipped; nothing was deleted.")
         return 1

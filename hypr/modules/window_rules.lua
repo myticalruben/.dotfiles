@@ -1,4 +1,26 @@
-local window_opacity = 0.7
+-- La opacidad la elige scripts/opacity.sh, que la guarda aqui. El archivo esta
+-- FUERA del repositorio a proposito: antes el script hacia sed -i sobre este
+-- mismo archivo, y como ~/.config/hypr es un symlink al checkout, cambiar la
+-- opacidad dejaba el arbol de git sucio. Peor con la variante `.#vm` de
+-- home-manager, donde este archivo es una ruta de /nix/store de solo lectura y
+-- el sed fallaba sin mas.
+local default_opacity = 0.7
+
+local function saved_opacity()
+	local state = os.getenv("XDG_STATE_HOME") or (os.getenv("HOME") .. "/.local/state")
+	local f = io.open(state .. "/hypr/opacity", "r")
+	if not f then return nil end
+
+	local value = tonumber(f:read("*l"))
+	f:close()
+
+	-- Un archivo corrupto o a medio escribir no debe dejar las ventanas
+	-- invisibles: fuera de rango se ignora y manda el valor por defecto.
+	if value and value > 0 and value <= 1 then return value end
+	return nil
+end
+
+local window_opacity = saved_opacity() or default_opacity
 
 -- Layer rules (old: layerrule = blur on / ignore_alpha 0.15, match:namespace rofi)
 hl.layer_rule({

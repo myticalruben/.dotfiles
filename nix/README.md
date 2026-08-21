@@ -7,8 +7,16 @@ que traiga la distro hoy".
 
 **Elige uno de los dos caminos.** No ejecutes `setup.py` y home-manager a la
 vez: ambos quieren ser dueños de `~/.config/hypr`, y home-manager se niega a
-pisar un symlink que no creó él. Si vienes de `setup.py`, borra antes sus
-enlaces: son solo symlinks, borrarlos no toca nada del repositorio.
+pisar un symlink que no creó él. Si vienes de `setup.py`, quita antes sus
+enlaces:
+
+```sh
+python3 setup.py --unlink --dry-run   # mira qué se va a quitar
+python3 setup.py --unlink
+```
+
+Solo borra symlinks que apunten a este checkout, así que no toca nada del
+repositorio ni nada que hayas puesto tú.
 
 ## Puesta en marcha
 
@@ -120,7 +128,11 @@ Todo lo que invocan las configs viene de Nix, en dos grupos.
 
 **Sin GPU de por medio**, instalados tal cual: `cliphist`, `wl-clipboard`,
 `grim`, `slurp`, `playerctl`, `brightnessctl`, `pulseaudio` (pactl),
-`wireplumber` (wpctl), `jq`, `imagemagick`, `btop`, `neovim`, `awww`.
+`wireplumber` (wpctl), `jq`, `imagemagick`, `btop`, `awww`.
+
+Neovim no está en esa lista porque no lo instala este flake: lo trae el input
+`nvim`, que además del editor pone en su PATH los LSP y formateadores que su
+config invoca. Ver [su README](https://github.com/myticalruben/nvim).
 
 **Abren ventanas**, envueltos con [nixGL](https://github.com/nix-community/nixGL):
 `waybar`, `rofi`, `kitty`, `alacritty`, `dunst`, `wlogout`, `quickshell`,
@@ -162,9 +174,42 @@ Además tiene que encontrarlo el gestor de sesión, que lee los archivos de
 `/usr/share/wayland-sessions`. Eso queda fuera del alcance de home-manager y
 fuera del `~/.config` que cubre este repositorio.
 
-Si aun así lo quieres desde Nix: añade `hyprland` a la lista envuelta, escribe
-un archivo de sesión que apunte al binario envuelto y **mantén instalado el
-paquete de la distro**, para tener siempre una sesión que arranque.
+Esa decisión sigue siendo la de esta configuración por defecto, pero ya no hay
+que improvisar para cambiarla: el interruptor `compositorFromNix` de `home.nix`
+lo hace, y la configuración `.#vm` del flake lo trae activado.
+
+Cuando se enciende, aparecen tres cosas nuevas en el perfil:
+
+| | |
+|---|---|
+| `Hyprland` | el paquete de nixpkgs, envuelto en nixGL como los demás |
+| `hyprland-session` | el arranque de sesión: prepara el `PATH` y el entorno, y luego lanza el compositor |
+| `install-hyprland-session` | registra la entrada en el gestor de acceso; necesita root |
+
+El punto que importa es que **no sustituye a la sesión de Ubuntu, se pone al
+lado**. La entrada va a `/usr/local/share/wayland-sessions` con otro nombre
+("Hyprland (Nix)"), así que las dos aparecen en la pantalla de acceso y una
+sesión de Nix que no levante te cuesta un cierre de sesión, no la máquina.
+
+Son dos pasos, no uno:
+
+```sh
+home-manager switch --flake .#ruben   # lo instala
+sudo install-hyprland-session         # hace que el gestor lo ofrezca
+```
+
+El segundo necesita root y por eso no puede formar parte de la activación.
+Solo hay que ejecutarlo una vez: la entrada apunta a `~/.nix-profile/bin`, que
+sigue tus generaciones, y no a la ruta del store que fuera la actual ese día.
+
+La entrada se registra donde el gestor de acceso de esa máquina la vaya a
+leer, que no es el mismo sitio en todas: GDM hereda `XDG_DATA_DIRS` y encuentra
+`/usr/local/share`, mientras que SDDM y LightDM leen listas explícitas de su
+propia configuración. `install-hyprland-session` lo detecta en vez de suponerlo;
+`--dry-run` te lo cuenta sin tocar nada ni pedir root.
+
+Todo el procedimiento, para VM o para hardware real, está en
+[`setup/README.md`](setup/README.md).
 
 ## Solución de problemas
 
@@ -209,7 +254,10 @@ Déjala como está.
 
 ## Tamaño
 
-El closure completo ronda los **4.4 GiB**. `hyprshot` está deliberadamente
+El closure completo ronda los **4.4 GiB**, y **4.7 GiB** con
+`compositorFromNix` encendido: Hyprland cuesta unos 300 MiB en la práctica,
+aunque su closure aislado sean 3.0 GiB, porque comparte Mesa y Qt con lo que
+ya estaba. `hyprshot` está deliberadamente
 fuera: depende de `hyprland`, que arrastra Qt 6 a través de
 `hyprland-qtutils`, así que un script de capturas de 60 KB costaba 640 MiB
 medidos. Lo aporta el script suelto en `~/.local/bin`, que por eso está en el

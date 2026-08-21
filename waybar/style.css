@@ -33,6 +33,7 @@ window#waybar {
 }
 
 /* Module spacing */
+#workspaces,
 #cpu,
 #memory,
 #custom-gpu,
@@ -41,7 +42,7 @@ window#waybar {
 #mpris,
 #custom-power,
 #temperature ,
-#battery,
+#custom-battery,
 #network,
 #tray{
     padding: 0 10px;
@@ -65,8 +66,39 @@ window#waybar {
     font-weight: bold;
 }
 
+/* Workspaces */
+#workspaces button {
+    padding: 0 6px;
+    color: #8b93a7;
+    background: transparent;
+    border: none;
+}
+
+#workspaces button.active {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+#workspaces button.urgent {
+    color: #ff005f;
+}
+
 /* Temperature */
 #temperature.critical {
+    color: #ff5555;
+}
+
+/* Battery. Las clases las pone waybar/scripts/battery.sh; en un PC de mesa el
+   modulo no existe siquiera, asi que estas reglas no llegan a aplicarse. */
+#custom-battery.charging {
+    color: #a8cd76;
+}
+
+#custom-battery.warning {
+    color: #ffb86c;
+}
+
+#custom-battery.critical {
     color: #ff5555;
 }
 
@@ -96,7 +128,7 @@ tooltip label {
 #mpris,
 #custom-power,
 #network,
-#battery,
+#custom-battery,
 #tray {
     transition: font-size 0.15s ease;
 }
@@ -110,7 +142,7 @@ tooltip label {
 #mpris:hover,
 #custom-power:hover,
 #network:hover,
-#baterry:hover,
+#custom-battery:hover,
 #tray:hover {
     font-size: 14px;
 }
