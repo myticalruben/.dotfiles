@@ -1,7 +1,7 @@
 # dotfiles
 
 Configuración de escritorio Hyprland: Hyprland (config en Lua), waybar, rofi,
-dunst, wlogout, quickshell, btop, kitty y neovim.
+dunst, wlogout, quickshell, btop y neovim.
 
 ## Instalación
 
@@ -17,11 +17,21 @@ semana. Ver [`nix/`](nix/README.md).
 ```sh
 git clone git@github.com:myticalruben/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-nix run home-manager/master -- switch --flake .#ruben-alexander -b backup
+nix run home-manager/master -- switch --flake .#ruben -b backup
 ```
 
-Hyprland en sí **no** viene de Nix: sigue instalándose desde la distro. El
-porqué está explicado en [`nix/README.md`](nix/README.md).
+Con `.#ruben` Hyprland sigue viniendo de la distro, a propósito: un
+compositor que no arranca te deja sin sesión desde la que arreglarlo. El
+porqué está en [`nix/README.md`](nix/README.md).
+
+Para que **también** el compositor salga de Nix, sin sustituir la sesión de la
+distro sino poniéndose al lado de ella:
+
+```sh
+bash nix/setup/bootstrap.sh     # activa .#pc y registra "Hyprland (Nix)"
+```
+
+Ver [`nix/setup/README.md`](nix/setup/README.md).
 
 ### Con paquetes de la distro
 

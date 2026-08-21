@@ -33,6 +33,7 @@ window#waybar {
 }
 
 /* Module spacing */
+#workspaces,
 #cpu,
 #memory,
 #custom-gpu,
@@ -63,6 +64,23 @@ window#waybar {
 /* Clock */
 #clock {
     font-weight: bold;
+}
+
+/* Workspaces */
+#workspaces button {
+    padding: 0 6px;
+    color: #8b93a7;
+    background: transparent;
+    border: none;
+}
+
+#workspaces button.active {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+#workspaces button.urgent {
+    color: #ff005f;
 }
 
 /* Temperature */
@@ -110,7 +128,7 @@ tooltip label {
 #mpris:hover,
 #custom-power:hover,
 #network:hover,
-#baterry:hover,
+#battery:hover,
 #tray:hover {
     font-size: 14px;
 }

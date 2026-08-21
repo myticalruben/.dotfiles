@@ -6,6 +6,7 @@
   "spacing": 2,
   "exclusive": false,
   "modules-left": [
+    "hyprland/workspaces",
     "cpu",
     "memory",
     "temperature",
@@ -16,9 +17,8 @@
   ],
   "modules-right": [
     "tray",
-
+    "network",
     "pulseaudio",
-
     "custom/power"
   ],
   // Modules configuration
@@ -117,10 +117,6 @@
     "format-charging": "<span color='#a8cd76'></span> {capacity}%",
   },
   
-  "battery#bat2": {
-    "bat": "BAT2",
-  },
-
   "network": {
     //"interface": "wlo1",
     "format": "{ifname}",
