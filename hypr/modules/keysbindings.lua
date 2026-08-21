@@ -92,10 +92,10 @@ hl.bind(mod .. " + SHIFT + J"			, hl.dsp.window.move({ direction = "down" }))
 hl.bind(mod .. " + SHIFT + K"			, hl.dsp.window.move({ direction = "up" }))
 hl.bind(mod .. " + SHIFT + L"			, hl.dsp.window.move({ direction = "right" }))
 
-hl.bind(mod .. " + CTRL + H", hl.dsp.window.resize({ x = -10, y = 0 }), { repeating = true })
-hl.bind(mod .. " + CTRL + L", hl.dsp.window.resize({ x = 10, y = 0 }), { repeating = true })
-hl.bind(mod .. " + CTRL + K", hl.dsp.window.resize({ x = 0, y = -10 }), { repeating = true })
-hl.bind(mod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = 10 }), { repeating = true })
+hl.bind(mod .. " + CTRL + H", hl.dsp.window.resize({ x = -10, y = 0, relative = true }), { repeating = true })
+hl.bind(mod .. " + CTRL + L", hl.dsp.window.resize({ x = 10, y = 0, relative = true }), { repeating = true })
+hl.bind(mod .. " + CTRL + K", hl.dsp.window.resize({ x = 0, y = -10, relative = true }), { repeating = true })
+hl.bind(mod .. " + CTRL + J", hl.dsp.window.resize({ x = 0, y = 10, relative = true }), { repeating = true })
 
 
 -- Via scripts/volume (enlazado en ~/.local/bin) en vez de wpctl directo: hace
