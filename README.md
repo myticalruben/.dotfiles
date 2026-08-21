@@ -160,6 +160,25 @@ fondo de pantalla y para fijar escritorios a monitores concretos.
 Sin ese archivo la config también funciona: `modules/monitors.lua` aplica una
 regla comodín que vale para cualquier salida de vídeo.
 
+### Lo que se detecta solo
+
+`local.lua` es para lo que **no se puede** deducir. Todo lo que sí, se deduce,
+porque un ajuste que hay que recordar poner en cada máquina es un ajuste que
+algún día no está puesto:
+
+| Qué | Cómo |
+|---|---|
+| Monitores | `modules/monitors.lua` aplica una regla con nombre vacío, que casa con cualquier salida |
+| Batería | `waybar/scripts/battery.sh` mira `/sys/class/power_supply`; sin batería no imprime nada y waybar oculta el módulo entero |
+| Navegador | `modules/keysbindings.lua` recorre el `PATH` buscando `brave`, `brave-browser` o `firefox` |
+| ImageMagick | `quickshell/hyprquickpaper/cache.sh` acepta `magick` (v7) o `convert` (v6) |
+| `PATH` de la sesión | `modules/envs.lua` antepone `~/.nix-profile/bin` y `~/.local/bin` solo si existen |
+
+Eso es lo que permite que el mismo commit corra en el portátil y en el PC de
+mesa sin una rama por máquina. La batería es el ejemplo claro: el módulo
+`battery` de waybar no sabe distinguirlas, así que en el PC avisaba
+"No batteries." en cada arranque y dejaba un hueco en la barra.
+
 ## Dependencias
 
 Ver [`packages/`](packages/README.md). En resumen: ninguna distro las trae

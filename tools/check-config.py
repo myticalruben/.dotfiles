@@ -47,7 +47,10 @@ def strip_jsonc(text: str) -> str:
 # acaba ignorando, que es la unica forma de que deje de servir.
 COMMENT = re.compile(r"^\s*(#|//|--|\*|/\*)")
 
-SCRIPT_REF = re.compile(r"(?:~|\$HOME)?/?\.config/hypr/(scripts/[\w.-]+)")
+# Cubre cualquier app, no solo hypr: el modulo de bateria de waybar apunta a
+# waybar/scripts/battery.sh, y una referencia rota ahi se ve exactamente
+# igual de poco que una en hyprlock, es decir, nada.
+SCRIPT_REF = re.compile(r"\.config(?:\})?/(\w+)/(scripts/[\w.-]+)")
 
 
 def referenced_scripts(text: str):
@@ -67,12 +70,12 @@ def check_referenced_scripts() -> None:
         except (UnicodeDecodeError, OSError):
             continue
         rel = path.relative_to(REPO)
-        for match in set(referenced_scripts(text)):
-            target = REPO / "hypr" / match
+        for app, script in set(referenced_scripts(text)):
+            target = REPO / app / script
             if not target.exists():
-                fail(str(rel), f"apunta a hypr/{match}, que no existe")
+                fail(str(rel), f"apunta a {app}/{script}, que no existe")
             elif not target.stat().st_mode & 0o111:
-                fail(str(rel), f"hypr/{match} existe pero no es ejecutable")
+                fail(str(rel), f"{app}/{script} existe pero no es ejecutable")
 
 
 def check_shell_scripts() -> None:

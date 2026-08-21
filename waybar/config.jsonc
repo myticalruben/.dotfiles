@@ -13,7 +13,7 @@
     "cpu",
     "memory",
     "temperature",
-    "battery"
+    "custom/battery"
   ],
   "modules-center": [
     "clock"
@@ -105,19 +105,17 @@
         "interval": 2
   },
 
-  "battery": {
-    "states": {
-      // "good": 95,
-      "warning": 10,
-      "critical": 5,
-    },
-    "format": " {capacity}% ",
-    "format-full": " {capacity}%",
-    "format-plugged": " {capacity}% ",
-    "format-alt": " {time} {icon}",
-    // "format-good": "", // An empty format will hide the module
-    // "format-full": "",
-    "format-charging": "<span color='#a8cd76'></span> {capacity}%",
+  // Modulo custom y no el `battery` de serie a proposito: la misma config
+  // corre en un portatil y en un PC de mesa. El de serie no sabe de eso -
+  // en el PC avisaba "No batteries." en cada arranque y dejaba un widget
+  // vacio ocupando sitio. waybar oculta por completo un modulo custom que no
+  // imprime nada, asi que scripts/battery.sh se calla donde no hay bateria y
+  // la deteccion no cuesta ni un ajuste por maquina.
+  "custom/battery": {
+    "exec": "${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/battery.sh",
+    "return-type": "json",
+    "interval": 30,
+    "tooltip": true,
   },
   
   "network": {
