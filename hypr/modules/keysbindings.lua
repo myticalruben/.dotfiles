@@ -28,7 +28,7 @@ local function first_available(...)
 	return candidates[1]
 end
 
-local browser = first_available("brave", "brave-browser", "firefox")
+local browser = first_available("brave-browser", "firefox")
 
 hl.bind(mod .. " + return"              , hl.dsp.exec_cmd(terminal))
 hl.bind(mod .. " + o"                   , hl.dsp.exec_cmd(hyprshot))
