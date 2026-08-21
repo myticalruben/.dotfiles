@@ -17,8 +17,15 @@
 
   outputs = { nixpkgs, home-manager, nixgl, ... }:
     let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
+      # nixGL solo tiene sentido fuera de NixOS, asi que Linux es el unico
+      # objetivo real. Antes esto era un unico `system = "x86_64-linux"`, lo
+      # que hacia que `nix flake check` fallara en cualquier otra maquina: no
+      # por que la configuracion no valiera, sino porque devShells no existia
+      # para ese sistema.
+      systems = [ "x86_64-linux" "aarch64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+
+      pkgsFor = system: import nixpkgs {
         inherit system;
         overlays = [ nixgl.overlay ];
       };
@@ -33,8 +40,11 @@
 
       # The two configurations below differ only in the arguments they pass,
       # so they cannot drift apart: same modules, same package set, same lock.
-      mkHome = args: home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+      # `system` se separa del resto: es para elegir el nixpkgs, no un
+      # argumento que el modulo de home-manager deba recibir.
+      mkHome = { system ? "x86_64-linux", ... }@args:
+        home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor system;
         extraSpecialArgs = {
           inherit username homeDirectory;
           # The conservative defaults live here, not as `? ` defaults in the
@@ -43,7 +53,7 @@
           # decides an option feeding home.file.
           mutableConfigs = true;
           compositorFromNix = false;
-        } // args;
+        } // builtins.removeAttrs args [ "system" ];
         modules = [ ./nix/home.nix ];
       };
     in
@@ -81,8 +91,10 @@
       };
 
       # Lets you run `nix develop` to get home-manager without installing it.
-      devShells.${system}.default = pkgs.mkShell {
-        packages = [ home-manager.packages.${system}.default ];
-      };
+      devShells = forAllSystems (system: {
+        default = (pkgsFor system).mkShell {
+          packages = [ home-manager.packages.${system}.default ];
+        };
+      });
     };
 }

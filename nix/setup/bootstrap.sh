@@ -67,12 +67,6 @@ if [ "$CONFIG" = "vm" ] && [ "$virt" = "none" ]; then
   fi
 fi
 
-FLAKE_USER="ruben"
-if [ "$(id -un)" != "$FLAKE_USER" ]; then
-  die "esta configuracion espera el usuario '$FLAKE_USER', y tu eres '$(id -un)'.
-    Cambia 'vmUsername' en flake.nix y vuelve a intentarlo."
-fi
-
 command -v sudo >/dev/null || die "hace falta sudo"
 
 # --------------------------------------------------------------- la GPU ---
@@ -121,6 +115,21 @@ else
   git -C "$CHECKOUT" fetch origin "$BRANCH"
   git -C "$CHECKOUT" checkout "$BRANCH"
   git -C "$CHECKOUT" pull --ff-only origin "$BRANCH"
+fi
+
+# ------------------------------------------------------------- el usuario ---
+
+# Se lee del flake en vez de repetirlo aqui: el valor ya vive en flake.nix y
+# tener una tercera copia solo garantiza que algun dia digan cosas distintas.
+# Por eso esta comprobacion va detras del clonado y no antes.
+FLAKE_USER="$(sed -n 's/^[[:space:]]*vmUsername = "\(.*\)";$/\1/p' "$CHECKOUT/flake.nix" | head -n1)"
+
+if [ -z "$FLAKE_USER" ]; then
+  warn "no se pudo leer vmUsername de flake.nix; se omite la comprobacion"
+elif [ "$(id -un)" != "$FLAKE_USER" ]; then
+  die "las configuraciones .#pc y .#vm esperan el usuario '$FLAKE_USER', y tu
+    eres '$(id -un)'. home-manager fallaria a mitad de la activacion, asi que
+    se para aqui. Cambia 'vmUsername' en $CHECKOUT/flake.nix y repite."
 fi
 
 # --------------------------------------------------- permisos de la sesion --

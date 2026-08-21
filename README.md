@@ -47,8 +47,14 @@ Para enlazar las configs sin instalar nada:
 
 ```sh
 python3 setup.py            # se puede repetir; nunca borra
+python3 setup.py --dry-run  # dice lo que haría, sin tocar nada
 python3 setup.py --force    # además reapunta symlinks que apunten a otro sitio
+python3 setup.py --unlink   # quita SUS enlaces, y solo los suyos
 ```
+
+`--unlink` es el paso previo a cambiarte a home-manager. Solo borra symlinks
+que apunten a este checkout: un directorio de verdad, o un enlace que puso
+otra cosa, lo deja donde está y lo dice.
 
 ## Atajos de teclado
 
@@ -172,6 +178,24 @@ mano si vas por el camino de la distro.
 | `scripts/`, `hypr/scripts/` | Scripts auxiliares |
 | `packages/` | Manifiestos de dependencias por distro |
 | `nix/` | Configuración de home-manager |
+| `tools/` | Comprobaciones que corren en CI |
+
+## Comprobaciones
+
+Casi todo lo que se rompe aquí se rompe en silencio: un script que no existe
+deja un hueco en la pantalla de bloqueo, un módulo sin colocar simplemente no
+se pinta, una fuente que falta cae a otra sin avisar. Nada de eso da un error.
+
+```sh
+python3 tools/check-config.py    # referencias entre configs
+```
+
+Valida que exista lo que las configs se citan entre sí: scripts, iconos de
+wlogout contra su layout y su CSS, módulos de waybar colocados contra
+configurados, `@import`s de rofi y las rutas que enlaza `setup.py`.
+
+El resto lo cubre [`.github/workflows/check.yml`](.github/workflows/check.yml):
+`shellcheck`, `luacheck`, `compileall` y `nix flake check`.
 
 Los comentarios dentro del código siguen en inglés, que es el idioma de los
 proyectos que configuran; esta documentación está en español.

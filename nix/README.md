@@ -7,8 +7,16 @@ que traiga la distro hoy".
 
 **Elige uno de los dos caminos.** No ejecutes `setup.py` y home-manager a la
 vez: ambos quieren ser dueños de `~/.config/hypr`, y home-manager se niega a
-pisar un symlink que no creó él. Si vienes de `setup.py`, borra antes sus
-enlaces: son solo symlinks, borrarlos no toca nada del repositorio.
+pisar un symlink que no creó él. Si vienes de `setup.py`, quita antes sus
+enlaces:
+
+```sh
+python3 setup.py --unlink --dry-run   # mira qué se va a quitar
+python3 setup.py --unlink
+```
+
+Solo borra symlinks que apunten a este checkout, así que no toca nada del
+repositorio ni nada que hayas puesto tú.
 
 ## Puesta en marcha
 
