@@ -13,9 +13,16 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # La config de neovim vive en su propio repositorio: es lo unico de aqui
+    # que tiene sentido instalar suelto, en una maquina sin Hyprland ni nada
+    # de esto. `follows` evita que se traiga un segundo nixpkgs entero.
+    nvim = {
+      url = "github:myticalruben/nvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, nixgl, ... }:
+  outputs = { nixpkgs, home-manager, nixgl, nvim, ... }:
     let
       # nixGL solo tiene sentido fuera de NixOS, asi que Linux es el unico
       # objetivo real. Antes esto era un unico `system = "x86_64-linux"`, lo
@@ -54,7 +61,7 @@
           mutableConfigs = true;
           compositorFromNix = false;
         } // builtins.removeAttrs args [ "system" ];
-        modules = [ ./nix/home.nix ];
+        modules = [ ./nix/home.nix nvim.homeModules.default ];
       };
     in
     {

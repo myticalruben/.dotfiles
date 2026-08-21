@@ -1,7 +1,11 @@
 # dotfiles
 
 Configuración de escritorio Hyprland: Hyprland (config en Lua), waybar, rofi,
-dunst, wlogout, quickshell, btop y neovim.
+dunst, wlogout, quickshell y btop.
+
+La configuración de neovim se separó a [su propio repositorio](https://github.com/myticalruben/nvim):
+es lo único de aquí que tiene sentido instalar suelto. El flake de este repo la
+trae como input, así que sigue llegando con el mismo `switch`.
 
 ## Instalación
 
@@ -193,7 +197,7 @@ mano si vas por el camino de la distro.
 | `hypr/` | Hyprland, en Lua, dividido en `modules/` |
 | `waybar/`, `rofi/`, `dunst/`, `wlogout/` | Barra, lanzador, notificaciones, menú de apagado |
 | `quickshell/hyprquickpaper/` | Selector de fondos (`MOD` + `W`) |
-| `nvim/`, `btop/` | Editor y monitor del sistema |
+| `btop/` | Monitor del sistema |
 | `scripts/`, `hypr/scripts/` | Scripts auxiliares |
 | `packages/` | Manifiestos de dependencias por distro |
 | `nix/` | Configuración de home-manager |

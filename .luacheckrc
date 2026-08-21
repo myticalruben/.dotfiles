@@ -1,5 +1,4 @@
--- Config de luacheck para el CI. Los dos árboles de Lua de este repositorio
--- corren en intérpretes distintos y no comparten ni un global.
+-- Config de luacheck para el CI.
 
 std = "min"
 
@@ -8,10 +7,6 @@ files["hypr/"] = {
 	-- modules/local.lua (no versionado) y lo lee modules/autostart.lua.
 	globals = { "wallpaper" },
 	read_globals = { "hl" },
-}
-
-files["nvim/"] = {
-	read_globals = { "vim" },
 }
 
 -- No está versionado (lo crea cada máquina a partir de local.lua.example), así

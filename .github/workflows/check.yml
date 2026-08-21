@@ -35,8 +35,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y lua-check
-      # nvim/ es LazyVim y no lo mantenemos nosotros; se comprueba hypr/, que
-      # sí es config propia.
       - run: luacheck hypr/
 
   python:

@@ -128,7 +128,11 @@ Todo lo que invocan las configs viene de Nix, en dos grupos.
 
 **Sin GPU de por medio**, instalados tal cual: `cliphist`, `wl-clipboard`,
 `grim`, `slurp`, `playerctl`, `brightnessctl`, `pulseaudio` (pactl),
-`wireplumber` (wpctl), `jq`, `imagemagick`, `btop`, `neovim`, `awww`.
+`wireplumber` (wpctl), `jq`, `imagemagick`, `btop`, `awww`.
+
+Neovim no está en esa lista porque no lo instala este flake: lo trae el input
+`nvim`, que además del editor pone en su PATH los LSP y formateadores que su
+config invoca. Ver [su README](https://github.com/myticalruben/nvim).
 
 **Abren ventanas**, envueltos con [nixGL](https://github.com/nix-community/nixGL):
 `waybar`, `rofi`, `kitty`, `alacritty`, `dunst`, `wlogout`, `quickshell`,

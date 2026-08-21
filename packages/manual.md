@@ -114,13 +114,16 @@ descrito arriba.
 
 ## neovim
 
-La configuración de este repositorio es LazyVim, que necesita un Neovim
-reciente. Ubuntu 24.04 trae la 0.9.x; aquí está instalada la **0.11.6** en
+La configuración ya no está en este repositorio: se separó a
+<https://github.com/myticalruben/nvim>, que es un flake y trae su propio
+Neovim. Por la vía de Nix no hay nada que instalar a mano.
+
+Esta sección es para la otra vía. Es LazyVim, que necesita un Neovim reciente;
+Ubuntu 24.04 trae la 0.9.x, y aquí está instalada la **0.11.6** en
 `~/.local/bin`.
 
 - Arch: `neovim` de los repos está al día.
 - Ubuntu/Debian: usar el AppImage o el tarball oficiales, no el paquete.
-- Nix: `neovim` 0.12.4.
 
 ## brave-browser
 

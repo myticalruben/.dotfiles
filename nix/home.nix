@@ -24,6 +24,11 @@ let
   # clone elsewhere.
   dotfiles = "${homeDirectory}/.dotfiles";
 
+  # Y donde vive el checkout de la config de neovim, que ya no esta aqui.
+  # Solo se usa cuando mutableConfigs esta puesto; si no, la config sale del
+  # flake y da igual que este repo este clonado o no.
+  nvimCheckout = "${homeDirectory}/nvim";
+
   link = path:
     if mutableConfigs
     then config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}"
@@ -238,10 +243,21 @@ in
     "wlogout".source = link "wlogout";
     "quickshell".source = link "quickshell";
     "btop".source = link "btop";
-    "nvim".source = link "nvim";
+    # nvim no esta en esta lista: lo coloca el modulo de su propio flake, mas
+    # abajo. La eleccion mutable/inmutable es la misma, solo que la toma alli.
   };
 
   home.file.".local/bin/volume".source = link "scripts/volume";
+
+  # ---------------------------------------------------------------- nvim ---
+  # Del flake de github:myticalruben/nvim, que ademas del editor trae en su
+  # PATH los LSP y formateadores que la config invoca por su nombre.
+
+  programs.nvimConfig = {
+    enable = true;
+    # Misma regla que `link`: editable contra el checkout, o copia del store.
+    source = if mutableConfigs then "${nvimCheckout}/config" else null;
+  };
 
   # ------------------------------------------------------------ packages ---
   # Everything the configs invoke, from Nix. Split in two because a non-NixOS
@@ -261,7 +277,6 @@ in
       jq
       imagemagick
       btop
-      neovim
       awww              # the fork the config calls; nixpkgs renamed swww to this
 
       # waybar, rofi y hyprlock piden "JetBrainsMono Nerd Font". El paquete de

@@ -36,7 +36,6 @@ print("Quitando los enlaces de estos dotfiles" if unlink
 print()
 
 ccf("rofi", Type.FOLDER)
-ccf("nvim", Type.FOLDER)
 ccf("dunst", Type.FOLDER)
 ccf("hypr", Type.FOLDER)
 ccf("waybar", Type.FOLDER)
@@ -48,6 +47,9 @@ ccf("scripts/volume", Type.BIN)
 code = summary()
 
 if not unlink:
+    print()
+    print("La config de neovim ya no está aquí: vive en")
+    print("  https://github.com/myticalruben/nvim")
     print()
     print("Machine-specific settings (monitors, wallpaper) go in")
     print("  hypr/modules/local.lua   - copy it from hypr/modules/local.lua.example")
