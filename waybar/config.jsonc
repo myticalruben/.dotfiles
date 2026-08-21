@@ -2,7 +2,10 @@
 {
   // No "output" key: the bar shows on every monitor. Set it per-machine if needed.
   "layer": "top",
-  "height": 24,
+  // Sin "height": waybar la calcula a partir del CSS. Antes ponia 24 y waybar
+  // respondia "Requested height: 24 is less than the minimum height: 27
+  // required by the modules" y usaba 27 igualmente, asi que el numero no
+  // describia nada: solo parecia que si.
   "spacing": 2,
   "exclusive": false,
   "modules-left": [
