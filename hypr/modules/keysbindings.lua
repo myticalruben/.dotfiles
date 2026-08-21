@@ -1,11 +1,13 @@
 local home = os.getenv("HOME")
 
 
-mod           = "SUPER"
-terminal      = "kitty"
-fileManager   = "thunar"
-hyprshot      = "hyprshot -m region"
-menu          = "rofi -show drun"
+-- Locales, no globales: solo los usa este archivo, y dejarlos sueltos en el
+-- entorno global de la config es pedirle a otro modulo que los pise sin querer.
+local mod         = "SUPER"
+local terminal    = "kitty"
+local fileManager = "thunar"
+local hyprshot    = "hyprshot -m region"
+local menu        = "rofi -show drun"
 -- The apt package installs "brave-browser", the AUR one installs "brave", so
 -- neither name is portable. Pick the first that actually exists on this box.
 --
@@ -26,7 +28,7 @@ local function first_available(...)
 	return candidates[1]
 end
 
-browser       = first_available("brave", "brave-browser", "firefox")
+local browser = first_available("brave", "brave-browser", "firefox")
 
 hl.bind(mod .. " + return"              , hl.dsp.exec_cmd(terminal))
 hl.bind(mod .. " + o"                   , hl.dsp.exec_cmd(hyprshot))

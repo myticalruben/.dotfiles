@@ -82,6 +82,7 @@ command -v sudo >/dev/null || die "hace falta sudo"
 # coincida EXACTAMENTE con la version del driver del host.
 say "Mirando la GPU"
 gpu="$(lspci 2>/dev/null | grep -iE 'vga|3d controller' || true)"
+# shellcheck disable=SC2001  # lspci devuelve varias lineas y hay que indentarlas todas
 echo "${gpu:-    (lspci no disponible)}" | sed 's/^/    /'
 if printf '%s' "$gpu" | grep -qi nvidia; then
   warn "detectada una NVIDIA. home.nix usa nixGLIntel (Mesa), que no la usara."
@@ -94,6 +95,7 @@ fi
 if ! command -v nix >/dev/null 2>&1; then
   say "Instalando Nix (instalador de Determinate, con flakes de serie)"
   curl -fsSL https://install.determinate.systems/nix | sh -s -- install --no-confirm
+  # shellcheck source=/dev/null  # lo crea el instalador que acaba de correr
   . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 else
   echo "    nix ya instalado: $(nix --version)"
