@@ -4,9 +4,10 @@ Estas son la razón de que "los mismos dotfiles en cualquier máquina" no sea un
 problema de symlinks. Cada una hay que instalarla a mano, o desde una fuente
 de terceros, en al menos una de las distros objetivo.
 
-**Con Nix casi nada de esto aplica**: cinco de las seis están en nixpkgs y las
-gestiona `home.nix`. Ver [`../nix/README.md`](../nix/README.md). Esta página
-cubre el camino de los paquetes de la distro.
+**Con Nix casi nada de esto aplica**: cinco de las seis están en nixpkgs —y
+la fuente también— y las gestiona `home.nix`. Ver
+[`../nix/README.md`](../nix/README.md). Esta página cubre el camino de los
+paquetes de la distro.
 
 El estado que se describe abajo se leyó de una instalación real de Ubuntu
 24.04 —dónde vive cada binario y si algún paquete lo posee—, así que refleja
@@ -139,15 +140,33 @@ en `modules-right`, así que la barra funciona sin él.
 
 ## Fuentes
 
-Las configs piden tres familias:
+Las configs piden **una sola familia**, y a propósito: antes pedían tres y dos
+de ellas no estaban instaladas, así que rofi y hyprlock llevaban tiempo
+cayendo en silencio a la fuente por defecto sin que nada lo dijera.
 
-| Fuente | La usa | ¿Instalada aquí? |
+| Fuente | La usan |
+|---|---|
+| JetBrainsMono Nerd Font | waybar, rofi, hyprlock |
+
+Tiene que ser la variante **Nerd Font**, no la normal. Las tres configs pintan
+glifos de iconos —el ⏻ del botón de apagado, los altavoces de `pulseaudio`,
+los prompts de rofi— y esos glifos solo están en la versión parcheada.
+
+Ojo con el nombre del paquete, porque aquí es donde se falla en silencio:
+
+| Distro | Paquete | ¿Sirve? |
 |---|---|---|
-| FantasqueSansMono Nerd Font | waybar | sí |
-| Iosevka | rofi | **no** |
-| CaskaydiaCove Nerd Font | waybar, hyprlock | **no** |
+| Ubuntu/Debian | `fonts-jetbrains-mono` | **no**: es la fuente sin parchear |
+| Arch | `ttf-jetbrains-mono-nerd` | sí |
+| Nix | `nerd-fonts.jetbrains-mono` | sí, lo instala `nix/home.nix` |
 
-Dos de las tres ya faltan en esta máquina, así que esas configs están cayendo
-en silencio a una fuente por defecto. O las instalas desde
-<https://github.com/ryanoasis/nerd-fonts> en `~/.local/share/fonts` (y luego
-`fc-cache -f`), o cambias las configs a una fuente que sí tengas.
+En Ubuntu y Debian hay que bajarla a mano de
+<https://github.com/ryanoasis/nerd-fonts/releases> a
+`~/.local/share/fonts` y luego `fc-cache -f`. Para comprobar que resolvió:
+
+```sh
+fc-match "JetBrainsMono Nerd Font"
+```
+
+Si responde con otra cosa (`NotoSans-Regular.ttf`, por ejemplo), no está
+instalada y las tres configs están usando una fuente que no eligió nadie.

@@ -28,5 +28,7 @@ pavucontrol
 polkit-kde-agent-1
 btop
 imagemagick
-fonts-jetbrains-mono
+fonts-jetbrains-mono   # OJO: es la fuente SIN parchear. waybar, rofi y
+                       # hyprlock necesitan la variante Nerd Font, que apt no
+                       # empaqueta: ver manual.md, seccion "Fuentes".
 python3

@@ -263,6 +263,11 @@ in
       btop
       neovim
       awww              # the fork the config calls; nixpkgs renamed swww to this
+
+      # waybar, rofi y hyprlock piden "JetBrainsMono Nerd Font". El paquete de
+      # Debian/Ubuntu (fonts-jetbrains-mono) es la fuente sin parchear: le
+      # faltan los glifos de iconos que usan los tres, así que no sirve.
+      nerd-fonts.jetbrains-mono
     ])
     ++
     # --- opens windows: wrapped so it finds the host drivers ---
