@@ -31,7 +31,7 @@ El script se niega a activar `.#vm` fuera de una VM, salvo `--force`.
 ## Poner en marcha
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/myticalruben/.dotfiles/feat/hyprland-from-nix/nix/setup/bootstrap.sh -o bootstrap.sh
+curl -fsSL https://raw.githubusercontent.com/myticalruben/.dotfiles/main/nix/setup/bootstrap.sh -o bootstrap.sh
 less bootstrap.sh    # léelo antes: usa sudo en varios sitios
 bash bootstrap.sh
 ```

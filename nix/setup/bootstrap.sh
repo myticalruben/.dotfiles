@@ -16,7 +16,9 @@
 set -euo pipefail
 
 REPO_URL="https://github.com/myticalruben/.dotfiles.git"
-BRANCH="feat/hyprland-from-nix"
+# La rama de trabajo original ya no existe: se fusiono y se borro, y con
+# ella el clonado fallaba antes de llegar a nada.
+BRANCH="main"
 CHECKOUT="$HOME/.dotfiles"
 CONFIG="pc"
 FORCE=0

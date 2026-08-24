@@ -84,6 +84,21 @@
           compositorFromNix = true;
         };
 
+        # El portatil. Cuenta distinta (`ruben-alexander`, no `ruben`), asi
+        # que necesita su propia entrada: con una sola, activar en una de las
+        # dos maquinas escribiria en el home de la otra.
+        #
+        # Empieza con el compositor de la distro a proposito. Comprobar que
+        # todo lo demas encaja no deberia arriesgar la sesion; pon
+        # compositorFromNix = true en una segunda pasada, que es un switch
+        # barato, y con la sesion de Ubuntu todavia ahi como respaldo.
+        ruben-alexander = mkHome {
+          username = "ruben-alexander";
+          homeDirectory = "/home/ruben-alexander";
+          mutableConfigs = true;
+          compositorFromNix = false;
+        };
+
         # Real hardware. Same compositor-from-Nix as the VM, but the configs
         # stay symlinked to the checkout: on a machine you actually use, the
         # point of the immutable variant - proving it boots from the flake
