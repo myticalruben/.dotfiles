@@ -1,0 +1,266 @@
+{
+  ".claude/settings.local.json": {
+    "mtime": 1787764530.4742146,
+    "seen": 1787933810.9611602,
+    "ast_hash": "91dc51c9eabb663da862a558eb6d7134",
+    "semantic_hash": "91dc51c9eabb663da862a558eb6d7134"
+  },
+  "hypr/.luarc.json": {
+    "mtime": 1787165581.4710865,
+    "seen": 1787933810.961166,
+    "ast_hash": "54bf6e57a5883321781f7312e08f6a42",
+    "semantic_hash": "54bf6e57a5883321781f7312e08f6a42"
+  },
+  "hypr/hyprland.lua": {
+    "mtime": 1787165581.4713902,
+    "seen": 1787933810.9611683,
+    "ast_hash": "974c31574c3394e667659ecffaea56b9",
+    "semantic_hash": "974c31574c3394e667659ecffaea56b9"
+  },
+  "hypr/modules/animations.lua": {
+    "mtime": 1787165581.471545,
+    "seen": 1787933810.9611702,
+    "ast_hash": "2f9de6afd1bedefe28b94ad90b23c0d8",
+    "semantic_hash": "2f9de6afd1bedefe28b94ad90b23c0d8"
+  },
+  "hypr/modules/autostart.lua": {
+    "mtime": 1787165581.4715946,
+    "seen": 1787933810.9611714,
+    "ast_hash": "ba31c98ba6cb21902edfb04bb6d7c41d",
+    "semantic_hash": "ba31c98ba6cb21902edfb04bb6d7c41d"
+  },
+  "hypr/modules/decoration.lua": {
+    "mtime": 1787165581.4715946,
+    "seen": 1787933810.9611728,
+    "ast_hash": "e59823a8a1579a6928fa7e6943852487",
+    "semantic_hash": "e59823a8a1579a6928fa7e6943852487"
+  },
+  "hypr/modules/envs.lua": {
+    "mtime": 1787165581.4717507,
+    "seen": 1787933810.961174,
+    "ast_hash": "70bc04949787fde8f5b3f469a9ef99ea",
+    "semantic_hash": "70bc04949787fde8f5b3f469a9ef99ea"
+  },
+  "hypr/modules/general.lua": {
+    "mtime": 1787347928.837863,
+    "seen": 1787933810.9611752,
+    "ast_hash": "ff33a08a4f81a577f84a9f9b55a6d0fa",
+    "semantic_hash": "ff33a08a4f81a577f84a9f9b55a6d0fa"
+  },
+  "hypr/modules/input.lua": {
+    "mtime": 1787165581.471858,
+    "seen": 1787933810.9611766,
+    "ast_hash": "ba0bfb254d93bd264b4fe769a29864cd",
+    "semantic_hash": "ba0bfb254d93bd264b4fe769a29864cd"
+  },
+  "hypr/modules/keysbindings.lua": {
+    "mtime": 1787347928.8379846,
+    "seen": 1787933810.9611778,
+    "ast_hash": "bf350a1ea00e5b89f324964bef52450a",
+    "semantic_hash": "bf350a1ea00e5b89f324964bef52450a"
+  },
+  "hypr/modules/master.lua": {
+    "mtime": 1787165581.4721005,
+    "seen": 1787933810.961179,
+    "ast_hash": "e730e67f4e4f5bfc523de84ca8e1e228",
+    "semantic_hash": "e730e67f4e4f5bfc523de84ca8e1e228"
+  },
+  "hypr/modules/mics.lua": {
+    "mtime": 1787165581.4721005,
+    "seen": 1787933810.9611804,
+    "ast_hash": "cff2a40c7cc731dd8961fa8a8e09385c",
+    "semantic_hash": "cff2a40c7cc731dd8961fa8a8e09385c"
+  },
+  "hypr/modules/monitors.lua": {
+    "mtime": 1787165581.4721005,
+    "seen": 1787933810.9611816,
+    "ast_hash": "5715c07f9466f03bf7ba417397e1871d",
+    "semantic_hash": "5715c07f9466f03bf7ba417397e1871d"
+  },
+  "hypr/modules/window_rules.lua": {
+    "mtime": 1787347928.8381267,
+    "seen": 1787933810.961183,
+    "ast_hash": "82dcb6a30fb87d597e60031ff3c00f53",
+    "semantic_hash": "82dcb6a30fb87d597e60031ff3c00f53"
+  },
+  "hypr/modules/workspaces_rules.lua": {
+    "mtime": 1787165581.4722426,
+    "seen": 1787933810.961184,
+    "ast_hash": "62282cb304d8a52a14332dc95ffc2efd",
+    "semantic_hash": "62282cb304d8a52a14332dc95ffc2efd"
+  },
+  "hypr/scripts/now-playing.sh": {
+    "mtime": 1787347928.838213,
+    "seen": 1787933810.9611852,
+    "ast_hash": "5afabad5cffd2b8507622950e03207cf",
+    "semantic_hash": "5afabad5cffd2b8507622950e03207cf"
+  },
+  "hypr/scripts/opacity.sh": {
+    "mtime": 1787347928.8383105,
+    "seen": 1787933810.9611864,
+    "ast_hash": "076129746a624771a6c7d372f9783d30",
+    "semantic_hash": "076129746a624771a6c7d372f9783d30"
+  },
+  "install.sh": {
+    "mtime": 1787347928.8383105,
+    "seen": 1787933810.9611876,
+    "ast_hash": "c8c3e657c2b6acf27099ccce589fb227",
+    "semantic_hash": "c8c3e657c2b6acf27099ccce589fb227"
+  },
+  "nix/setup/bootstrap.sh": {
+    "mtime": 1787765087.4445403,
+    "seen": 1787933810.9611888,
+    "ast_hash": "807602d3c2cbb313f05cd5e92a8006dc",
+    "semantic_hash": "807602d3c2cbb313f05cd5e92a8006dc"
+  },
+  "quickshell/hyprquickpaper/cache.sh": {
+    "mtime": 1787165581.4746659,
+    "seen": 1787933810.96119,
+    "ast_hash": "c4ac1709212d73ed5cf380eefa3dc214",
+    "semantic_hash": "c4ac1709212d73ed5cf380eefa3dc214"
+  },
+  "quickshell/hyprquickpaper/commands.sh": {
+    "mtime": 1787347928.8394465,
+    "seen": 1787933810.9611957,
+    "ast_hash": "faf36e437c57920a6f5c880d1f5e5b94",
+    "semantic_hash": "faf36e437c57920a6f5c880d1f5e5b94"
+  },
+  "quickshell/hyprquickpaper/config.json": {
+    "mtime": 1787165581.4747708,
+    "seen": 1787933810.9611971,
+    "ast_hash": "6868da398a8bb02bdd517ff62a87f698",
+    "semantic_hash": "6868da398a8bb02bdd517ff62a87f698"
+  },
+  "scripts/volume": {
+    "mtime": 1787347928.8398054,
+    "seen": 1787933810.9611986,
+    "ast_hash": "3c7e00a69df295c1d0a9ca3676954392",
+    "semantic_hash": "3c7e00a69df295c1d0a9ca3676954392"
+  },
+  "setup.py": {
+    "mtime": 1787347928.8398054,
+    "seen": 1787933810.9611998,
+    "ast_hash": "12f213f07543111b311fbcceec877546",
+    "semantic_hash": "12f213f07543111b311fbcceec877546"
+  },
+  "tools/check-config.py": {
+    "mtime": 1787347928.8398054,
+    "seen": 1787933810.9612012,
+    "ast_hash": "3e024d89553433a4671ee250d915a627",
+    "semantic_hash": "3e024d89553433a4671ee250d915a627"
+  },
+  "utils.py": {
+    "mtime": 1787347928.8401413,
+    "seen": 1787933810.9612021,
+    "ast_hash": "64bcfebfecb21cab37a6551548ee7fe7",
+    "semantic_hash": "64bcfebfecb21cab37a6551548ee7fe7"
+  },
+  "waybar/scripts/battery.sh": {
+    "mtime": 1787347928.840335,
+    "seen": 1787933810.9612036,
+    "ast_hash": "4bb059ef1b583bd0a512e63ef5f7d84a",
+    "semantic_hash": "4bb059ef1b583bd0a512e63ef5f7d84a"
+  },
+  ".github/workflows/check.yml": {
+    "mtime": 1787765128.72923,
+    "seen": 1787933810.9612048,
+    "ast_hash": "ee2915faa5866c474ed8876aa42f2fe4",
+    "semantic_hash": "ee2915faa5866c474ed8876aa42f2fe4"
+  },
+  "README.md": {
+    "mtime": 1787765128.72923,
+    "seen": 1787933810.9612057,
+    "ast_hash": "f2a8c2c65c40be8edfd8af636021fa6a",
+    "semantic_hash": "f2a8c2c65c40be8edfd8af636021fa6a"
+  },
+  "nix/README.md": {
+    "mtime": 1787347928.8386147,
+    "seen": 1787933810.9612072,
+    "ast_hash": "3fc2a6b4b9844b43d66732a0cee36a25",
+    "semantic_hash": "3fc2a6b4b9844b43d66732a0cee36a25"
+  },
+  "nix/setup/README.md": {
+    "mtime": 1787765087.4445403,
+    "seen": 1787933810.9612083,
+    "ast_hash": "37abac58368df1b8d8d293fb37f8dfb0",
+    "semantic_hash": "37abac58368df1b8d8d293fb37f8dfb0"
+  },
+  "packages/README.md": {
+    "mtime": 1787165581.4739282,
+    "seen": 1787933810.9612095,
+    "ast_hash": "4aa2b3452e8d2149c614ea87699c8a2f",
+    "semantic_hash": "4aa2b3452e8d2149c614ea87699c8a2f"
+  },
+  "packages/arch-aur.txt": {
+    "mtime": 1787165581.4740567,
+    "seen": 1787933810.9612107,
+    "ast_hash": "5e890eeda0c013f2d0d9419f2d1368c1",
+    "semantic_hash": "5e890eeda0c013f2d0d9419f2d1368c1"
+  },
+  "packages/arch.txt": {
+    "mtime": 1787165581.47413,
+    "seen": 1787933810.961212,
+    "ast_hash": "d96ec21f8e5953b144ab7c36c584320a",
+    "semantic_hash": "d96ec21f8e5953b144ab7c36c584320a"
+  },
+  "packages/debian.txt": {
+    "mtime": 1787347928.8389459,
+    "seen": 1787933810.961213,
+    "ast_hash": "336fe43e4b1b7ee1e6d4451ec29eca50",
+    "semantic_hash": "336fe43e4b1b7ee1e6d4451ec29eca50"
+  },
+  "packages/manual.md": {
+    "mtime": 1787347928.8389459,
+    "seen": 1787933810.9612145,
+    "ast_hash": "f8e04df10b918e98aae928609503ba74",
+    "semantic_hash": "f8e04df10b918e98aae928609503ba74"
+  },
+  "packages/required-commands.txt": {
+    "mtime": 1787347928.8393538,
+    "seen": 1787933810.9612155,
+    "ast_hash": "e3488bbd207d7544c00411b05d289ade",
+    "semantic_hash": "e3488bbd207d7544c00411b05d289ade"
+  },
+  "packages/ubuntu-ppa.txt": {
+    "mtime": 1787165581.4744163,
+    "seen": 1787933810.9612167,
+    "ast_hash": "62683ef69b48800507663b4a77728ad3",
+    "semantic_hash": "62683ef69b48800507663b4a77728ad3"
+  },
+  "packages/ubuntu.txt": {
+    "mtime": 1787347928.8394465,
+    "seen": 1787933810.9612179,
+    "ast_hash": "23ab4a42fc793173dc6301ed47e4439a",
+    "semantic_hash": "23ab4a42fc793173dc6301ed47e4439a"
+  },
+  "wlogout/icons/lock.png": {
+    "mtime": 1787165581.4761007,
+    "seen": 1787933810.9612188,
+    "ast_hash": "cf18ca3c9107ed7b6d4d4a443b6180ae",
+    "semantic_hash": "cf18ca3c9107ed7b6d4d4a443b6180ae"
+  },
+  "wlogout/icons/logout.png": {
+    "mtime": 1787165581.4763365,
+    "seen": 1787933810.96122,
+    "ast_hash": "4edc1733411bd8d6c2659bb055730c5f",
+    "semantic_hash": "4edc1733411bd8d6c2659bb055730c5f"
+  },
+  "wlogout/icons/reboot.png": {
+    "mtime": 1787165581.476526,
+    "seen": 1787933810.9612212,
+    "ast_hash": "7ee9ff6a5197f896cb3d050d32e07cc1",
+    "semantic_hash": "7ee9ff6a5197f896cb3d050d32e07cc1"
+  },
+  "wlogout/icons/shutdown.png": {
+    "mtime": 1787165581.4767344,
+    "seen": 1787933810.9612226,
+    "ast_hash": "53d91ef23077798385c2074dc0ba8acd",
+    "semantic_hash": "53d91ef23077798385c2074dc0ba8acd"
+  },
+  "wlogout/icons/suspend.png": {
+    "mtime": 1787165581.4769335,
+    "seen": 1787933810.9612248,
+    "ast_hash": "132cdda64bc4cb87c3d3d23919963055",
+    "semantic_hash": "132cdda64bc4cb87c3d3d23919963055"
+  }
+}

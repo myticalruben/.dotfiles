@@ -108,7 +108,7 @@
           username = vmUsername;
           homeDirectory = "/home/${vmUsername}";
           mutableConfigs = true;
-          compositorFromNix = true;
+          compositorFromNix = false;
         };
       };
 

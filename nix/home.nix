@@ -253,11 +253,11 @@ in
   # Del flake de github:myticalruben/nvim, que ademas del editor trae en su
   # PATH los LSP y formateadores que la config invoca por su nombre.
 
-  programs.nvimConfig = {
-    enable = true;
+    #  programs.nvimConfig = {
+    #enable = true;
     # Misma regla que `link`: editable contra el checkout, o copia del store.
-    source = if mutableConfigs then "${nvimCheckout}/config" else null;
-  };
+    #source = if mutableConfigs then "${nvimCheckout}/config" else null;
+  #};
 
   # ------------------------------------------------------------ packages ---
   # Everything the configs invoke, from Nix. Split in two because a non-NixOS
