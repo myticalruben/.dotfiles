@@ -74,7 +74,7 @@ otra cosa, lo deja donde está y lo dice.
 | `MOD` + `B` | Navegador (brave, o firefox si no está) |
 | `MOD` + `E` | Gestor de archivos (thunar) |
 | `MOD` + `V` | Historial del portapapeles (cliphist + rofi) |
-| `MOD` + `W` | Selector de fondos de pantalla (quickshell) |
+| `MOD` + `W` | Selector de fondos de pantalla (quickshell); el elegido se recuerda para la próxima sesión |
 | `MOD` + `O` | Captura de una región (hyprshot) |
 | `MOD` + `Tab` | Bloquear la pantalla (hyprlock) |
 | `MOD` + `` ` `` | Menú de sesión (wlogout) |
@@ -161,6 +161,10 @@ cp hypr/modules/local.lua.example hypr/modules/local.lua
 valores compartidos. Sirve para nombres de conector, resoluciones, escala,
 fondo de pantalla y para fijar escritorios a monitores concretos.
 
+El fondo que se pone ahí es solo el de partida: en cuanto eliges uno con
+`MOD` + `W`, `scripts/wallpaper` lo apunta en
+`~/.local/state/hypr/wallpaper` y es ese el que vuelve al iniciar sesión.
+
 Sin ese archivo la config también funciona: `modules/monitors.lua` aplica una
 regla comodín que vale para cualquier salida de vídeo.
 
@@ -176,6 +180,7 @@ algún día no está puesto:
 | Batería | `waybar/scripts/battery.sh` mira `/sys/class/power_supply`; sin batería no imprime nada y waybar oculta el módulo entero |
 | Navegador | `modules/keysbindings.lua` recorre el `PATH` buscando `brave`, `brave-browser` o `firefox` |
 | ImageMagick | `quickshell/hyprquickpaper/cache.sh` acepta `magick` (v7) o `convert` (v6) |
+| Último fondo | `scripts/wallpaper` lo guarda al elegirlo y lo repone al arrancar; si esa imagen ya no está, cae al de `local.lua` |
 | `PATH` de la sesión | `modules/envs.lua` antepone `~/.nix-profile/bin` y `~/.local/bin` solo si existen |
 
 Eso es lo que permite que el mismo commit corra en el portátil y en el PC de

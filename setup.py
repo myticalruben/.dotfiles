@@ -43,6 +43,7 @@ ccf("wlogout", Type.FOLDER)
 ccf("btop", Type.FOLDER)
 ccf("quickshell", Type.FOLDER)
 ccf("scripts/volume", Type.BIN)
+ccf("scripts/wallpaper", Type.BIN)
 
 code = summary()
 

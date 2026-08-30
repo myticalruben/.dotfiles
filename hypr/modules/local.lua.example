@@ -9,7 +9,9 @@
 --
 -- The file is loaded last, so anything here overrides the shared defaults.
 
--- Startup wallpaper. Defaults to ~/Pictures/Wallpapers/01.png.
+-- Fallback wallpaper, used only until one is picked with MOD+W: from then on
+-- the last one chosen is what comes back at login, remembered in
+-- ~/.local/state/hypr/wallpaper. Defaults to ~/Pictures/Wallpapers/01.png.
 -- wallpaper = os.getenv("HOME") .. "/Pictures/Wallpapers/01.png"
 
 -- Monitor overrides. modules/monitors.lua already applies a catch-all rule to

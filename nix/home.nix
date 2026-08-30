@@ -248,6 +248,7 @@ in
   };
 
   home.file.".local/bin/volume".source = link "scripts/volume";
+  home.file.".local/bin/wallpaper".source = link "scripts/wallpaper";
 
   # ---------------------------------------------------------------- nvim ---
   # Del flake de github:myticalruben/nvim, que ademas del editor trae en su
