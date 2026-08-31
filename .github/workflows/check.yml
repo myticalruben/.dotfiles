@@ -25,9 +25,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y shellcheck
-      # scripts/volume no lleva extensión .sh: es un ejecutable que se enlaza
-      # en ~/.local/bin, así que hay que nombrarlo aparte.
-      - run: shellcheck --shell=bash $(git ls-files '*.sh') scripts/volume
+      # scripts/volume y scripts/wallpaper no llevan extensión .sh: son
+      # ejecutables que se enlazan en ~/.local/bin, así que hay que nombrarlos
+      # aparte.
+      - run: shellcheck --shell=bash $(git ls-files '*.sh') scripts/volume scripts/wallpaper
 
   lua:
     name: luacheck
