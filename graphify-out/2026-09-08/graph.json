@@ -597,7 +597,7 @@
       "node_kind": "heading",
       "norm_label": "comprobaciones",
       "source_file": "README.md",
-      "source_location": "L206"
+      "source_location": "L211"
     },
     {
       "id": "hypr_modules_keysbindings",
@@ -1341,6 +1341,96 @@
       "source_location": "L255"
     },
     {
+      "id": "scripts_wallpaper",
+      "label": "wallpaper",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "wallpaper",
+      "file_type": "code",
+      "metadata": {
+        "language": "bash",
+        "kind": "file"
+      },
+      "norm_label": "wallpaper",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_wallpaper__entry",
+      "label": "wallpaper script",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "wallpaper",
+      "file_type": "code",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_entrypoint"
+      },
+      "norm_label": "wallpaper script",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L1"
+    },
+    {
+      "id": "scripts_wallpaper_remember",
+      "label": "remember()",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "wallpaper",
+      "file_type": "code",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "norm_label": "remember()",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L35"
+    },
+    {
+      "id": "scripts_wallpaper_saved",
+      "label": "saved()",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "wallpaper",
+      "file_type": "code",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "norm_label": "saved()",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L31"
+    },
+    {
+      "id": "scripts_wallpaper_usable",
+      "label": "usable()",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "wallpaper",
+      "file_type": "code",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "norm_label": "usable()",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L27"
+    },
+    {
+      "id": "scripts_wallpaper_wait_for_daemon",
+      "label": "wait_for_daemon()",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "wallpaper",
+      "file_type": "code",
+      "metadata": {
+        "language": "bash",
+        "kind": "bash_function"
+      },
+      "norm_label": "wait_for_daemon()",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L43"
+    },
+    {
       "id": "install",
       "label": "install.sh",
       "_origin": "ast",
@@ -1587,7 +1677,7 @@
       "node_kind": "heading",
       "norm_label": "dependencias",
       "source_file": "README.md",
-      "source_location": "L186"
+      "source_location": "L191"
     },
     {
       "id": "readme_dotfiles",
@@ -1623,7 +1713,7 @@
       "node_kind": "heading",
       "norm_label": "estructura",
       "source_file": "README.md",
-      "source_location": "L193"
+      "source_location": "L198"
     },
     {
       "id": "readme_instalaci\u00f3n",
@@ -1647,7 +1737,7 @@
       "node_kind": "heading",
       "norm_label": "lo que se detecta solo",
       "source_file": "README.md",
-      "source_location": "L167"
+      "source_location": "L171"
     },
     {
       "id": "readme_sesi\u00f3n",
@@ -2492,6 +2582,54 @@
       "weight": 1.0
     },
     {
+      "source": "scripts_wallpaper__entry",
+      "target": "scripts_wallpaper_usable",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_wallpaper__entry",
+      "target": "scripts_wallpaper_remember",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L57",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_wallpaper__entry",
+      "target": "scripts_wallpaper_saved",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L68",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_wallpaper__entry",
+      "target": "scripts_wallpaper_wait_for_daemon",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "scripts/wallpaper",
+      "source_location": "L72",
+      "weight": 1.0
+    },
+    {
       "source": "tools_check_config_check_referenced_scripts",
       "target": "tools_check_config_referenced_scripts",
       "relation": "calls",
@@ -3295,7 +3433,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L167",
+      "source_location": "L171",
       "weight": 1.0
     },
     {
@@ -3394,7 +3532,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L186",
+      "source_location": "L191",
       "weight": 1.0
     },
     {
@@ -3405,7 +3543,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L193",
+      "source_location": "L198",
       "weight": 1.0
     },
     {
@@ -3416,7 +3554,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L206",
+      "source_location": "L211",
       "weight": 1.0
     },
     {
@@ -3460,6 +3598,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "scripts/volume",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_wallpaper",
+      "target": "scripts_wallpaper__entry",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/wallpaper",
       "source_location": "L1",
       "weight": 1.0
     },
@@ -3860,6 +4009,50 @@
       "weight": 1.0
     },
     {
+      "source": "scripts_wallpaper",
+      "target": "scripts_wallpaper_usable",
+      "relation": "defines",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/wallpaper",
+      "source_location": "L27",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_wallpaper",
+      "target": "scripts_wallpaper_saved",
+      "relation": "defines",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/wallpaper",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_wallpaper",
+      "target": "scripts_wallpaper_remember",
+      "relation": "defines",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/wallpaper",
+      "source_location": "L35",
+      "weight": 1.0
+    },
+    {
+      "source": "scripts_wallpaper",
+      "target": "scripts_wallpaper_wait_for_daemon",
+      "relation": "defines",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/wallpaper",
+      "source_location": "L43",
+      "weight": 1.0
+    },
+    {
       "source": "utils_type",
       "target": "enum",
       "relation": "inherits",
@@ -4081,17 +4274,6 @@
     },
     {
       "source": "readme",
-      "target": "packages_readme",
-      "relation": "references",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L188",
-      "weight": 1.0
-    },
-    {
-      "source": "readme",
       "target": "nix_readme",
       "relation": "references",
       "_origin": "ast",
@@ -4103,13 +4285,24 @@
     },
     {
       "source": "readme",
+      "target": "packages_readme",
+      "relation": "references",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L193",
+      "weight": 1.0
+    },
+    {
+      "source": "readme",
       "target": "packages_manual",
       "relation": "references",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L190",
+      "source_location": "L195",
       "weight": 1.0
     },
     {
@@ -4644,5 +4837,5 @@
       "source_file": ".github/workflows/check.yml"
     }
   ],
-  "built_at_commit": "9efac3938f4b0f1acd42dfc1d1e6345a96c06441"
+  "built_at_commit": "eddf81b8d113608307f832850aa666cae041f861"
 }

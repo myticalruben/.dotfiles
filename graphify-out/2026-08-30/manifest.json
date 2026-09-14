@@ -24,10 +24,10 @@
     "semantic_hash": "2f9de6afd1bedefe28b94ad90b23c0d8"
   },
   "hypr/modules/autostart.lua": {
-    "mtime": 1788870916.1857483,
-    "seen": 1788870917.0825388,
+    "mtime": 1787165581.4715946,
+    "seen": 1787933810.9611714,
     "ast_hash": "ba31c98ba6cb21902edfb04bb6d7c41d",
-    "semantic_hash": ""
+    "semantic_hash": "ba31c98ba6cb21902edfb04bb6d7c41d"
   },
   "hypr/modules/decoration.lua": {
     "mtime": 1787165581.4715946,
@@ -120,10 +120,10 @@
     "semantic_hash": "c4ac1709212d73ed5cf380eefa3dc214"
   },
   "quickshell/hyprquickpaper/commands.sh": {
-    "mtime": 1788870916.1877482,
-    "seen": 1788870917.082576,
+    "mtime": 1787347928.8394465,
+    "seen": 1787933810.9611957,
     "ast_hash": "faf36e437c57920a6f5c880d1f5e5b94",
-    "semantic_hash": ""
+    "semantic_hash": "faf36e437c57920a6f5c880d1f5e5b94"
   },
   "quickshell/hyprquickpaper/config.json": {
     "mtime": 1787165581.4747708,
@@ -138,10 +138,10 @@
     "semantic_hash": "3c7e00a69df295c1d0a9ca3676954392"
   },
   "setup.py": {
-    "mtime": 1788870916.1877482,
-    "seen": 1788870917.082583,
+    "mtime": 1787347928.8398054,
+    "seen": 1787933810.9611998,
     "ast_hash": "12f213f07543111b311fbcceec877546",
-    "semantic_hash": ""
+    "semantic_hash": "12f213f07543111b311fbcceec877546"
   },
   "tools/check-config.py": {
     "mtime": 1787347928.8398054,
@@ -162,16 +162,16 @@
     "semantic_hash": "4bb059ef1b583bd0a512e63ef5f7d84a"
   },
   ".github/workflows/check.yml": {
-    "mtime": 1788870916.1847484,
-    "seen": 1788870917.0825927,
+    "mtime": 1787765128.72923,
+    "seen": 1787933810.9612048,
     "ast_hash": "ee2915faa5866c474ed8876aa42f2fe4",
-    "semantic_hash": ""
+    "semantic_hash": "ee2915faa5866c474ed8876aa42f2fe4"
   },
   "README.md": {
-    "mtime": 1788870916.1857483,
-    "seen": 1788870917.0825946,
+    "mtime": 1787765128.72923,
+    "seen": 1787933810.9612057,
     "ast_hash": "f2a8c2c65c40be8edfd8af636021fa6a",
-    "semantic_hash": ""
+    "semantic_hash": "f2a8c2c65c40be8edfd8af636021fa6a"
   },
   "nix/README.md": {
     "mtime": 1787347928.8386147,

@@ -1,16 +1,16 @@
-# Graph Report - .dotfiles  (2026-09-08)
+# Graph Report - .dotfiles  (2026-09-04)
 
 ## Corpus Check
-- 32 files · ~18,235 words
+- 33 files · ~18,864 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 167 nodes · 213 edges · 33 communities (28 shown, 5 thin omitted)
-- Extraction: 82% EXTRACTED · 16% INFERRED · 2% AMBIGUOUS · INFERRED: 34 edges (avg confidence: 0.9)
+- 173 nodes · 222 edges · 34 communities (29 shown, 5 thin omitted)
+- Extraction: 82% EXTRACTED · 15% INFERRED · 2% AMBIGUOUS · INFERRED: 34 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9efac393`
+- Built from commit: `eddf81b8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -35,6 +35,7 @@
 - battery.sh
 - Hyprland desde Nix, en una máquina de verdad
 - Nix + home-manager
+- wallpaper
 
 ## God Nodes (most connected - your core abstractions)
 1. `Nix + home-manager` - 10 edges
@@ -66,7 +67,7 @@
 ## Hyperedges (group relationships)
 - **Comprobaciones de CI contra los fallos silenciosos** — _github_workflows_check_silent_failure_rationale, _github_workflows_check_referencias, _github_workflows_check_shell, _github_workflows_check_lua, _github_workflows_check_python, _github_workflows_check_nix, readme_comprobaciones [EXTRACTED 1.00]
 
-## Communities (33 total, 5 thin omitted)
+## Communities (34 total, 5 thin omitted)
 
 ### Community 0 - "Dependencias que ninguna distro te instala"
 Cohesion: 0.21
@@ -128,6 +129,10 @@ Nodes (13): Coste, Dónde se registra la sesión, y por qué se detecta, Hyprlan
 Cohesion: 0.17
 Nodes (12): Comprobado, Cómo se reparten los paquetes, El `PATH` de la sesión, En otra máquina, `install.sh` dice que faltan quickshell, awww o awww-daemon, Las configs se siguen editando en su sitio, Nix + home-manager, Por qué el compositor no está en esa lista (+4 more)
 
+### Community 33 - "wallpaper"
+Cohesion: 0.60
+Nodes (5): wallpaper script, remember(), saved(), usable(), wait_for_daemon()
+
 ## Ambiguous Edges - Review These
 - `Monochrome thin-stroke outline glyph style` → `wlogout power menu icon set`  [AMBIGUOUS]
   wlogout/icons/reboot.png · relation: rationale_for
@@ -159,6 +164,6 @@ _Questions this graph is uniquely positioned to answer:_
 - **What is the exact relationship between `Action: End User Session (Log Out)` and `wlogout Logout Icon`?**
   _Edge tagged AMBIGUOUS (relation: semantically_similar_to) - confidence is low._
 - **Why does `dotfiles` connect `Atajos de teclado` to `CI workflow "check"`, `Hyprland desde Nix, en una máquina de verdad`?**
-  _High betweenness centrality (0.087) - this node is a cross-community bridge._
+  _High betweenness centrality (0.081) - this node is a cross-community bridge._
 - **Why does `Dependencias que ninguna distro te instala` connect `Dependencias que ninguna distro te instala` to `Hyprland desde Nix, en una máquina de verdad`?**
-  _High betweenness centrality (0.062) - this node is a cross-community bridge._
+  _High betweenness centrality (0.058) - this node is a cross-community bridge._

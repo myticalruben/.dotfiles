@@ -1,17 +1,22 @@
-{ config, pkgs, lib, username, homeDirectory
-, # Where the config directories come from.
+{
+  config,
+  pkgs,
+  lib,
+  username,
+  homeDirectory,
+  # Where the config directories come from.
   #
   #   true  - symlinked back out to the checkout, so editing ~/.config/hypr
   #           still edits the repo. What a daily machine wants.
   #   false - copied into /nix/store, read-only. What a VM wants: it proves
   #           the session comes up from nothing but the flake, with no
   #           checkout in any particular place and nothing edited by hand.
-  mutableConfigs
-, # Whether Hyprland itself comes from Nix instead of the distro package.
+  mutableConfigs,
+  # Whether Hyprland itself comes from Nix instead of the distro package.
   # Read the long note at the bottom of this file before turning it on for a
   # machine you need to log into tomorrow.
-  compositorFromNix
-, ...
+  compositorFromNix,
+  ...
 }:
 
 # Both flags are required rather than defaulted. A module argument with a
@@ -29,10 +34,12 @@ let
   # flake y da igual que este repo este clonado o no.
   nvimCheckout = "${homeDirectory}/nvim";
 
-  link = path:
-    if mutableConfigs
-    then config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}"
-    else ../. + "/${path}";
+  link =
+    path:
+    if mutableConfigs then
+      config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}"
+    else
+      ../. + "/${path}";
 
   # Programs that open a window need the host's GPU drivers, not the Mesa that
   # nixpkgs built them against. nixGL injects the former at launch. This
@@ -40,18 +47,20 @@ let
   # Mesa/nixGL handles cleanly.
   nixGL = lib.getExe pkgs.nixgl.nixGLIntel;
 
-  wrapGL = pkg: pkgs.runCommand "${pkg.name}-nixgl" { } ''
-    mkdir -p $out/bin
-    # Keep everything except bin/ as-is: .desktop files, icons, shares.
-    for d in ${pkg}/*; do
-      [ "$(basename "$d")" = bin ] || ln -s "$d" "$out/$(basename "$d")"
-    done
-    for bin in ${pkg}/bin/*; do
-      out_bin="$out/bin/$(basename "$bin")"
-      printf '#!/bin/sh\nexec %s "%s" "$@"\n' ${nixGL} "$bin" > "$out_bin"
-      chmod +x "$out_bin"
-    done
-  '';
+  wrapGL =
+    pkg:
+    pkgs.runCommand "${pkg.name}-nixgl" { } ''
+      mkdir -p $out/bin
+      # Keep everything except bin/ as-is: .desktop files, icons, shares.
+      for d in ${pkg}/*; do
+        [ "$(basename "$d")" = bin ] || ln -s "$d" "$out/$(basename "$d")"
+      done
+      for bin in ${pkg}/bin/*; do
+        out_bin="$out/bin/$(basename "$bin")"
+        printf '#!/bin/sh\nexec %s "%s" "$@"\n' ${nixGL} "$bin" > "$out_bin"
+        chmod +x "$out_bin"
+      done
+    '';
 
   # ---------------------------------------------------------- compositor ---
 
@@ -249,15 +258,16 @@ in
 
   home.file.".local/bin/volume".source = link "scripts/volume";
   home.file.".local/bin/wallpaper".source = link "scripts/wallpaper";
+  home.file."Pictures/Wallpapers".source = link "Wallpapers";
 
   # ---------------------------------------------------------------- nvim ---
   # Del flake de github:myticalruben/nvim, que ademas del editor trae en su
   # PATH los LSP y formateadores que la config invoca por su nombre.
 
-    #  programs.nvimConfig = {
-    #enable = true;
-    # Misma regla que `link`: editable contra el checkout, o copia del store.
-    #source = if mutableConfigs then "${nvimCheckout}/config" else null;
+  #  programs.nvimConfig = {
+  #enable = true;
+  # Misma regla que `link`: editable contra el checkout, o copia del store.
+  #source = if mutableConfigs then "${nvimCheckout}/config" else null;
   #};
 
   # ------------------------------------------------------------ packages ---
@@ -273,12 +283,12 @@ in
       slurp
       playerctl
       brightnessctl
-      pulseaudio        # pactl, used by scripts/volume
-      wireplumber       # wpctl, used by the volume keybinds
+      pulseaudio # pactl, used by scripts/volume
+      wireplumber # wpctl, used by the volume keybinds
       jq
       imagemagick
       btop
-      awww              # the fork the config calls; nixpkgs renamed swww to this
+      awww # the fork the config calls; nixpkgs renamed swww to this
 
       # waybar, rofi y hyprlock piden "JetBrainsMono Nerd Font". El paquete de
       # Debian/Ubuntu (fonts-jetbrains-mono) es la fuente sin parchear: le
@@ -286,26 +296,29 @@ in
       nerd-fonts.jetbrains-mono
     ])
     ++
-    # --- opens windows: wrapped so it finds the host drivers ---
-    (map wrapGL (with pkgs; [
-      waybar
-      rofi
-      kitty
-      alacritty
-      dunst
-      wlogout
-      quickshell
-      pavucontrol
-      networkmanagerapplet   # nm-applet
-      brave
-    ]))
+      # --- opens windows: wrapped so it finds the host drivers ---
+      (map wrapGL (
+        with pkgs;
+        [
+          waybar
+          rofi
+          kitty
+          alacritty
+          dunst
+          wlogout
+          quickshell
+          pavucontrol
+          networkmanagerapplet # nm-applet
+          brave
+        ]
+      ))
     ++
-    # --- the compositor, only when asked for ---
-    lib.optionals compositorFromNix [
-      hyprlandWrapped
-      hyprlandSession
-      installSession
-    ];
+      # --- the compositor, only when asked for ---
+      lib.optionals compositorFromNix [
+        hyprlandWrapped
+        hyprlandSession
+        installSession
+      ];
 
   # Written for the display managers that honour XDG_DATA_DIRS. GDM does not -
   # it reads its list as root, before this directory is any of its business -

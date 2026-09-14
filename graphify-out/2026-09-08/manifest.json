@@ -24,9 +24,9 @@
     "semantic_hash": "2f9de6afd1bedefe28b94ad90b23c0d8"
   },
   "hypr/modules/autostart.lua": {
-    "mtime": 1788870916.1857483,
-    "seen": 1788870917.0825388,
-    "ast_hash": "ba31c98ba6cb21902edfb04bb6d7c41d",
+    "mtime": 1788573234.2443635,
+    "seen": 1788573234.9024377,
+    "ast_hash": "ec594131e0d70350bf84c957e27ef95d",
     "semantic_hash": ""
   },
   "hypr/modules/decoration.lua": {
@@ -120,9 +120,9 @@
     "semantic_hash": "c4ac1709212d73ed5cf380eefa3dc214"
   },
   "quickshell/hyprquickpaper/commands.sh": {
-    "mtime": 1788870916.1877482,
-    "seen": 1788870917.082576,
-    "ast_hash": "faf36e437c57920a6f5c880d1f5e5b94",
+    "mtime": 1788573234.2453635,
+    "seen": 1788573234.9024663,
+    "ast_hash": "9c0bd323dd9bd8fdd2d5dbf18cbc9951",
     "semantic_hash": ""
   },
   "quickshell/hyprquickpaper/config.json": {
@@ -138,9 +138,9 @@
     "semantic_hash": "3c7e00a69df295c1d0a9ca3676954392"
   },
   "setup.py": {
-    "mtime": 1788870916.1877482,
-    "seen": 1788870917.082583,
-    "ast_hash": "12f213f07543111b311fbcceec877546",
+    "mtime": 1788573234.2463634,
+    "seen": 1788573234.9024734,
+    "ast_hash": "39bafaf78dc9303ed0c4b180d0274e1c",
     "semantic_hash": ""
   },
   "tools/check-config.py": {
@@ -162,15 +162,15 @@
     "semantic_hash": "4bb059ef1b583bd0a512e63ef5f7d84a"
   },
   ".github/workflows/check.yml": {
-    "mtime": 1788870916.1847484,
-    "seen": 1788870917.0825927,
-    "ast_hash": "ee2915faa5866c474ed8876aa42f2fe4",
+    "mtime": 1788573234.2423635,
+    "seen": 1788573234.9024801,
+    "ast_hash": "8cff1e0ef2fb6098a08020d75e6ee8c0",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1788870916.1857483,
-    "seen": 1788870917.0825946,
-    "ast_hash": "f2a8c2c65c40be8edfd8af636021fa6a",
+    "mtime": 1788573234.2433634,
+    "seen": 1788573234.9024816,
+    "ast_hash": "31b3f445cb124ea4ed8c4df5cab0b076",
     "semantic_hash": ""
   },
   "nix/README.md": {
@@ -262,5 +262,11 @@
     "seen": 1787933810.9612248,
     "ast_hash": "132cdda64bc4cb87c3d3d23919963055",
     "semantic_hash": "132cdda64bc4cb87c3d3d23919963055"
+  },
+  "scripts/wallpaper": {
+    "mtime": 1788573234.2463634,
+    "seen": 1788573234.9024718,
+    "ast_hash": "da1e81326efe93708d6ef0df344299a5",
+    "semantic_hash": ""
   }
 }

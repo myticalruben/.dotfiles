@@ -1,4 +1,4 @@
-# Graph Report - .dotfiles  (2026-09-08)
+# Graph Report - .dotfiles  (2026-09-04)
 
 ## Corpus Check
 - 32 files · ~18,235 words
