@@ -115,12 +115,14 @@ window#waybar {
     color: @neon_accent2;
     border-color: @neon_soft2;
     text-shadow: 0 0 8px @neon_glow2;
+    box-shadow: 0 0 0 1px @neon_glow2, 0 0 0 3px @neon_glow2_mid, 0 0 0 5px @neon_glow2_faint;
 }
 
 #pulseaudio.muted {
     color: @neon_muted;
     border-color: @neon_muted;
     text-shadow: none;
+    box-shadow: 0 0 0 1px @neon_muted;
 }
 
 #custom-power {
