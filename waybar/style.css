@@ -189,6 +189,12 @@ window#waybar {
     box-shadow: 0 0 0 1px @neon_glow1, 0 0 0 3px @neon_glow1_mid, 0 0 0 5px @neon_glow1_faint;
 }
 
+/* RAM y volumen usan el acento 2; su hover no debe heredar el halo cian. */
+#memory:hover,
+#pulseaudio:hover {
+    box-shadow: 0 0 0 1px @neon_glow2, 0 0 0 3px @neon_glow2_mid, 0 0 0 5px @neon_glow2_faint;
+}
+
 /* Tooltip */
 tooltip {
     background: @neon_tooltip;
