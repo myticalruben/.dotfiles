@@ -6,19 +6,8 @@
 local default_wallpaper = os.getenv("HOME") .. "/Pictures/Wallpapers/01.png"
 
 hl.on("hyprland.start", function()
-	-- Lo primero: tapar el escritorio mientras arrancan la barra, dunst y el
-	-- fondo. Si Quickshell no está, el script sale sin splash y la sesión
-	-- sigue igual.
-	hl.exec_cmd("session-splash start")
-	hl.exec_cmd("~/.config/waybar/scripts/launch-waybar.sh")
-	hl.exec_cmd("dunst")
-	hl.exec_cmd("nm-applet")
-	hl.exec_cmd("wl-paste --type text --watch cliphist store")
-	hl.exec_cmd("wl-paste --type image --watch cliphist store")
-	--hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
-
-	hl.exec_cmd("awww-daemon")
-	-- No sleep here: the script waits for the daemon to answer before asking
-	-- it for anything.
-	hl.exec_cmd("wallpaper restore '" .. (wallpaper or default_wallpaper) .. "'")
+	-- Un solo proceso ordena el arranque: splash primero, y cuando termina
+	-- recién aparecen waybar, dunst, el fondo y el resto. Así no hay un
+	-- parpadeo del escritorio antes de la animación.
+	hl.exec_cmd("session-start '" .. (wallpaper or default_wallpaper) .. "'")
 end)

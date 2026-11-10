@@ -18,6 +18,12 @@ PanelWindow {
     readonly property string glyph: Quickshell.env("SESSION_SPLASH_GLYPH") || ""
     readonly property string accent: Quickshell.env("SESSION_SPLASH_ACCENT") || "#FFFFFF"
     readonly property bool exitMode: Quickshell.env("SESSION_SPLASH_MODE") === "exit"
+    // Arranque: 250 ms de fade-in + 2,2 s de espera + 300 ms de fade-out.
+    // Salida: se queda en 450 ms para no retrasar el logout.
+    readonly property int holdMs: {
+        var v = parseInt(Quickshell.env("SESSION_SPLASH_HOLD_MS") || "")
+        return isNaN(v) ? 2200 : v
+    }
 
     // The script passes the focused monitor. Very early in hyprland.start
     // hyprctl may not answer yet, so fall back to the first screen rather
@@ -131,7 +137,8 @@ PanelWindow {
         }
     }
 
-    // 250 ms fade in, 450 ms hold, 300 ms fade out. The exit path never fades
+    // 250 ms fade in, 2,2 s hold on startup (450 ms on exit), 300 ms fade out.
+    // The exit path never fades
     // the black backdrop out: only the logo content goes away.
     SequentialAnimation {
         running: true
@@ -163,7 +170,7 @@ PanelWindow {
             }
         }
 
-        PauseAnimation { duration: 450 }
+        PauseAnimation { duration: root.exitMode ? 450 : root.holdMs }
 
         ParallelAnimation {
             NumberAnimation {
