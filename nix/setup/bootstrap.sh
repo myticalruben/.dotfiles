@@ -3,15 +3,8 @@
 # Deja una maquina corriendo Hyprland desde Nix: instala Nix si falta, clona
 # el repositorio, activa home-manager y registra la entrada de sesion.
 #
-# Sirve igual para una VM de prueba y para un equipo real. La diferencia esta
-# en que configuracion se activa:
-#
-#   pc  (por defecto)  configs enlazadas al checkout, editables en caliente
-#   vm                 configs copiadas al store, de solo lectura
-#
-# La variante `vm` existe para demostrar que la sesion arranca desde el flake
-# y nada mas. En un equipo que usas a diario eso solo estorba, porque te quita
-# poder tocar y recargar.
+# Una sola configuracion (.#default) para VM, portatil y PC. Lo unico que
+# cambia por maquina sale del entorno: el usuario y su $HOME.
 
 set -euo pipefail
 
@@ -20,18 +13,14 @@ REPO_URL="https://github.com/myticalruben/.dotfiles.git"
 # ella el clonado fallaba antes de llegar a nada.
 BRANCH="main"
 CHECKOUT="$HOME/.dotfiles"
-CONFIG="pc"
-FORCE=0
 
 for arg in "$@"; do
   case "$arg" in
-    --force)    FORCE=1 ;;
-    --config=*) CONFIG="${arg#*=}" ;;
     --branch=*) BRANCH="${arg#*=}" ;;
     -h|--help)
-      sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'
       echo
-      echo "Uso: bootstrap.sh [--config=pc|vm] [--branch=NOMBRE] [--force]"
+      echo "Uso: bootstrap.sh [--branch=NOMBRE]"
       exit 0
       ;;
     *) echo "opcion desconocida: $arg" >&2; exit 2 ;;
@@ -51,23 +40,13 @@ virt="$(systemd-detect-virt 2>/dev/null || true)"
 virt="${virt:-none}"
 
 say "Comprobando el destino"
-echo "    configuracion   : .#$CONFIG"
+echo "    configuracion   : .#default"
+echo "    usuario         : $(id -un)"
+echo "    home            : $HOME"
 echo "    virtualizacion  : $virt"
 
-# La unica combinacion que hace dano es la de solo lectura en una maquina de
-# verdad: te deja ~/.config apuntando al store y sin forma de editar nada.
-if [ "$CONFIG" = "vm" ] && [ "$virt" = "none" ]; then
-  if [ "$FORCE" -eq 1 ]; then
-    warn "activando la variante inmutable en hardware real, porque lo pediste"
-  else
-    die "'--config=vm' deja ~/.config en rutas de solo lectura, y esto no
-    parece una VM. Para un equipo real usa la de por defecto:
-
-        bash bootstrap.sh
-
-    Si de verdad quieres la inmutable aqui, repite con --force."
-  fi
-fi
+[ -n "${HOME:-}" ] || die "HOME no esta definido"
+[ "$(id -u)" -ne 0 ] || die "no lo ejecutes como root: home-manager escribiria en /root"
 
 command -v sudo >/dev/null || die "hace falta sudo"
 
@@ -90,6 +69,14 @@ fi
 
 if ! command -v nix >/dev/null 2>&1; then
   say "Instalando Nix (instalador de Determinate, con flakes de serie)"
+  if ! command -v curl >/dev/null 2>&1; then
+    if   command -v apt-get >/dev/null; then sudo apt-get update && sudo apt-get install -y curl
+    elif command -v pacman  >/dev/null; then sudo pacman -S --noconfirm curl
+    elif command -v dnf     >/dev/null; then sudo dnf install -y curl
+    elif command -v zypper  >/dev/null; then sudo zypper install -y curl
+    else die "instala curl a mano: lo necesita el instalador de Nix"
+    fi
+  fi
   curl -fsSL https://install.determinate.systems/nix | sh -s -- install --no-confirm
   # shellcheck source=/dev/null  # lo crea el instalador que acaba de correr
   . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
@@ -117,21 +104,6 @@ else
   git -C "$CHECKOUT" fetch origin "$BRANCH"
   git -C "$CHECKOUT" checkout "$BRANCH"
   git -C "$CHECKOUT" pull --ff-only origin "$BRANCH"
-fi
-
-# ------------------------------------------------------------- el usuario ---
-
-# Se lee del flake en vez de repetirlo aqui: el valor ya vive en flake.nix y
-# tener una tercera copia solo garantiza que algun dia digan cosas distintas.
-# Por eso esta comprobacion va detras del clonado y no antes.
-FLAKE_USER="$(sed -n 's/^[[:space:]]*vmUsername = "\(.*\)";$/\1/p' "$CHECKOUT/flake.nix" | head -n1)"
-
-if [ -z "$FLAKE_USER" ]; then
-  warn "no se pudo leer vmUsername de flake.nix; se omite la comprobacion"
-elif [ "$(id -un)" != "$FLAKE_USER" ]; then
-  die "las configuraciones .#pc y .#vm esperan el usuario '$FLAKE_USER', y tu
-    eres '$(id -un)'. home-manager fallaria a mitad de la activacion, asi que
-    se para aqui. Cambia 'vmUsername' en $CHECKOUT/flake.nix y repite."
 fi
 
 # --------------------------------------------------- permisos de la sesion --
@@ -178,9 +150,9 @@ fi
 
 # -------------------------------------------------------------- activar ---
 
-say "Activando home-manager (.#$CONFIG)"
+say "Activando home-manager (.#default)"
 cd "$CHECKOUT"
-nix run home-manager/master -- switch --flake ".#$CONFIG" -b backup
+nix run ".#home-manager" -- switch --flake ".#default" --impure -b backup
 
 say "Registrando la entrada de sesion"
 "$HOME/.nix-profile/bin/install-hyprland-session" --dry-run

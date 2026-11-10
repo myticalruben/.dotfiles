@@ -1,6 +1,5 @@
 {
   "0": "Dependencias que ninguna distro te instala",
-  "1": "CI workflow \"check\"",
   "2": "utils.py",
   "3": "check-config.py",
   "4": "install.sh",

@@ -5,3 +5,6 @@ __pycache__/
 # Machine-specific Hyprland settings: monitors, wallpaper, anything tied to one
 # box. Copy hypr/modules/local.lua.example to create it.
 hypr/modules/local.lua
+
+# btop writes its log to ~/.local/state; this one was a stale copy.
+btop/btop.log

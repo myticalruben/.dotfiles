@@ -35,8 +35,8 @@ notificación; el programa simplemente no aparece.
 
 `modules/envs.lua` antepone los dos, calculados desde el `PATH` con el que
 arrancó Hyprland. Sin esa línea, `awww`, `quickshell`, `hyprshot` y el script
-`volume` están muertos en una máquina con Nix, mientras que `dunst`, `waybar`
-y `nm-applet` sí arrancan —no porque estén bien configurados, sino porque
+`volume` están muertos en una máquina con Nix, mientras que `dunst` y
+`nm-applet` sí arrancan —no porque estén bien configurados, sino porque
 Ubuntu deja una copia de cada uno en `/usr/bin`—. Ese es el patrón a
 reconocer: **una sesión a medio arrancar es síntoma de `PATH`**.
 
@@ -134,12 +134,6 @@ Trae su propio repositorio de apt y su propia clave de firma; ver
 Ojo: el nombre del binario cambia según la distro. El paquete de apt instala
 `brave-browser` y el del AUR instala `brave`. `modules/keysbindings.lua`
 elige el que exista en vez de dar uno por supuesto.
-
-## pomobar
-
-Proyecto tuyo, al que apunta el módulo `custom/pomobar` de waybar en
-`$HOME/Documents/pomobar/`. Nada lo instala, y el módulo no está actualmente
-en `modules-right`, así que la barra funciona sin él.
 
 ## Fuentes
 

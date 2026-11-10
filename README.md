@@ -4,8 +4,12 @@ Configuración de escritorio Hyprland: Hyprland (config en Lua), waybar, rofi,
 dunst, wlogout, quickshell y btop.
 
 La configuración de neovim se separó a [su propio repositorio](https://github.com/myticalruben/nvim):
-es lo único de aquí que tiene sentido instalar suelto. El flake de este repo la
-trae como input, así que sigue llegando con el mismo `switch`.
+es lo único de aquí que tiene sentido instalar suelto. No es un input de este
+flake; se instala con su propio comando:
+
+```sh
+nix run github:myticalruben/nvim
+```
 
 ## Instalación
 
@@ -21,18 +25,21 @@ semana. Ver [`nix/`](nix/README.md).
 ```sh
 git clone git@github.com:myticalruben/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-nix run home-manager/master -- switch --flake .#ruben -b backup
+nix run .#home-manager -- switch --flake .#default --impure -b backup
 ```
 
-Con `.#ruben` Hyprland sigue viniendo de la distro, a propósito: un
-compositor que no arranca te deja sin sesión desde la que arreglarlo. El
-porqué está en [`nix/README.md`](nix/README.md).
+Es **una sola configuración** para VM, portátil y PC: lo único que cambia es
+el usuario y su `$HOME`, que se leen del entorno con `--impure`; las versiones
+siguen clavadas en `flake.lock`. Hyprland viene de Nix y se instala **al lado**
+de la sesión de la distro, no en su lugar: si la de Nix no arranca, la de la
+distro sigue en el selector de acceso. El porqué está en
+[`nix/README.md`](nix/README.md).
 
-Para que **también** el compositor salga de Nix, sin sustituir la sesión de la
-distro sino poniéndose al lado de ella:
+Para dejar la máquina entera lista de una vez (Nix, clon, activación y entrada
+de sesión):
 
 ```sh
-bash nix/setup/bootstrap.sh     # activa .#pc y registra "Hyprland (Nix)"
+bash nix/setup/bootstrap.sh
 ```
 
 Ver [`nix/setup/README.md`](nix/setup/README.md).
@@ -207,6 +214,18 @@ mano si vas por el camino de la distro.
 | `packages/` | Manifiestos de dependencias por distro |
 | `nix/` | Configuración de home-manager |
 | `tools/` | Comprobaciones que corren en CI |
+
+## Grafo
+
+`graphify-out/` guarda el grafo de conocimiento del repositorio y
+`.gitattributes` trae el merge driver para su `graph.json`. El hook que lo
+reconstruye tras cada commit no se versiona (vive en `.git/hooks`), así que en
+cada clon hay que instalarlo una vez:
+
+```sh
+graphify hook install   # post-commit, post-checkout, post-merge, post-rewrite
+graphify hook status
+```
 
 ## Comprobaciones
 

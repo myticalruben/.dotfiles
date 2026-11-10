@@ -39,12 +39,16 @@ echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 Después, desde el repositorio:
 
 ```sh
-nix run home-manager/master -- switch --flake .#ruben -b backup
+nix run .#home-manager -- switch --flake .#default --impure -b backup
 ```
 
 `-b backup` renombra a `.backup` cualquier archivo que estorbe, en vez de
 borrarlo. Tras la primera activación basta con
-`home-manager switch --flake .#ruben`.
+`home-manager switch --flake .#default --impure`.
+
+`--impure` solo deja leer `$USER` y `$HOME`: son los dos únicos datos que
+cambian entre una VM, un portátil y un PC. Las versiones de todos los paquetes
+siguen saliendo de `flake.lock`.
 
 ## El `PATH` de la sesión
 
@@ -61,8 +65,10 @@ con el `PATH` pelado del sistema. Como `exec-once` y los atajos pasan por
 nada**: ni error en el log, ni notificación.
 
 El síntoma es una sesión a medio arrancar, que es justo lo que despista.
-`dunst`, `waybar`, `nm-applet` y `cliphist` sí salen, pero no desde Nix, sino
-desde la copia que Ubuntu deja en `/usr/bin`. Lo que se queda muerto es lo que
+`dunst`, `nm-applet` y `cliphist` sí salen, pero no desde Nix, sino
+desde la copia que Ubuntu deja en `/usr/bin`; `waybar` se lanza a mano con
+SUPER+Shift+W (su autostart está comentado a propósito). Lo que se queda
+muerto es lo que
 solo aporta Nix —`awww` y `awww-daemon`, o sea ningún fondo de pantalla, y
 `quickshell` (SUPER+W)— más lo que vive en `~/.local/bin`: `hyprshot`
 (SUPER+O) y el script `volume`.
@@ -106,9 +112,9 @@ bien.
 
 ## En otra máquina
 
-Cambia `username` y `homeDirectory` en `flake.nix`, o añade una segunda
-entrada en `homeConfigurations` y selecciónala por nombre. `home.nix` da por
-supuesto que el repositorio está en `~/.dotfiles`.
+No hay que tocar el flake. La cuenta y el home salen de `$USER` y `$HOME` al
+activar con `--impure`; el repositorio tiene que estar en `~/.dotfiles`
+(`bootstrap.sh` lo clona ahí).
 
 ## Las configs se siguen editando en su sitio
 
@@ -124,19 +130,20 @@ Efecto secundario: `~/.config` sigue **la rama de git que tengas activa**.
 
 ## Cómo se reparten los paquetes
 
-Todo lo que invocan las configs viene de Nix, en dos grupos.
+Todo lo que invocan las configs sale de Nix, en un solo conjunto. No hay
+variantes por máquina: la misma lista se instala en VM, portátil y PC.
 
 **Sin GPU de por medio**, instalados tal cual: `cliphist`, `wl-clipboard`,
 `grim`, `slurp`, `playerctl`, `brightnessctl`, `pulseaudio` (pactl),
 `wireplumber` (wpctl), `jq`, `imagemagick`, `btop`, `awww`.
 
-Neovim no está en esa lista porque no lo instala este flake: lo trae el input
-`nvim`, que además del editor pone en su PATH los LSP y formateadores que su
-config invoca. Ver [su README](https://github.com/myticalruben/nvim).
+Neovim no está en esa lista porque no lo instala este flake: vive en su propio
+repositorio, con su propio comando (`nix run github:myticalruben/nvim`). Ver
+[su README](https://github.com/myticalruben/nvim).
 
 **Abren ventanas**, envueltos con [nixGL](https://github.com/nix-community/nixGL):
 `waybar`, `rofi`, `kitty`, `alacritty`, `dunst`, `wlogout`, `quickshell`,
-`pavucontrol`, `networkmanagerapplet`, `brave`.
+`pavucontrol`, `networkmanagerapplet`, `brave`, `thunar` y `hyprlock`.
 
 El envoltorio importa porque esto no es NixOS. Esos programas se compilaron
 contra la Mesa de nixpkgs, mientras que el núcleo y los drivers vienen de
@@ -162,23 +169,18 @@ Medido en esta máquina, no supuesto:
 La prueba en una máquina nueva es esa misma: lanzar `alacritty -e true` por
 las dos vías y comparar los códigos de salida.
 
-## Por qué el compositor no está en esa lista
+## Por qué el compositor sí está
 
-Hyprland se sigue instalando desde la distro, y es a propósito. No es que
-falte en nixpkgs —está, la misma versión 0.56.2—; el motivo es el modo de
-fallo. Un terminal que no arranca es una molestia que arreglas desde otro
-terminal. Un compositor que no arranca te deja sin sesión desde la que
-arreglarlo.
+Hyprland viene de Nix en la única configuración. No sustituye a la sesión de
+la distro: la entrada de Nix se registra al lado, con otro nombre, y las dos
+aparecen en el gestor de acceso. Una sesión de Nix que no levante cuesta un
+cierre de sesión, no el equipo; la de la distro sigue ahí.
 
-Además tiene que encontrarlo el gestor de sesión, que lee los archivos de
-`/usr/share/wayland-sessions`. Eso queda fuera del alcance de home-manager y
-fuera del `~/.config` que cubre este repositorio.
+El riesgo real no es empaquetar Hyprland —está en nixpkgs, la misma 0.56.2—
+sino el modo de fallo de un compositor. Por eso se instala al lado y no en
+lugar de.
 
-Esa decisión sigue siendo la de esta configuración por defecto, pero ya no hay
-que improvisar para cambiarla: el interruptor `compositorFromNix` de `home.nix`
-lo hace, y la configuración `.#vm` del flake lo trae activado.
-
-Cuando se enciende, aparecen tres cosas nuevas en el perfil:
+En el perfil aparecen tres cosas:
 
 | | |
 |---|---|
@@ -186,16 +188,11 @@ Cuando se enciende, aparecen tres cosas nuevas en el perfil:
 | `hyprland-session` | el arranque de sesión: prepara el `PATH` y el entorno, y luego lanza el compositor |
 | `install-hyprland-session` | registra la entrada en el gestor de acceso; necesita root |
 
-El punto que importa es que **no sustituye a la sesión de Ubuntu, se pone al
-lado**. La entrada va a `/usr/local/share/wayland-sessions` con otro nombre
-("Hyprland (Nix)"), así que las dos aparecen en la pantalla de acceso y una
-sesión de Nix que no levante te cuesta un cierre de sesión, no la máquina.
-
 Son dos pasos, no uno:
 
 ```sh
-home-manager switch --flake .#ruben   # lo instala
-sudo install-hyprland-session         # hace que el gestor lo ofrezca
+nix run .#home-manager -- switch --flake .#default --impure   # lo instala
+sudo install-hyprland-session                                # lo registra
 ```
 
 El segundo necesita root y por eso no puede formar parte de la activación.
@@ -230,11 +227,8 @@ La solución es activar home-manager ahí:
 
 ```sh
 cd ~/.dotfiles
-nix run home-manager/master -- switch --flake .#ruben -b backup
+nix run .#home-manager -- switch --flake .#default --impure -b backup
 ```
-
-Si el usuario de esa máquina no es `ruben`, cambia antes `username` y
-`homeDirectory` en `flake.nix`.
 
 Después, `hyprctl reload` o una sesión nueva (ver **El `PATH` de la
 sesión**), y compruébalo con:
@@ -254,11 +248,34 @@ Déjala como está.
 
 ## Tamaño
 
-El closure completo ronda los **4.4 GiB**, y **4.7 GiB** con
-`compositorFromNix` encendido: Hyprland cuesta unos 300 MiB en la práctica,
-aunque su closure aislado sean 3.0 GiB, porque comparte Mesa y Qt con lo que
-ya estaba. `hyprshot` está deliberadamente
-fuera: depende de `hyprland`, que arrastra Qt 6 a través de
+Medido con `nix path-info -Sh` sobre la generación de home-manager:
+**3.8 GiB**, la misma en VM, portátil y PC. No hay una variante "ligera" y
+otra "completa"; hay una sola.
+
+De dónde sale el ahorro: `nixGL` se construye aquí con `enable32bits = false`
+y sin las extensiones Intel, así que no arrastra una segunda Mesa ni su LLVM
+(~1.3 GiB menos). `brave` (448 MiB) forma parte de esa cifra. `hyprshot` sigue
+deliberadamente fuera: depende de `hyprland`, que arrastra Qt 6 a través de
 `hyprland-qtutils`, así que un script de capturas de 60 KB costaba 640 MiB
 medidos. Lo aporta el script suelto en `~/.local/bin`, que por eso está en el
 `PATH` que añade `envs.lua`.
+
+Medido en las VM de prueba: `.#default` da 3.8 GiB en Arch y en Ubuntu 26.04.
+La activación fue de segundos con la caché caliente; en Ubuntu la primera vez
+tardó 64 s porque instaló el closure completo.
+
+## Sesión gráfica
+
+Probada en las dos VM. En Arch, con el backend DRM de QEMU, Hyprland 0.56.2
+arrancó en `Virtual-1` (1280x800) con waybar, quickshell, kitty, dunst,
+nm-applet, cliphist y awww; el fondo se restauró desde `Wallpapers/01.png` y
+`grim` capturó la pantalla.
+
+En Ubuntu, tras añadirle una GPU virtio, también arrancó en `Virtual-1`
+(1280x800) con quickshell, kitty, dunst y awww; `grim` capturó el selector de
+fondos con las miniaturas. Mesa cayó a `kms_swrast` (software) porque el
+display no expone virgl; para render por hardware, usa Display=VirGL.
+
+La diferencia importante: con QEMU stdvga/bochs (PCI `1234:1111`) no hay
+`/dev/dri/renderD128` ni driver Mesa, y Aquamarine no encuentra EGLDevice. No
+es la configuración; es la GPU emulada.

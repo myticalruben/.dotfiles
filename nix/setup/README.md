@@ -9,24 +9,16 @@ renunciar, es **no sustituir nada**. La entrada de Nix se registra al lado de
 la de la distro, con otro nombre, y las dos aparecen en la pantalla de acceso.
 Una sesión de Nix que no levante te cuesta un cierre de sesión, no el equipo.
 
-## Las dos variantes
+## Una sola configuración
+
+No hay variantes: `.#default` es la misma en una VM, un portátil y un PC. El
+usuario y el home salen de `$USER` y `$HOME` al activar con `--impure`, y las
+configs son symlinks al checkout (`~/.dotfiles`), así que se editan y se
+recargan en caliente en cualquier máquina.
 
 ```sh
-bash bootstrap.sh                 # .#pc  - configs editables (lo normal)
-bash bootstrap.sh --config=vm     # .#vm  - configs de solo lectura
+bash bootstrap.sh
 ```
-
-| | `.#pc` | `.#vm` |
-|---|---|---|
-| Hyprland | Nix, envuelto en nixGL | Nix, envuelto en nixGL |
-| Configs | symlink al checkout, editables | copiadas al store, solo lectura |
-
-`.#vm` existe para demostrar una cosa: que la sesión arranca **desde el flake
-y nada más**, sin un checkout en un sitio concreto y sin nada tocado a mano.
-Es una buena prueba y una mala experiencia diaria, porque te quita poder editar
-y recargar. En un equipo real quieres `.#pc`.
-
-El script se niega a activar `.#vm` fuera de una VM, salvo `--force`.
 
 ## Poner en marcha
 
@@ -103,8 +95,16 @@ id -nG | tr ' ' '\n' | grep -E 'video|input|render'
 ls -l /dev/dri/
 ```
 
+### GPU emulada
+
+En una VM con QEMU stdvga/bochs (PCI `1234:1111`) Hyprland no arranca aunque la
+configuración sea correcta: no hay `/dev/dri/renderD128` y Mesa no tiene driver
+para ese PCI, así que Aquamarine no encuentra EGLDevice. Con virtio-gpu
+(Proxmox: Display=VirGL) sí arranca; si el display no expone virgl, Mesa cae a
+`kms_swrast` y la sesión va por software, pero funciona.
+
 ## Coste
 
-Medido: el closure pasa de **4,4 GiB** sin compositor a **4,7 GiB** con él.
-Hyprland cuesta unos **300 MiB** en la práctica, aunque su closure aislado sean
-3,0 GiB, porque comparte Mesa y Qt con lo que ya estaba.
+Medido: **3,8 GiB** en la única configuración, con Hyprland, brave, thunar y
+hyprlock incluidos. Hyprland cuesta unos **300 MiB** en la práctica, aunque su
+closure aislado sea mayor, porque comparte Mesa y Qt con lo que ya estaba.

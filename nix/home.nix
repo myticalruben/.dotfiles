@@ -4,48 +4,35 @@
   lib,
   username,
   homeDirectory,
-  # Where the config directories come from.
-  #
-  #   true  - symlinked back out to the checkout, so editing ~/.config/hypr
-  #           still edits the repo. What a daily machine wants.
-  #   false - copied into /nix/store, read-only. What a VM wants: it proves
-  #           the session comes up from nothing but the flake, with no
-  #           checkout in any particular place and nothing edited by hand.
-  mutableConfigs,
-  # Whether Hyprland itself comes from Nix instead of the distro package.
-  # Read the long note at the bottom of this file before turning it on for a
-  # machine you need to log into tomorrow.
-  compositorFromNix,
+  # Flake input de nixGL, para construir el wrapper aqui y no depender de su
+  # overlay: el overlay fija enable32bits = true, y eso mete una segunda Mesa
+  # (y su LLVM) que ninguno de estos programas de 64 bits usa.
+  nixgl,
   ...
 }:
 
-# Both flags are required rather than defaulted. A module argument with a
-# default is resolved through `_module.args`, which needs `config`, and that
-# is a cycle as soon as the flag decides an option that feeds home.file -
-# which `xdg.dataFile` below does. The flake passes both, always.
+# One configuration for every machine. `username` and `homeDirectory` are the
+# only values that come from the environment; every package and file below is
+# the same on a VM, a laptop and a desktop.
 
 let
-  # Where the checkout lives, when mutableConfigs is on. Change this if you
-  # clone elsewhere.
+  # The checkout must live here on every machine; bootstrap.sh clones it here.
   dotfiles = "${homeDirectory}/.dotfiles";
 
-  # Y donde vive el checkout de la config de neovim, que ya no esta aqui.
-  # Solo se usa cuando mutableConfigs esta puesto; si no, la config sale del
-  # flake y da igual que este repo este clonado o no.
-  nvimCheckout = "${homeDirectory}/nvim";
-
-  link =
-    path:
-    if mutableConfigs then
-      config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}"
-    else
-      ../. + "/${path}";
+  link = path: config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}";
 
   # Programs that open a window need the host's GPU drivers, not the Mesa that
   # nixpkgs built them against. nixGL injects the former at launch. This
   # machine and the desktop both use integrated graphics, which is the case
   # Mesa/nixGL handles cleanly.
-  nixGL = lib.getExe pkgs.nixgl.nixGLIntel;
+  nixGL = lib.getExe (pkgs.callPackage "${nixgl}/default.nix" {
+    inherit pkgs;
+    # 64 bits only. These are all 64-bit programs; the 32-bit branch exists
+    # for Steam-style apps, and costs a second Mesa plus its LLVM (~1.3 GiB).
+    enable32bits = false;
+    # Intel VA-API extras; not used by this config and ~100 MiB.
+    enableIntelX86Extensions = false;
+  }).nixGLIntel;
 
   wrapGL =
     pkg:
@@ -76,9 +63,8 @@ let
     hm_vars="$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
     [ -r "$hm_vars" ] && . "$hm_vars"
 
-    # Per-machine escape hatch, sourced before the compositor starts. It is
-    # deliberately outside ~/.config/hypr: with mutableConfigs = false that
-    # directory is a read-only store path, so nothing can be dropped into it.
+    # Per-machine escape hatch, sourced before the compositor starts. Kept
+    # outside ~/.config/hypr so it never becomes part of the checkout.
     #
     # This is the only place some settings can go at all. A virtualised GPU
     # that needs LIBGL_ALWAYS_SOFTWARE has to have it set before Hyprland
@@ -252,27 +238,15 @@ in
     "wlogout".source = link "wlogout";
     "quickshell".source = link "quickshell";
     "btop".source = link "btop";
-    # nvim no esta en esta lista: lo coloca el modulo de su propio flake, mas
-    # abajo. La eleccion mutable/inmutable es la misma, solo que la toma alli.
   };
 
   home.file.".local/bin/volume".source = link "scripts/volume";
   home.file.".local/bin/wallpaper".source = link "scripts/wallpaper";
   home.file."Pictures/Wallpapers".source = link "Wallpapers";
 
-  # ---------------------------------------------------------------- nvim ---
-  # Del flake de github:myticalruben/nvim, que ademas del editor trae en su
-  # PATH los LSP y formateadores que la config invoca por su nombre.
-
-  #  programs.nvimConfig = {
-  #enable = true;
-  # Misma regla que `link`: editable contra el checkout, o copia del store.
-  #source = if mutableConfigs then "${nvimCheckout}/config" else null;
-  #};
-
   # ------------------------------------------------------------ packages ---
-  # Everything the configs invoke, from Nix. Split in two because a non-NixOS
-  # host makes one half harder than the other.
+  # Everything the configs invoke, from Nix. One list: the closure is the same
+  # on a VM, a laptop and a desktop.
 
   home.packages =
     # --- no GPU involved: safe as-is ---
@@ -286,7 +260,7 @@ in
       pulseaudio # pactl, used by scripts/volume
       wireplumber # wpctl, used by the volume keybinds
       jq
-      imagemagick
+      imagemagick # magick/convert for quickshell thumbnails
       btop
       awww # the fork the config calls; nixpkgs renamed swww to this
 
@@ -310,11 +284,13 @@ in
           pavucontrol
           networkmanagerapplet # nm-applet
           brave
+          thunar
+          hyprlock
         ]
       ))
     ++
-      # --- the compositor, only when asked for ---
-      lib.optionals compositorFromNix [
+      # --- the compositor and its session entry ---
+      [
         hyprlandWrapped
         hyprlandSession
         installSession
@@ -323,30 +299,11 @@ in
   # Written for the display managers that honour XDG_DATA_DIRS. GDM does not -
   # it reads its list as root, before this directory is any of its business -
   # so `sudo install-hyprland-session` stays the step that matters.
-  xdg.dataFile = lib.mkIf compositorFromNix {
-    "wayland-sessions/hyprland-nix.desktop".source = sessionDesktop;
-  };
+  xdg.dataFile."wayland-sessions/hyprland-nix.desktop".source = sessionDesktop;
 
-  # --- Why the compositor is opt-in ---------------------------------------
-  #
-  # `compositorFromNix` defaults to false, and that default is the whole
-  # point. The risk is not that Hyprland is hard to package - nixpkgs has it,
-  # the same 0.56.2 - it is the failure mode. A terminal that will not start
-  # is an annoyance you fix from another terminal. A compositor that will not
-  # start leaves you with no session to fix it from.
-  #
-  # So the distro package stays installed and its session entry stays in
-  # /usr/share/wayland-sessions. This one installs alongside it, in
-  # /usr/local/share, under a different name ("Hyprland (Nix)"). Both show up
-  # in the greeter, and a Nix session that will not come up costs you one
-  # logout instead of your machine.
-  #
-  # Turning it on takes two steps, not one:
-  #
-  #   home-manager switch --flake .#ruben   # installs it
-  #   sudo install-hyprland-session         # makes the greeter offer it
-  #
-  # The second needs root and therefore cannot be part of activation. It only
-  # has to run once: the entry points at ~/.nix-profile/bin, which follows
-  # your generations, not at the store path current on the day you ran it.
+  # The distro's own session entry is left untouched. This one installs
+  # alongside it as "Hyprland (Nix)"; if the Nix session does not come up, the
+  # distro session is still in the greeter. `sudo install-hyprland-session`
+  # registers it once; activation cannot, because the greeter reads its list
+  # as root.
 }

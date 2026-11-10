@@ -14,8 +14,8 @@ dunst             | notification daemon
 dunstify          | scripts/volume notifications (ships with dunst)
 rofi              | SUPER+D launcher, clipboard picker, opacity.sh menu
 kitty             | SUPER+Return terminal
-thunar            | file manager keybind (currently commented out)
-brave-browser     | browser keybind
+thunar            | SUPER+E file manager
+brave/brave-browser | browser keybind
 wlogout           | SUPER+GRAVE power menu
 quickshell        | SUPER+W wallpaper picker
 awww              | sets the wallpaper
@@ -31,8 +31,8 @@ wpctl             | volume and mute keybinds (wireplumber)
 playerctl         | media keys
 brightnessctl     | brightness keys
 nm-applet         | network tray icon
+nm-connection-editor | waybar network click
 pavucontrol       | waybar audio click
-alacritty         | waybar network click runs "alacritty -e nmtui"
 btop              | system monitor
 magick/convert    | quickshell thumbnails (ImageMagick 7 or 6)
 nvim              | editor; its config lives in github.com/myticalruben/nvim

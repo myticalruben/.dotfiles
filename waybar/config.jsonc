@@ -124,15 +124,7 @@
     "format-wifi": "<span color='#90cdfa'></span>{essid}({signalStrength}%)",
     "format-ethernet": "{ipaddr}/{cidr} ",
     "format-disconnected": "<span color='#ff005f'></span>No Network",
-    "on-click": "alacritty -e nmtui",
-  },
-  "custom/pomobar": {
-    "format": "{}",
-    "interval": 1,
-    "exec": "$HOME/Documents/pomobar/pomobar-client status",
-    "on-click": "$HOME/Documents/pomobar/pomobar-client pause",
-    "on-click-middle": "$HOME/Documents/pomobar/pomobar-client reset",
-    "return-type": "json",
+    "on-click": "nm-connection-editor",
   },
   "custom/power": {
     "format": "⏻",
