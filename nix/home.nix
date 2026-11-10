@@ -271,8 +271,7 @@ in
     "dunst".source = link "dunst";
     "wlogout".source = link "wlogout";
     "quickshell".source = link "quickshell";
-    "gtk-3.0/gtk.css".source = link "gtk/gtk-3.0.css";
-    "gtk-4.0/gtk.css".source = link "gtk/gtk-4.0.css";
+    "gtk-theme".source = link "gtk";
     "btop".source = link "btop";
   };
 

@@ -1,0 +1,53 @@
+/* Neon para apps GTK4. */
+@define-color accent_bg_color __ACCENT__;
+@define-color accent_fg_color __BG__;
+@define-color accent_color __ACCENT__;
+@define-color window_bg_color __BG__;
+@define-color window_fg_color __FG__;
+@define-color view_bg_color __BASE__;
+@define-color view_fg_color __FG__;
+@define-color headerbar_bg_color __BASE__;
+@define-color headerbar_fg_color __FG__;
+@define-color card_bg_color __BASE__;
+@define-color card_fg_color __FG__;
+
+window,
+.background {
+    background-color: @window_bg_color;
+    color: @window_fg_color;
+}
+
+headerbar {
+    background-color: @headerbar_bg_color;
+    color: @headerbar_fg_color;
+    border-bottom: 1px solid __ACCENT_SOFT__;
+    box-shadow: none;
+}
+
+button {
+    border-radius: 6px;
+    border: 1px solid __ACCENT_SOFT__;
+}
+
+button:hover {
+    background-color: __ACCENT_GLOW__;
+    border-color: __ACCENT_STRONG__;
+}
+
+entry,
+spinbutton {
+    border-radius: 6px;
+    border: 1px solid __ACCENT_SOFT__;
+    box-shadow: none;
+}
+
+row:selected,
+list row:selected {
+    background-color: @accent_bg_color;
+    color: @accent_fg_color;
+}
+
+scrollbar slider {
+    background-color: __ACCENT_SOFT__;
+    border-radius: 6px;
+}

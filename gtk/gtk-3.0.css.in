@@ -1,12 +1,12 @@
 /* Neon para apps GTK3 (Thunar). Base oscura + acentos cian/magenta. */
-@define-color theme_bg_color #05080f;
-@define-color theme_fg_color #d9fbff;
-@define-color theme_base_color #090c14;
-@define-color theme_text_color #d9fbff;
-@define-color theme_selected_bg_color #00f0ff;
-@define-color theme_selected_fg_color #041018;
-@define-color theme_unfocused_bg_color #0b1220;
-@define-color insensitive_fg_color #5e6b86;
+@define-color theme_bg_color __BG__;
+@define-color theme_fg_color __FG__;
+@define-color theme_base_color __BASE__;
+@define-color theme_text_color __FG__;
+@define-color theme_selected_bg_color __ACCENT__;
+@define-color theme_selected_fg_color __BG__;
+@define-color theme_unfocused_bg_color __BASE__;
+@define-color insensitive_fg_color __MUTED__;
 
 window,
 .background {
@@ -17,24 +17,24 @@ window,
 headerbar,
 .titlebar {
     background-image: none;
-    background-color: #090c14;
+    background-color: __BASE__;
     color: @theme_fg_color;
-    border-bottom: 1px solid rgba(0, 240, 255, 0.35);
+    border-bottom: 1px solid __ACCENT_SOFT__;
     box-shadow: none;
 }
 
 button {
     background-image: none;
-    background-color: #0b1220;
+    background-color: __BASE__;
     color: @theme_fg_color;
-    border: 1px solid rgba(0, 240, 255, 0.25);
+    border: 1px solid __ACCENT_SOFT__;
     border-radius: 6px;
     box-shadow: none;
 }
 
 button:hover {
-    background-color: rgba(0, 240, 255, 0.12);
-    border-color: rgba(0, 240, 255, 0.55);
+    background-color: __ACCENT_GLOW__;
+    border-color: __ACCENT_STRONG__;
 }
 
 button:checked,
@@ -49,13 +49,13 @@ searchbar,
 spinbutton {
     background-color: @theme_base_color;
     color: @theme_fg_color;
-    border: 1px solid rgba(0, 240, 255, 0.28);
+    border: 1px solid __ACCENT_SOFT__;
     border-radius: 6px;
 }
 
 entry:focus {
     border-color: @theme_selected_bg_color;
-    box-shadow: 0 0 8px rgba(0, 240, 255, 0.35);
+    box-shadow: 0 0 8px __ACCENT_SOFT__;
 }
 
 treeview.view,
@@ -67,7 +67,7 @@ row {
 
 treeview.view:hover,
 list row:hover {
-    background-color: rgba(0, 240, 255, 0.08);
+    background-color: __ACCENT_GLOW__;
 }
 
 treeview.view:selected,
@@ -80,17 +80,17 @@ list row:selected {
 menubar,
 menu,
 .menu {
-    background-color: #090c14;
+    background-color: __BASE__;
     color: @theme_fg_color;
-    border: 1px solid rgba(0, 240, 255, 0.25);
+    border: 1px solid __ACCENT_SOFT__;
 }
 
 menuitem:hover {
-    background-color: rgba(0, 240, 255, 0.12);
+    background-color: __ACCENT_GLOW__;
 }
 
 scrollbar slider {
-    background-color: rgba(0, 240, 255, 0.35);
+    background-color: __ACCENT_SOFT__;
     border-radius: 6px;
 }
 
@@ -99,7 +99,7 @@ scrollbar slider:hover {
 }
 
 separator {
-    background-color: rgba(0, 240, 255, 0.18);
+    background-color: __ACCENT_GLOW__;
 }
 
 /* Thunar */
@@ -109,17 +109,17 @@ window.thunar,
 }
 
 .thunar toolbar {
-    background-color: #090c14;
-    border-bottom: 1px solid rgba(0, 240, 255, 0.22);
+    background-color: __BASE__;
+    border-bottom: 1px solid __ACCENT_GLOW__;
 }
 
 .thunar .sidebar {
     background-color: #070b13;
-    border-right: 1px solid rgba(0, 240, 255, 0.18);
+    border-right: 1px solid __ACCENT_GLOW__;
 }
 
 .thunar .sidebar row:selected {
-    background-color: rgba(0, 240, 255, 0.18);
+    background-color: __ACCENT_GLOW__;
     color: @theme_fg_color;
     box-shadow: inset 3px 0 0 @theme_selected_bg_color;
 }
@@ -129,7 +129,7 @@ window.thunar,
 }
 
 .thunar statusbar {
-    background-color: #090c14;
-    color: #8ef7ff;
-    border-top: 1px solid rgba(0, 240, 255, 0.22);
+    background-color: __BASE__;
+    color: __ACCENT__;
+    border-top: 1px solid __ACCENT_GLOW__;
 }

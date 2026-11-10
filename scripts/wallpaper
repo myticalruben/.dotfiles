@@ -44,6 +44,12 @@ apply_theme() {
     [ -x "$script" ] && "$script" "$1" >/dev/null 2>&1 || true
 }
 
+# Thunar y las apps GTK leen el CSS generado al abrir sus ventanas.
+apply_gtk_theme() {
+    local script="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-theme/theme.sh"
+    [ -x "$script" ] && "$script" "$1" >/dev/null 2>&1 || true
+}
+
 # awww-daemon se lanza en el mismo bloque de arranque que esto, así que cuando
 # `restore` corre todavía puede no aceptar conexiones. Antes había un `sleep 1`
 # a ojo; esto espera a que el demonio responda de verdad, y como mucho 10 s.
@@ -63,6 +69,7 @@ case "${1:-}" in
         awww img "$path" -t random --transition-duration 1 || exit 1
         remember "$path"
         apply_theme "$path"
+        apply_gtk_theme "$path"
         ;;
 
     restore)
@@ -83,6 +90,7 @@ case "${1:-}" in
         # el efecto no se ve y solo retrasa la aparición del escritorio.
         awww img "$path" -t none || exit 1
         apply_theme "$path"
+        apply_gtk_theme "$path"
         ;;
 
     *)
