@@ -80,7 +80,7 @@ let
   # generation that happened to be current when it was installed.
   sessionDesktop = pkgs.writeText "hyprland-nix.desktop" ''
     [Desktop Entry]
-    Name=Hyprland (Nix)
+    Name=Mytical
     Comment=Hyprland desde Nix, con el entorno de sesion ya preparado
     Exec=${homeDirectory}/.nix-profile/bin/hyprland-session
     Type=Application
@@ -106,7 +106,7 @@ let
         -h|--help)
           echo "Uso: install-hyprland-session [--dry-run] [--dir=RUTA]"
           echo
-          echo "Registra la sesion \"Hyprland (Nix)\" donde el gestor de acceso"
+          echo "Registra la sesion \"Mytical\" donde el gestor de acceso"
           echo "de esta maquina la vaya a leer. Sin argumentos lo detecta solo."
           echo
           echo "  --dry-run   dice que haria, sin escribir y sin necesitar root"
@@ -307,7 +307,7 @@ in
   xdg.dataFile."wayland-sessions/hyprland-nix.desktop".source = sessionDesktop;
 
   # The distro's own session entry is left untouched. This one installs
-  # alongside it as "Hyprland (Nix)"; if the Nix session does not come up, the
+  # alongside it as "Mytical"; if the Nix session does not come up, the
   # distro session is still in the greeter. `sudo install-hyprland-session`
   # registers it once; activation cannot, because the greeter reads its list
   # as root.

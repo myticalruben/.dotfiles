@@ -167,7 +167,7 @@ cat <<'FIN'
 
       command -v Hyprland hyprland-session awww quickshell
 
-    Cierra sesion y elige "Hyprland (Nix)" en el selector del gestor de
+    Cierra sesion y elige "Mytical" en el selector del gestor de
     acceso. La sesion de la distro sigue ahi, intacta, por si acaso.
 
     Si no arranca, lanzalo desde una TTY (Ctrl+Alt+F3) para ver el error:

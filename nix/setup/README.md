@@ -31,7 +31,7 @@ bash bootstrap.sh
 Instala Nix si falta, clona el repositorio, te añade a los grupos `video`,
 `input` y `render`, activa home-manager y registra la entrada de sesión.
 
-Al terminar, cierra sesión y elige **"Hyprland (Nix)"** en el selector.
+Al terminar, cierra sesión y elige **"Mytical"** en el selector.
 
 ## Dónde se registra la sesión, y por qué se detecta
 
