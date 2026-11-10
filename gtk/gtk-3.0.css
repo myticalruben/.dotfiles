@@ -1,0 +1,135 @@
+/* Neon para apps GTK3 (Thunar). Base oscura + acentos cian/magenta. */
+@define-color theme_bg_color #05080f;
+@define-color theme_fg_color #d9fbff;
+@define-color theme_base_color #090c14;
+@define-color theme_text_color #d9fbff;
+@define-color theme_selected_bg_color #00f0ff;
+@define-color theme_selected_fg_color #041018;
+@define-color theme_unfocused_bg_color #0b1220;
+@define-color insensitive_fg_color #5e6b86;
+
+window,
+.background {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+}
+
+headerbar,
+.titlebar {
+    background-image: none;
+    background-color: #090c14;
+    color: @theme_fg_color;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.35);
+    box-shadow: none;
+}
+
+button {
+    background-image: none;
+    background-color: #0b1220;
+    color: @theme_fg_color;
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+button:hover {
+    background-color: rgba(0, 240, 255, 0.12);
+    border-color: rgba(0, 240, 255, 0.55);
+}
+
+button:checked,
+button:active {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+    border-color: @theme_selected_bg_color;
+}
+
+entry,
+searchbar,
+spinbutton {
+    background-color: @theme_base_color;
+    color: @theme_fg_color;
+    border: 1px solid rgba(0, 240, 255, 0.28);
+    border-radius: 6px;
+}
+
+entry:focus {
+    border-color: @theme_selected_bg_color;
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.35);
+}
+
+treeview.view,
+list,
+row {
+    background-color: @theme_base_color;
+    color: @theme_fg_color;
+}
+
+treeview.view:hover,
+list row:hover {
+    background-color: rgba(0, 240, 255, 0.08);
+}
+
+treeview.view:selected,
+row:selected,
+list row:selected {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}
+
+menubar,
+menu,
+.menu {
+    background-color: #090c14;
+    color: @theme_fg_color;
+    border: 1px solid rgba(0, 240, 255, 0.25);
+}
+
+menuitem:hover {
+    background-color: rgba(0, 240, 255, 0.12);
+}
+
+scrollbar slider {
+    background-color: rgba(0, 240, 255, 0.35);
+    border-radius: 6px;
+}
+
+scrollbar slider:hover {
+    background-color: @theme_selected_bg_color;
+}
+
+separator {
+    background-color: rgba(0, 240, 255, 0.18);
+}
+
+/* Thunar */
+window.thunar,
+.thunar {
+    background-color: @theme_bg_color;
+}
+
+.thunar toolbar {
+    background-color: #090c14;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.22);
+}
+
+.thunar .sidebar {
+    background-color: #070b13;
+    border-right: 1px solid rgba(0, 240, 255, 0.18);
+}
+
+.thunar .sidebar row:selected {
+    background-color: rgba(0, 240, 255, 0.18);
+    color: @theme_fg_color;
+    box-shadow: inset 3px 0 0 @theme_selected_bg_color;
+}
+
+.thunar .path-bar button {
+    border-radius: 5px;
+}
+
+.thunar statusbar {
+    background-color: #090c14;
+    color: #8ef7ff;
+    border-top: 1px solid rgba(0, 240, 255, 0.22);
+}

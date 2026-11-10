@@ -231,6 +231,17 @@ in
 
   programs.home-manager.enable = true;
 
+  # Base oscura para GTK3/GTK4; el CSS de gtk/ pone los acentos neon. Thunar
+  # es GTK3 y toma estos colores sin tocar su configuracion interna.
+  gtk = {
+    enable = true;
+    theme.name = "Adwaita-dark";
+    font = {
+      name = "JetBrainsMono Nerd Font";
+      size = 10;
+    };
+  };
+
   # Zsh + Oh My Zsh desde Nix. Los plugins son los que trae Oh My Zsh; no hay
   # que clonar nada a mano ni mantener un ~/.oh-my-zsh fuera del perfil.
   programs.zsh = {
@@ -260,6 +271,8 @@ in
     "dunst".source = link "dunst";
     "wlogout".source = link "wlogout";
     "quickshell".source = link "quickshell";
+    "gtk-3.0/gtk.css".source = link "gtk/gtk-3.0.css";
+    "gtk-4.0/gtk.css".source = link "gtk/gtk-4.0.css";
     "btop".source = link "btop";
   };
 
