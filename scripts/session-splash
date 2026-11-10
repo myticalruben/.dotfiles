@@ -71,33 +71,33 @@ detect_distro() {
     if [[ "$id" == "ubuntu" || " $id_like " == *" ubuntu "* ]]; then
         distro_id=ubuntu
         distro_name="Ubuntu"
-        distro_glyph=$'\uf31b'
+        distro_glyph=$(printf '\357\214\233')
         distro_accent="#E95420"
     elif [[ "$id" == "arch" || "$id" == "archlinux" || " $id_like " == *" arch "* ]]; then
         distro_id=arch
         distro_name="Arch Linux"
-        distro_glyph=$'\uf303'
+        distro_glyph=$(printf '\357\214\203')
         distro_accent="#1793D1"
     elif [[ "$id" == "debian" || " $id_like " == *" debian "* ]]; then
         distro_id=debian
         distro_name="Debian"
-        distro_glyph=$'\uf306'
+        distro_glyph=$(printf '\357\214\206')
         distro_accent="#A81D33"
     elif [[ "$id" == "fedora" || " $id_like " == *" fedora "* ]]; then
         distro_id=fedora
         distro_name="Fedora"
-        distro_glyph=$'\uf30a'
+        distro_glyph=$(printf '\357\214\212')
         distro_accent="#51A2DA"
     elif [[ "$id" == "nixos" || " $id_like " == *" nixos "* ]]; then
         distro_id=nixos
         distro_name="NixOS"
-        distro_glyph=$'\uf313'
+        distro_glyph=$(printf '\357\214\223')
         distro_accent="#5277C3"
     else
         # Distro desconocida: su propio nombre si lo trae, Tux y blanco.
         distro_id=${id:-unknown}
         distro_name=${name:-Linux}
-        distro_glyph=$'\uf31a'
+        distro_glyph=$(printf '\357\214\232')
         distro_accent="#FFFFFF"
     fi
 
