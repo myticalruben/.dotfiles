@@ -37,6 +37,13 @@ remember() {
     printf '%s\n' "$1" > "$STATE_FILE"
 }
 
+# La barra se adapta al fondo: theme.sh escribe su CSS en la cache y recarga
+# waybar si esta corriendo.
+apply_theme() {
+    local script="${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/theme.sh"
+    [ -x "$script" ] && "$script" "$1" >/dev/null 2>&1 || true
+}
+
 # awww-daemon se lanza en el mismo bloque de arranque que esto, así que cuando
 # `restore` corre todavía puede no aceptar conexiones. Antes había un `sleep 1`
 # a ojo; esto espera a que el demonio responda de verdad, y como mucho 10 s.
@@ -55,6 +62,7 @@ case "${1:-}" in
 
         awww img "$path" -t random --transition-duration 1 || exit 1
         remember "$path"
+        apply_theme "$path"
         ;;
 
     restore)
@@ -74,6 +82,7 @@ case "${1:-}" in
         # Sin transición: al arrancar no hay imagen previa desde la que fundir,
         # el efecto no se ve y solo retrasa la aparición del escritorio.
         awww img "$path" -t none || exit 1
+        apply_theme "$path"
         ;;
 
     *)
