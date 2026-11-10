@@ -108,7 +108,8 @@ window#waybar {
     color: #04131a;
     background: #00f0ff;
     border-color: #00f0ff;
-    box-shadow: 0 0 12px rgba(0, 240, 255, 0.9);
+    /* Sombra interior: el cian no se sale de la pastilla. */
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.28);
 }
 
 #workspaces button.urgent {
