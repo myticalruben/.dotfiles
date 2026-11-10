@@ -4,7 +4,7 @@
   // ejecucion si mostrar el icono de wifi (portatil con bateria) o la IP
   // (PC o maquina virtual).
   "layer": "top",
-  "spacing": 2,
+  "spacing": 6,
   "exclusive": true,
 
   "modules-left": [
