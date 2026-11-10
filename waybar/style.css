@@ -98,6 +98,13 @@ window#waybar {
     text-shadow: 0 0 8px @neon_glow1;
 }
 
+/* El glifo de wifi tiene bearing a la derecha; la IP no. Solo se compensa
+   cuando el script manda class="wifi". */
+#custom-network.wifi {
+    min-width: 24px;
+    padding: 2px 4px 2px 0;
+}
+
 #pulseaudio {
     color: @neon_accent2;
     border-color: @neon_soft2;

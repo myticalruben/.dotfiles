@@ -74,7 +74,7 @@
   },
   "custom/network": {
     "exec": "${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/network.sh",
-    "return-type": "text",
+    "return-type": "json",
     "interval": 5,
     "tooltip": false,
     "on-click": "nm-connection-editor"

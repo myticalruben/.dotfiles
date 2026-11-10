@@ -5,7 +5,7 @@ set -u
 
 for bat in /sys/class/power_supply/BAT*; do
     if [ -d "$bat" ]; then
-        printf ''
+        printf '{"text":"","class":"wifi"}\n'
         exit 0
     fi
 done
@@ -23,4 +23,4 @@ if [ -n "$iface" ]; then
 fi
 [ -n "$ip" ] || ip=$(hostname -I 2>/dev/null | awk '{ print $1 }')
 
-printf '%s' "${ip:-no-ip}"
+printf '{"text":"%s","class":"ip"}\n' "${ip:-no-ip}"
