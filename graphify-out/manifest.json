@@ -18,10 +18,10 @@
     "semantic_hash": "2f9de6afd1bedefe28b94ad90b23c0d8"
   },
   "hypr/modules/autostart.lua": {
-    "mtime": 1794272231.8453708,
-    "seen": 1794273961.773544,
-    "ast_hash": "b54d94f9f22487a68be2bd13253ac6a9",
-    "semantic_hash": ""
+    "mtime": 1794331382.0020444,
+    "seen": 1794352948.5142696,
+    "ast_hash": "62b816045280f1ac528545f2c068b3e9",
+    "semantic_hash": "62b816045280f1ac528545f2c068b3e9"
   },
   "hypr/modules/decoration.lua": {
     "mtime": 1794272231.8453708,
@@ -48,10 +48,10 @@
     "semantic_hash": "ba0bfb254d93bd264b4fe769a29864cd"
   },
   "hypr/modules/keysbindings.lua": {
-    "mtime": 1794275023.0263844,
-    "seen": 1794275157.540292,
-    "ast_hash": "31e9e1009d875757450b60c9194abd72",
-    "semantic_hash": ""
+    "mtime": 1794325710.7317097,
+    "seen": 1794352948.5144606,
+    "ast_hash": "57b9fb51633886febd06323527d8b2da",
+    "semantic_hash": "57b9fb51633886febd06323527d8b2da"
   },
   "hypr/modules/master.lua": {
     "mtime": 1794272231.8453708,
@@ -102,10 +102,10 @@
     "semantic_hash": "c8c3e657c2b6acf27099ccce589fb227"
   },
   "nix/setup/bootstrap.sh": {
-    "mtime": 1794306455.8557744,
-    "seen": 1794306720.7204866,
-    "ast_hash": "e8d12f55e0f18df4b794a4ad8a0614ea",
-    "semantic_hash": ""
+    "mtime": 1794345166.3841462,
+    "seen": 1794352948.5147984,
+    "ast_hash": "22b2052e2c3e2a5ac7d211a35e4a5df2",
+    "semantic_hash": "22b2052e2c3e2a5ac7d211a35e4a5df2"
   },
   "quickshell/hyprquickpaper/cache.sh": {
     "mtime": 1794272231.8493707,
@@ -115,9 +115,9 @@
   },
   "quickshell/hyprquickpaper/commands.sh": {
     "mtime": 1794272231.8493707,
-    "seen": 1794273961.773569,
+    "seen": 1794352948.5148451,
     "ast_hash": "9c0bd323dd9bd8fdd2d5dbf18cbc9951",
-    "semantic_hash": ""
+    "semantic_hash": "9c0bd323dd9bd8fdd2d5dbf18cbc9951"
   },
   "quickshell/hyprquickpaper/config.json": {
     "mtime": 1794272231.8493707,
@@ -133,9 +133,9 @@
   },
   "setup.py": {
     "mtime": 1794272231.8493707,
-    "seen": 1794273961.773576,
+    "seen": 1794352948.5149424,
     "ast_hash": "39bafaf78dc9303ed0c4b180d0274e1c",
-    "semantic_hash": ""
+    "semantic_hash": "39bafaf78dc9303ed0c4b180d0274e1c"
   },
   "tools/check-config.py": {
     "mtime": 1794272231.8493707,
@@ -150,34 +150,34 @@
     "semantic_hash": "64bcfebfecb21cab37a6551548ee7fe7"
   },
   "waybar/scripts/battery.sh": {
-    "mtime": 1794272231.8493707,
-    "seen": 1794273961.7735808,
-    "ast_hash": "4bb059ef1b583bd0a512e63ef5f7d84a",
-    "semantic_hash": "4bb059ef1b583bd0a512e63ef5f7d84a"
+    "mtime": 1794335359.0144143,
+    "seen": 1794352948.5150216,
+    "ast_hash": "fa96a67bfe0b4e7f5ca67712919395f9",
+    "semantic_hash": "fa96a67bfe0b4e7f5ca67712919395f9"
   },
   ".github/workflows/check.yml": {
-    "mtime": 1794272231.6413727,
-    "seen": 1794273961.7735143,
-    "ast_hash": "8cff1e0ef2fb6098a08020d75e6ee8c0",
-    "semantic_hash": ""
+    "mtime": 1794325710.7317097,
+    "seen": 1794352948.5140772,
+    "ast_hash": "d4d23c89c53119c7f2ec242f4e04d615",
+    "semantic_hash": "d4d23c89c53119c7f2ec242f4e04d615"
   },
   "README.md": {
     "mtime": 1794308060.7760947,
-    "seen": 1794308489.70223,
+    "seen": 1794352948.5150309,
     "ast_hash": "fd02d5e839b13ce0294103c253f3cfa5",
-    "semantic_hash": ""
+    "semantic_hash": "fd02d5e839b13ce0294103c253f3cfa5"
   },
   "nix/README.md": {
     "mtime": 1794307450.025944,
-    "seen": 1794308034.5243025,
+    "seen": 1794352948.5150325,
     "ast_hash": "0f72d312c2c650406ed6ace016747ee3",
-    "semantic_hash": ""
+    "semantic_hash": "0f72d312c2c650406ed6ace016747ee3"
   },
   "nix/setup/README.md": {
-    "mtime": 1794307450.3019466,
-    "seen": 1794308034.524305,
-    "ast_hash": "32cd35f5c775114ae545ce4d80cebc76",
-    "semantic_hash": ""
+    "mtime": 1794326460.0416422,
+    "seen": 1794352948.5150342,
+    "ast_hash": "a0b53d0940eedf425d2538877b9ea945",
+    "semantic_hash": "a0b53d0940eedf425d2538877b9ea945"
   },
   "packages/README.md": {
     "mtime": 1794272231.8493707,
@@ -205,15 +205,15 @@
   },
   "packages/manual.md": {
     "mtime": 1794275061.0546994,
-    "seen": 1794275157.5403416,
+    "seen": 1794352948.5151954,
     "ast_hash": "37fab1533e74bd4c604b6ebb3bea7ff0",
-    "semantic_hash": ""
+    "semantic_hash": "37fab1533e74bd4c604b6ebb3bea7ff0"
   },
   "packages/required-commands.txt": {
     "mtime": 1794275204.0759344,
-    "seen": 1794306720.7205176,
+    "seen": 1794352948.5151975,
     "ast_hash": "6c06b7a673f29be7371f0c85be5fb288",
-    "semantic_hash": ""
+    "semantic_hash": "6c06b7a673f29be7371f0c85be5fb288"
   },
   "packages/ubuntu-ppa.txt": {
     "mtime": 1794272231.8493707,
@@ -258,10 +258,10 @@
     "semantic_hash": "132cdda64bc4cb87c3d3d23919963055"
   },
   "scripts/wallpaper": {
-    "mtime": 1794272231.8493707,
-    "seen": 1794273961.773574,
-    "ast_hash": "da1e81326efe93708d6ef0df344299a5",
-    "semantic_hash": ""
+    "mtime": 1794348027.856507,
+    "seen": 1794352948.5149405,
+    "ast_hash": "ff32f39788c46605b66cc3c58d4ae743",
+    "semantic_hash": "ff32f39788c46605b66cc3c58d4ae743"
   },
   "Wallpapers/0.png": {
     "mtime": 1794272231.6733723,
@@ -394,5 +394,59 @@
     "seen": 1794273961.7736304,
     "ast_hash": "7c83b298e99f6f9d399fd6f12f56a036",
     "semantic_hash": ""
+  },
+  "gtk/theme.py": {
+    "mtime": 1794348018.7444036,
+    "seen": 1794352948.514085,
+    "ast_hash": "caa4c22c14ee2289296890550dc41d6d",
+    "semantic_hash": "caa4c22c14ee2289296890550dc41d6d"
+  },
+  "gtk/theme.sh": {
+    "mtime": 1794348018.7444036,
+    "seen": 1794352948.5140886,
+    "ast_hash": "ca877a77a9205d68ba0678692d4f80ef",
+    "semantic_hash": "ca877a77a9205d68ba0678692d4f80ef"
+  },
+  "scripts/session-splash": {
+    "mtime": 1794325855.185839,
+    "seen": 1794352948.5148916,
+    "ast_hash": "6a5d25fa2933eab54f7780e1278eb8d7",
+    "semantic_hash": "6a5d25fa2933eab54f7780e1278eb8d7"
+  },
+  "scripts/session-start": {
+    "mtime": 1794331381.7060416,
+    "seen": 1794352948.5148935,
+    "ast_hash": "7021e8d1a919b9c6273685725e57ca4a",
+    "semantic_hash": "7021e8d1a919b9c6273685725e57ca4a"
+  },
+  "scripts/set-zsh-shell": {
+    "mtime": 1794345290.75739,
+    "seen": 1794352948.5148957,
+    "ast_hash": "e4e78e8033d5f9feb615271bf17e8d26",
+    "semantic_hash": "e4e78e8033d5f9feb615271bf17e8d26"
+  },
+  "waybar/scripts/launch-waybar.sh": {
+    "mtime": 1794322650.0208547,
+    "seen": 1794352948.5150235,
+    "ast_hash": "706c6b442b4304a6e0f44656c9a3f776",
+    "semantic_hash": "706c6b442b4304a6e0f44656c9a3f776"
+  },
+  "waybar/scripts/network.sh": {
+    "mtime": 1794335579.5808377,
+    "seen": 1794352948.5150251,
+    "ast_hash": "a355ec3952415c111b634f04249a9134",
+    "semantic_hash": "a355ec3952415c111b634f04249a9134"
+  },
+  "waybar/scripts/palette.py": {
+    "mtime": 1794351809.4814458,
+    "seen": 1794352948.515027,
+    "ast_hash": "e198df0808676fbe6d0b00695b3add64",
+    "semantic_hash": "e198df0808676fbe6d0b00695b3add64"
+  },
+  "waybar/scripts/theme.sh": {
+    "mtime": 1794322650.0248547,
+    "seen": 1794352948.5150287,
+    "ast_hash": "313ba7635d6667dcdfaa01921b47c65e",
+    "semantic_hash": "313ba7635d6667dcdfaa01921b47c65e"
   }
 }
