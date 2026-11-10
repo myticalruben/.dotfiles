@@ -1,0 +1,288 @@
+#!/usr/bin/env bash
+#
+# Splash de inicio y de fin de sesión, dibujado con Quickshell.
+#
+# Uso:
+#   session-splash start
+#   session-splash exit logout|reboot|shutdown
+#   session-splash --test exit reboot     (solo la animación)
+#   SESSION_SPLASH_TEST=1 session-splash exit reboot
+#   session-splash detect
+#
+# Lo llaman hypr/modules/autostart.lua (start), wlogout/layout (exit ...) y
+# el atajo SUPER+SHIFT+M (exit logout). En el arranque lanza Quickshell y se
+# va con él; en el cierre espera a que el overlay esté pintado y a que termine
+# el fundido, y solo entonces ejecuta la acción. Si Quickshell no está, el
+# arranque sigue sin splash y el cierre ejecuta la acción directamente.
+#
+# El logo sale de /etc/os-release. Los glifos son de Nerd Font y se pueden
+# desactivar con SESSION_SPLASH_ICONS=0 (queda solo el nombre).
+
+set -u
+
+self=$(readlink -f -- "${BASH_SOURCE[0]}")
+self_dir=$(dirname -- "$self")
+qml_dir=$(cd -- "$self_dir/../quickshell/session-splash" 2>/dev/null && pwd) || qml_dir=""
+test_mode=${SESSION_SPLASH_TEST:-0}
+
+usage() {
+    cat <<'EOF'
+Uso: session-splash start
+     session-splash exit logout|reboot|shutdown
+
+  --test          enseña la animación sin cerrar la sesión
+  detect          imprime la distro detectada y sale
+  --help          esta ayuda
+
+Variables:
+  SESSION_SPLASH_TEST=1    igual que --test
+  SESSION_SPLASH_ICONS=0   sin glifo de Nerd Font (solo el nombre)
+EOF
+}
+
+# ------------------------------------------------------------- distro ----
+
+# Los glifos son los de Nerd Fonts 3.x: f31b Ubuntu, f303 Arch, f306 Debian,
+# f30a Fedora, f313 NixOS y f31a Tux. El de Ubuntu se comprobó pintado en la
+# VM; el resto sale del mapa oficial de Nerd Fonts.
+# SESSION_SPLASH_ICONS=0 los quita sin tocar el código.
+detect_distro() {
+    local id="" id_like="" name=""
+
+    if [[ -r /etc/os-release ]]; then
+        # shellcheck disable=SC1091
+        . /etc/os-release
+        id=${ID:-}
+        id_like=${ID_LIKE:-}
+        name=${NAME:-}
+    fi
+
+    id=$(printf '%s' "$id" | tr '[:upper:]' '[:lower:]')
+    id_like=$(printf '%s' "$id_like" | tr '[:upper:]' '[:lower:]')
+
+    # Ubuntu y Arch primero: sus derivados se anuncian en ID_LIKE y deben
+    # heredar el logo, no caer en Debian o en el genérico. Ubuntu va antes
+    # que Debian porque Ubuntu también lleva ID_LIKE=debian.
+    if [[ "$id" == "ubuntu" || " $id_like " == *" ubuntu "* ]]; then
+        distro_id=ubuntu
+        distro_name="Ubuntu"
+        distro_glyph=$'\uf31b'
+        distro_accent="#E95420"
+    elif [[ "$id" == "arch" || "$id" == "archlinux" || " $id_like " == *" arch "* ]]; then
+        distro_id=arch
+        distro_name="Arch Linux"
+        distro_glyph=$'\uf303'
+        distro_accent="#1793D1"
+    elif [[ "$id" == "debian" || " $id_like " == *" debian "* ]]; then
+        distro_id=debian
+        distro_name="Debian"
+        distro_glyph=$'\uf306'
+        distro_accent="#A81D33"
+    elif [[ "$id" == "fedora" || " $id_like " == *" fedora "* ]]; then
+        distro_id=fedora
+        distro_name="Fedora"
+        distro_glyph=$'\uf30a'
+        distro_accent="#51A2DA"
+    elif [[ "$id" == "nixos" || " $id_like " == *" nixos "* ]]; then
+        distro_id=nixos
+        distro_name="NixOS"
+        distro_glyph=$'\uf313'
+        distro_accent="#5277C3"
+    else
+        # Distro desconocida: su propio nombre si lo trae, Tux y blanco.
+        distro_id=${id:-unknown}
+        distro_name=${name:-Linux}
+        distro_glyph=$'\uf31a'
+        distro_accent="#FFFFFF"
+    fi
+
+    if [[ "${SESSION_SPLASH_ICONS:-1}" == "0" ]]; then
+        distro_glyph=""
+    fi
+}
+
+focused_monitor() {
+    command -v hyprctl >/dev/null 2>&1 || return 0
+    command -v jq >/dev/null 2>&1 || return 0
+    hyprctl -j monitors 2>/dev/null |
+        jq -r '.[] | select(.focused == true) | .name' 2>/dev/null |
+        head -n 1
+}
+
+prepare_env() {
+    local mode=$1 monitor
+
+    export SESSION_SPLASH_NAME="$distro_name"
+    export SESSION_SPLASH_GLYPH="$distro_glyph"
+    export SESSION_SPLASH_ACCENT="$distro_accent"
+    export SESSION_SPLASH_MODE="$mode"
+
+    monitor=$(focused_monitor)
+    if [[ -n "$monitor" ]]; then
+        export SESSION_SPLASH_MONITOR="$monitor"
+    else
+        unset SESSION_SPLASH_MONITOR
+    fi
+}
+
+# Espera a que Hyprland vea la superficie. El fundido de entrada no depende de
+# esto, pero así la acción de cierre no se adelanta a la animación cuando
+# Quickshell tarda en arrancar (nixGL incluido).
+wait_for_layer() {
+    local until
+
+    command -v hyprctl >/dev/null 2>&1 || return 1
+    until=$(($(date +%s%N) + 1500000000))
+
+    while (($(date +%s%N) < until)); do
+        if hyprctl -j layers 2>/dev/null |
+            grep -q '"namespace"[[:space:]]*:[[:space:]]*"session-splash"'; then
+            return 0
+        fi
+        sleep 0.05
+    done
+
+    return 1
+}
+
+run_action() {
+    case "$1" in
+        logout)
+            # Hyprland 0.56 interprets dispatchers as Lua: the old
+            # `hyprctl dispatch exit` no longer parses. Try the Lua form and
+            # leave the classic one as a fallback for older compositors.
+            if hyprctl dispatch 'hl.dsp.exit()' >/dev/null 2>&1; then
+                return 0
+            fi
+            hyprctl dispatch exit
+            ;;
+        reboot)
+            systemctl reboot
+            ;;
+        shutdown)
+            systemctl poweroff
+            ;;
+    esac
+}
+
+run_start() {
+    prepare_env start
+
+    if [[ -z "$qml_dir" || ! -f "$qml_dir/shell.qml" ]] ||
+        ! command -v quickshell >/dev/null 2>&1; then
+        echo "session-splash: Quickshell no disponible; arranco sin splash" >&2
+        exit 0
+    fi
+
+    # exec: Quickshell cierra solo cuando termina la animación de entrada, y
+    # el proceso del autostart no se queda colgado.
+    exec quickshell -p "$qml_dir"
+}
+
+run_exit() {
+    local action=$1 qs_pid="" exit_wait=${SESSION_SPLASH_EXIT_WAIT:-1.05}
+
+    prepare_env exit
+
+    if [[ -n "$qml_dir" && -f "$qml_dir/shell.qml" ]] &&
+        command -v quickshell >/dev/null 2>&1; then
+        if [[ "${SESSION_SPLASH_DEBUG:-0}" == "1" ]]; then
+            quickshell -p "$qml_dir" &
+        else
+            quickshell -p "$qml_dir" >/dev/null 2>&1 &
+        fi
+        qs_pid=$!
+
+        # Si la capa aparece, esperar el fundido completo desde ese momento.
+        # Si Quickshell sigue vivo pero Hyprland no responde (primeros
+        # instantes), se espera igual: la animación arranca con el QML.
+        # Si el proceso murió, no hay nada que enseñar y se actúa ya.
+        if wait_for_layer; then
+            sleep "$exit_wait"
+        elif kill -0 "$qs_pid" 2>/dev/null; then
+            sleep "$exit_wait"
+        fi
+    elif [[ "$test_mode" == "1" ]]; then
+        echo "session-splash: sin overlay para el modo prueba" >&2
+    else
+        echo "session-splash: sin overlay; ejecutando '$action' directamente" >&2
+    fi
+
+    if [[ "$test_mode" == "1" ]]; then
+        echo "session-splash: modo prueba; no ejecuto '$action'" >&2
+        if [[ -n "$qs_pid" ]]; then
+            kill "$qs_pid" 2>/dev/null || true
+            wait "$qs_pid" 2>/dev/null || true
+        fi
+        exit 0
+    fi
+
+    # En logout/reboot/shutdown la sesión entera se va: no se retira el
+    # overlay, para no enseñar el escritorio justo antes de apagarse. Si el
+    # comando falla, el temporizador de 10 s del QML lo retira igualmente.
+    if ! run_action "$action"; then
+        if [[ -n "$qs_pid" ]]; then
+            kill "$qs_pid" 2>/dev/null || true
+        fi
+        exit 1
+    fi
+}
+
+# --------------------------------------------------------------- main ----
+
+args=()
+for arg in "$@"; do
+    case "$arg" in
+        --test | -t)
+            test_mode=1
+            ;;
+        -h | --help)
+            usage
+            exit 0
+            ;;
+        *)
+            args+=("$arg")
+            ;;
+    esac
+done
+
+if ((${#args[@]})); then
+    set -- "${args[@]}"
+else
+    set --
+fi
+
+detect_distro
+
+mode=${1:-}
+action=${2:-}
+
+case "$mode" in
+    detect)
+        printf 'id=%s\nname=%s\nglyph=%s\naccent=%s\n' \
+            "$distro_id" "$distro_name" "$distro_glyph" "$distro_accent"
+        ;;
+    start)
+        run_start
+        ;;
+    exit)
+        case "$action" in
+            logout | reboot | shutdown) ;;
+            *)
+                echo "session-splash: acción desconocida '${action}'" >&2
+                usage >&2
+                exit 2
+                ;;
+        esac
+        run_exit "$action"
+        ;;
+    "")
+        usage >&2
+        exit 2
+        ;;
+    *)
+        echo "session-splash: modo desconocido '${mode}'" >&2
+        usage >&2
+        exit 2
+        ;;
+esac

@@ -60,7 +60,9 @@ hl.bind(mod .. " + V", hl.dsp.exec_cmd(
 -- el equipo sin preguntar. Los dos estan en wlogout (SUPER + `), que ademas
 -- pasa por systemctl y respeta polkit y los inhibidores.
 hl.bind(mod .. " + CONTROL + s"         , hl.dsp.exec_cmd("systemctl suspend"))
-hl.bind(mod .. " + SHIFT + m"           , hl.dsp.exit())
+-- El splash funde a negro antes de salir. Si el script no está, el `||` deja
+-- el mismo cierre directo de antes (en la forma que entiende Hyprland 0.56).
+hl.bind(mod .. " + SHIFT + m"           , hl.dsp.exec_cmd("session-splash exit logout || hyprctl dispatch 'hl.dsp.exit()'"))
 
 
 hl.bind(mod .. " + D"                   , hl.dsp.exec_cmd(menu))

@@ -6,6 +6,10 @@
 local default_wallpaper = os.getenv("HOME") .. "/Pictures/Wallpapers/01.png"
 
 hl.on("hyprland.start", function()
+	-- Lo primero: tapar el escritorio mientras arrancan la barra, dunst y el
+	-- fondo. Si Quickshell no está, el script sale sin splash y la sesión
+	-- sigue igual.
+	hl.exec_cmd("session-splash start")
 	hl.exec_cmd("~/.config/waybar/scripts/launch-waybar.sh")
 	hl.exec_cmd("dunst")
 	hl.exec_cmd("nm-applet")

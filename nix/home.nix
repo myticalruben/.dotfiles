@@ -246,6 +246,7 @@ in
 
   home.file.".local/bin/volume".source = link "scripts/volume";
   home.file.".local/bin/wallpaper".source = link "scripts/wallpaper";
+  home.file.".local/bin/session-splash".source = link "scripts/session-splash";
   home.file."Pictures/Wallpapers".source = link "Wallpapers";
 
   # ------------------------------------------------------------ packages ---

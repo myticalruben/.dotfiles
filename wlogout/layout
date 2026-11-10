@@ -12,19 +12,19 @@
 }
 {
     "label" : "logout",
-    "action" : "hyprctl dispatch exit",
+    "action" : "session-splash exit logout || hyprctl dispatch 'hl.dsp.exit()'",
     "text" : "L",
     "keybind" : "l"
 }
 {
     "label" : "reboot",
-    "action" : "systemctl reboot",
+    "action" : "session-splash exit reboot || systemctl reboot",
     "text" : "R",
     "keybind" : "r"
 }
 {
     "label" : "shutdown",
-    "action" : "systemctl poweroff",
+    "action" : "session-splash exit shutdown || systemctl poweroff",
     "text" : "S",
     "keybind" : "s"
 }
