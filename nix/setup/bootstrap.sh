@@ -158,6 +158,9 @@ say "Registrando la entrada de sesion"
 "$HOME/.nix-profile/bin/install-hyprland-session" --dry-run
 sudo "$HOME/.nix-profile/bin/install-hyprland-session"
 
+say "Poniendo zsh como shell por defecto"
+"$HOME/.nix-profile/bin/set-zsh-shell"
+
 # ----------------------------------------------------------- resultado ---
 
 say "Listo"

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#
+# Pone zsh (el del perfil de home-manager) como shell de login del usuario.
+# chsh y /etc/shells necesitan root, por eso esto no puede hacerlo la
+# activacion de home-manager. Lo llama nix/setup/bootstrap.sh al instalar.
+set -eu
+
+# Preferir el zsh del perfil: bootstrap.sh puede llamarnos sin el perfil en
+# PATH, y /usr/bin/zsh (si existe) no tiene la config de home-manager.
+zsh="$HOME/.nix-profile/bin/zsh"
+if [ ! -x "$zsh" ]; then
+    zsh="$(command -v zsh || true)"
+fi
+if [ -z "$zsh" ] || [ ! -x "$zsh" ]; then
+    echo "set-zsh-shell: zsh no esta instalado" >&2
+    exit 1
+fi
+
+if ! grep -qxF "$zsh" /etc/shells 2>/dev/null; then
+    printf '%s\n' "$zsh" | sudo tee -a /etc/shells >/dev/null
+fi
+
+current="$(getent passwd "$(id -un)" | cut -d: -f7)"
+if [ "$current" != "$zsh" ]; then
+    sudo chsh -s "$zsh" "$(id -un)"
+fi
