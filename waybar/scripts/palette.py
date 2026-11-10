@@ -123,12 +123,18 @@ def main():
     print("@define-color neon_soft1 %s;" % rgba(accent1, 0.38))
     print("@define-color neon_soft2 %s;" % rgba(accent2, 0.38))
     print("@define-color neon_glow1 %s;" % rgba(accent1, 0.25))
+    print("@define-color neon_glow1_mid %s;" % rgba(accent1, 0.12))
+    print("@define-color neon_glow1_faint %s;" % rgba(accent1, 0.05))
     print("@define-color neon_glow2 %s;" % rgba(accent2, 0.25))
+    print("@define-color neon_glow2_mid %s;" % rgba(accent2, 0.12))
+    print("@define-color neon_glow2_faint %s;" % rgba(accent2, 0.05))
     print("@define-color neon_text %s;" % hexc(text))
     print("@define-color neon_muted %s;" % hexc(muted))
     print("@define-color neon_power %s;" % hexc(power))
     print("@define-color neon_power_soft %s;" % rgba(power, 0.50))
     print("@define-color neon_power_glow %s;" % rgba(power, 0.25))
+    print("@define-color neon_power_glow_mid %s;" % rgba(power, 0.12))
+    print("@define-color neon_power_glow_faint %s;" % rgba(power, 0.05))
 
 
 if __name__ == "__main__":
