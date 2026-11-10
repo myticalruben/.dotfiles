@@ -231,6 +231,21 @@ in
 
   programs.home-manager.enable = true;
 
+  # Zsh + Oh My Zsh desde Nix. Los plugins son los que trae Oh My Zsh; no hay
+  # que clonar nada a mano ni mantener un ~/.oh-my-zsh fuera del perfil.
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    oh-my-zsh = {
+      enable = true;
+      theme = "robbyrussell";
+      plugins = [ "git" "z" "colorize" ];
+    };
+    # Oh My Zsh no trae el plugin zsh-syntax-highlighting en su paquete de
+    # nixpkgs; home-manager lo instala y lo carga desde su propio modulo.
+    syntaxHighlighting.enable = true;
+  };
+
   # Sin esto, Pango no ve la Nerd Font que instala home.packages: fontconfig
   # solo mira ~/.local/share/fonts y /usr/share/fonts, no el perfil de Nix.
   fonts.fontconfig.enable = true;
