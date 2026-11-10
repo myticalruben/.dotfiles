@@ -93,7 +93,9 @@ window#waybar {
     font-size: 14px;
     /* Pastilla cuadrada: el glifo queda centrado, no pegado a un lado. */
     min-width: 24px;
-    padding: 2px 0;
+    /* El glifo de power tiene 2 px de bearing a la derecha: este padding
+       compensa eso y deja el dibujo en el centro optico de la pastilla. */
+    padding: 2px 4px 2px 0;
     box-shadow: 0 0 10px @neon_power_glow;
 }
 
