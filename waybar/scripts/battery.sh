@@ -52,16 +52,32 @@ for pair in "energy_now:power_now" "charge_now:current_now"; do
     break
 done
 
-# El enchufe es el mismo glifo que usaba el módulo de serie.
+# Iconos de batería de Font Awesome (incluidos en la Nerd Font). Se escriben
+# como bytes UTF-8 para que no dependan del locale de la sesión.
+bolt="$(printf '\357\203\247')"       # U+F0E7
+full="$(printf '\357\211\200')"       # U+F240
+three_quarters="$(printf '\357\211\201')" # U+F241
+half="$(printf '\357\211\202')"       # U+F242
+quarter="$(printf '\357\211\203')"    # U+F243
+empty="$(printf '\357\211\204')"      # U+F244
+
 case "$status" in
-    Charging)              icon=" "; class="charging" ;;
-    Full|"Not charging")   icon=" "; class="full" ;;
+    Charging)
+        icon="$bolt"
+        class="charging"
+        ;;
+    Full|"Not charging")
+        icon="$full"
+        class="full"
+        ;;
     *)
-        icon=""
-        if   (( capacity <= 5 ));  then class="critical"
-        elif (( capacity <= 10 )); then class="warning"
-        else                            class="discharging"
-        fi ;;
+        if   (( capacity <= 10 )); then icon="$empty";          class="critical"
+        elif (( capacity <= 35 )); then icon="$quarter";        class="warning"
+        elif (( capacity <= 60 )); then icon="$half";           class="discharging"
+        elif (( capacity <= 85 )); then icon="$three_quarters"; class="discharging"
+        else                            icon="$full";           class="discharging"
+        fi
+        ;;
 esac
 
 tooltip="$status"
@@ -69,5 +85,5 @@ tooltip="$status"
 
 # printf en vez de una plantilla suelta: el texto va dentro de JSON y waybar lo
 # lee con un parser de verdad, así que las comillas tienen que estar bien.
-printf '{"text":"%s%s%%","tooltip":"%s","class":"%s","percentage":%s}\n' \
+printf '{"text":"%s %s%%","tooltip":"%s","class":"%s","percentage":%s}\n' \
     "$icon" "$capacity" "$tooltip" "$class" "$capacity"
