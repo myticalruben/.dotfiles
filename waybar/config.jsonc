@@ -7,7 +7,9 @@
   // required by the modules" y usaba 27 igualmente, asi que el numero no
   // describia nada: solo parecia que si.
   "spacing": 2,
-  "exclusive": false,
+  // true: Hyprland reserva la altura de la barra (27 px) en el monitor, asi
+  // que las ventanas empiezan debajo en vez de quedar tapadas por ella.
+  "exclusive": true,
   "modules-left": [
     "hyprland/workspaces",
     "cpu",
