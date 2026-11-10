@@ -22,7 +22,12 @@ set -u
 
 self=$(readlink -f -- "${BASH_SOURCE[0]}")
 self_dir=$(dirname -- "$self")
-qml_dir=$(cd -- "$self_dir/../quickshell/session-splash" 2>/dev/null && pwd) || qml_dir=""
+config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+qml_dir="$config_home/quickshell/session-splash"
+if [[ ! -f "$qml_dir/shell.qml" ]]; then
+    # Fallback para ejecutarlo desde el checkout sin instalar.
+    qml_dir=$(cd -- "$self_dir/../quickshell/session-splash" 2>/dev/null && pwd) || qml_dir=""
+fi
 test_mode=${SESSION_SPLASH_TEST:-0}
 
 usage() {
