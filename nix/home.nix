@@ -72,7 +72,11 @@ let
     session_env="''${XDG_CONFIG_HOME:-$HOME/.config}/hyprland-session.env"
     [ -r "$session_env" ] && . "$session_env"
 
-    exec ${hyprlandWrapped}/bin/Hyprland "$@"
+    # start-hyprland pone el watchdog que Hyprland espera. Lanzar el binario
+    # Hyprland directo hace que muestre "Hyprland started without
+    # start-hyprland" y pierde el reinicio automatico si el compositor cae.
+    # El wrapper de nixGL ya esta aplicado arriba; --no-nixgl evita duplicarlo.
+    exec ${hyprlandWrapped}/bin/start-hyprland --no-nixgl "$@"
   '';
 
   # Exec points at the profile, not at a store path, so the entry keeps
