@@ -1,148 +1,118 @@
-/* General */
+/* Neon minimal — una sola barra para todas las maquinas. */
 * {
-    font-family: 'JetBrainsMono Nerd Font' , 'Symbols Only';
-    font-size: 11px;
+    font-family: "JetBrainsMono Nerd Font", "Symbols Only", monospace;
+    font-size: 12px;
+    font-weight: 600;
     min-height: 0;
 }
 
 window#waybar {
-    min-height: 10px;
-    background-color: rgba(20, 20, 20, 0);
-    color: #ffffff;
+    min-height: 30px;
+    background: rgba(5, 8, 15, 0.82);
+    color: #d9fbff;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.55);
+    box-shadow: 0 2px 18px rgba(0, 240, 255, 0.18);
 }
 
-/* LEFT */
-.modules-left {
-    background-color: rgba(20, 20, 20, 0.5);
-    border-radius: 10px;
-    margin: 3px 0 3px 6px;
-}
-
-/* CENTER */
-.modules-center {
-    background-color: rgba(20, 20, 20, 0.5);
-    border-radius: 10px;
-    margin: 3px 0;
-}
-
-/* RIGHT */
+.modules-left,
+.modules-center,
 .modules-right {
-    background-color: rgba(20, 20, 20, 0.5);
-    border-radius: 10px;
-    margin: 3px 6px 3px 0;
+    padding: 0 6px;
 }
 
-/* Module spacing */
 #workspaces,
 #cpu,
 #memory,
-#custom-gpu,
 #clock,
+#custom-network,
 #pulseaudio,
-#mpris,
-#custom-power,
-#temperature ,
-#custom-battery,
-#network,
-#tray{
-    padding: 0 10px;
-    margin: 0 2px;
-}
-
-/* Power */
 #custom-power {
-    color: #ffffff;
-    font-size: 15px;
-    margin-right: 10px;
-}
-
-/* MPRIS */
-#mpris {
-    min-width: 0;
-}
-
-/* Clock */
-#clock {
-    font-weight: bold;
+    padding: 0 10px;
+    margin: 0 1px;
 }
 
 /* Workspaces */
 #workspaces button {
-    padding: 0 6px;
-    color: #8b93a7;
+    padding: 0 7px;
+    margin: 4px 2px;
+    min-width: 18px;
+    color: #5e6b86;
     background: transparent;
     border: none;
+    border-radius: 4px;
+}
+
+#workspaces button:hover {
+    color: #bff9ff;
+    background: rgba(0, 240, 255, 0.08);
 }
 
 #workspaces button.active {
-    color: #ffffff;
-    font-weight: bold;
+    color: #04131a;
+    background: #00f0ff;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
 }
 
 #workspaces button.urgent {
-    color: #ff005f;
+    color: #ff2bd6;
+    box-shadow: 0 0 10px rgba(255, 43, 214, 0.6);
 }
 
-/* Temperature */
-#temperature.critical {
-    color: #ff5555;
+/* Modulos */
+#cpu {
+    color: #00f0ff;
 }
 
-/* Battery. Las clases las pone waybar/scripts/battery.sh; en un PC de mesa el
-   modulo no existe siquiera, asi que estas reglas no llegan a aplicarse. */
-#custom-battery.charging {
-    color: #a8cd76;
+#memory {
+    color: #ff2bd6;
 }
 
-#custom-battery.warning {
-    color: #ffb86c;
+#clock {
+    color: #eaffff;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.75);
 }
 
-#custom-battery.critical {
-    color: #ff5555;
+#custom-network {
+    color: #8ef7ff;
 }
 
-/* Tooltip */
-tooltip {
-    background-color: rgba(20, 20, 20, 0.4);
+#pulseaudio {
+    color: #ff2bd6;
+}
+
+#pulseaudio.muted {
+    color: #5e5470;
+}
+
+#custom-power {
+    color: #ff4d6d;
+    font-size: 15px;
+    padding: 0 12px;
+}
+
+#custom-power:hover {
     color: #ffffff;
-    font-weight: bold;
-    border: 1px solid rgba(255, 255, 255, 0);
-    border-radius: 25px;
-}
-
-tooltip label {
-    color: #ffffff;
-    font-size: 11px;
-    padding: 0;
-    margin: 0;
-}
-
-/* Interactive hover effect */
-#cpu,
-#memory,
-#custom-gpu,
-#temperature,
-#clock,
-#pulseaudio,
-#mpris,
-#custom-power,
-#network,
-#custom-battery,
-#tray {
-    transition: font-size 0.15s ease;
+    background: rgba(255, 77, 109, 0.18);
+    border-radius: 4px;
 }
 
 #cpu:hover,
 #memory:hover,
-#custom-gpu:hover,
-#temperature:hover,
 #clock:hover,
-#pulseaudio:hover,
-#mpris:hover,
-#custom-power:hover,
-#network:hover,
-#custom-battery:hover,
-#tray:hover {
-    font-size: 14px;
+#custom-network:hover,
+#pulseaudio:hover {
+    color: #ffffff;
+}
+
+/* Tooltip */
+tooltip {
+    background: rgba(5, 8, 15, 0.95);
+    color: #d9fbff;
+    border: 1px solid rgba(0, 240, 255, 0.55);
+    border-radius: 6px;
+}
+
+tooltip label {
+    padding: 4px 6px;
 }

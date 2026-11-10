@@ -1,48 +1,26 @@
 // -*- mode: jsonc -*-
 {
-  // No "output" key: the bar shows on every monitor. Set it per-machine if needed.
+  // Barra unica en todas las maquinas: el modulo de red decide en tiempo de
+  // ejecucion si mostrar el icono de wifi (portatil con bateria) o la IP
+  // (PC o maquina virtual).
   "layer": "top",
-  // Sin "height": waybar la calcula a partir del CSS. Antes ponia 24 y waybar
-  // respondia "Requested height: 24 is less than the minimum height: 27
-  // required by the modules" y usaba 27 igualmente, asi que el numero no
-  // describia nada: solo parecia que si.
   "spacing": 2,
-  // true: Hyprland reserva la altura de la barra (27 px) en el monitor, asi
-  // que las ventanas empiezan debajo en vez de quedar tapadas por ella.
   "exclusive": true,
+
   "modules-left": [
     "hyprland/workspaces",
     "cpu",
-    "memory",
-    "temperature",
-    "custom/battery"
+    "memory"
   ],
   "modules-center": [
     "clock"
   ],
   "modules-right": [
-    "tray",
-    "network",
+    "custom/network",
     "pulseaudio",
     "custom/power"
   ],
-  // Modules configuration
-  // "sway/workspaces": {
-  //     "disable-scroll": true,
-  //     "all-outputs": true,
-  //     "warp-on-scroll": false,
-  //     "format": "{name}: {icon}",
-  //     "format-icons": {
-  //         "1": "",
-  //         "2": "",
-  //         "3": "",
-  //         "4": "",
-  //         "5": "",
-  //         "urgent": "",
-  //         "focused": "",
-  //         "default": ""
-  //     }
-  // },
+
   "hyprland/workspaces": {
     "format": "{icon}",
     "on-click": "activate",
@@ -57,7 +35,7 @@
       "7": [],
       "8": [],
       "9": [],
-      "10": [],
+      "10": []
     },
     "format-icons": {
       "1": "1",
@@ -69,78 +47,41 @@
       "7": "7",
       "8": "8",
       "9": "9",
-      "10": "10",
-    },
-  },
-  "tray": {
-    // "icon-size": 21,
-    "spacing": 10,
-    // "icons": {
-    //   "blueman": "bluetooth",
-    //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
-    // }
-  },
-  "clock": {
-        "format": "{:%H:%M}",
-        "tooltip-format": "<tt>{:%a %d %b %Y}</tt>"
-  },
-  "cpu": {
-        "format": "CPU {usage}%",
-        "interval": 2
-  },
-  "memory": {
-          "format": "RAM {percentage}%",
-        "tooltip-format": "{used} / {total}GiB",
-        "interval": 2
-  },
-  "temperature": {
-        // No "hwmon-path": the hwmon index is not stable across machines or even
-    // across boots (hwmon5 was dell_smm on the laptop this was written on, and
-    // coretemp was hwmon7). Without it waybar falls back to the default
-    // thermal zone, which works anywhere. Set "thermal-zone" if you want a
-    // specific sensor on a specific machine.
-        "critical-threshold": 80,
-        "format": " {temperatureC}°C",
-        "format-critical": " {temperatureC}°C",
-        "tooltip": true,
-        "tooltip-format": "CPU Temp: {temperatureC}°C",
-        "interval": 2
+      "10": "10"
+    }
   },
 
-  // Modulo custom y no el `battery` de serie a proposito: la misma config
-  // corre en un portatil y en un PC de mesa. El de serie no sabe de eso -
-  // en el PC avisaba "No batteries." en cada arranque y dejaba un widget
-  // vacio ocupando sitio. waybar oculta por completo un modulo custom que no
-  // imprime nada, asi que scripts/battery.sh se calla donde no hay bateria y
-  // la deteccion no cuesta ni un ajuste por maquina.
-  "custom/battery": {
-    "exec": "${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/battery.sh",
-    "return-type": "json",
-    "interval": 30,
-    "tooltip": true,
+  "clock": {
+    "format": "{:%H:%M}",
+    "tooltip-format": "<tt>{:%a %d %b %Y}</tt>"
   },
-  
-  "network": {
-    //"interface": "wlo1",
-    "format": "{ifname}",
-    "format-wifi": "<span color='#90cdfa'></span>{essid}({signalStrength}%)",
-    "format-ethernet": "{ipaddr}/{cidr} ",
-    "format-disconnected": "<span color='#ff005f'></span>No Network",
-    "on-click": "nm-connection-editor",
+  "cpu": {
+    "format": "CPU {usage}%",
+    "interval": 2
+  },
+  "memory": {
+    "format": "RAM {percentage}%",
+    "tooltip-format": "{used} / {total}GiB",
+    "interval": 2
+  },
+
+  "custom/network": {
+    "exec": "${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/network.sh",
+    "return-type": "text",
+    "interval": 5,
+    "tooltip": false,
+    "on-click": "nm-connection-editor"
+  },
+  "pulseaudio": {
+    "format": "VOL {volume}%",
+    "format-muted": "MUTED",
+    "tooltip": false,
+    "on-click": "pavucontrol",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
     "on-click": "wlogout -b 5 -c 20 -r 20 -n"
-  },
-  "pulseaudio": {
-        "format": "{icon}  {volume}%",
-        "format-muted": "Muted",
-        "format-icons": {
-            "default": ["", "", ""]
-        },
-        "tooltip": false,
-        "on-click": "pavucontrol",
-        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
-  },
+  }
 }
