@@ -227,6 +227,10 @@ in
 
   programs.home-manager.enable = true;
 
+  # Sin esto, Pango no ve la Nerd Font que instala home.packages: fontconfig
+  # solo mira ~/.local/share/fonts y /usr/share/fonts, no el perfil de Nix.
+  fonts.fontconfig.enable = true;
+
   # ------------------------------------------------------------- configs ---
   # Scope is ~/.config only, matching what setup.py already did.
 

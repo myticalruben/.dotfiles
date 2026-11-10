@@ -56,11 +56,11 @@
     "tooltip-format": "<tt>{:%a %d %b %Y}</tt>"
   },
   "cpu": {
-    "format": "CPU {usage}%",
+    "format": " {usage}%",
     "interval": 2
   },
   "memory": {
-    "format": "RAM {percentage}%",
+    "format": "󰍛 {percentage}%",
     "tooltip-format": "{used} / {total}GiB",
     "interval": 2
   },
