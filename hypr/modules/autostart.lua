@@ -6,7 +6,7 @@
 local default_wallpaper = os.getenv("HOME") .. "/Pictures/Wallpapers/01.png"
 
 hl.on("hyprland.start", function()
-	-- hl.exec_cmd("waybar")
+	hl.exec_cmd("waybar")
 	hl.exec_cmd("dunst")
 	hl.exec_cmd("nm-applet")
 	hl.exec_cmd("wl-paste --type text --watch cliphist store")
