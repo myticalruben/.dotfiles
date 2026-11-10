@@ -73,8 +73,11 @@
     "on-click": "nm-connection-editor"
   },
   "pulseaudio": {
-    "format": "VOL {volume}%",
-    "format-muted": "MUTED",
+    "format": "{icon} {volume}%",
+    "format-muted": " MUTED",
+    "format-icons": {
+      "default": ["", "", ""]
+    },
     "tooltip": false,
     "on-click": "pavucontrol",
     "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
