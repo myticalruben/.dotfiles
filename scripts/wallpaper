@@ -92,9 +92,9 @@ case "${1:-}" in
 
         wait_for_daemon || { echo "awww-daemon no responde" >&2; exit 1; }
 
-        # Sin transición: al arrancar no hay imagen previa desde la que fundir,
-        # el efecto no se ve y solo retrasa la aparición del escritorio.
-        awww img "$path" -t none || exit 1
+        # Al arrancar, awww funde desde el fondo vacío/negro. Es la única
+        # animación de entrada: sin splash ni logo, solo el fondo apareciendo.
+        awww img "$path" -t fade --transition-duration 1 || exit 1
         apply_theme "$path"
         apply_gtk_theme "$path"
         apply_btop_theme "$path"

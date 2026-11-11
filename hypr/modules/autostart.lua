@@ -6,8 +6,7 @@
 local default_wallpaper = os.getenv("HOME") .. "/Pictures/Wallpapers/01.png"
 
 hl.on("hyprland.start", function()
-	-- Un solo proceso ordena el arranque: splash primero, y cuando termina
-	-- recién aparecen waybar, dunst, el fondo y el resto. Así no hay un
-	-- parpadeo del escritorio antes de la animación.
+	-- Un solo proceso ordena el arranque: el fondo hace un fade suave y
+	-- después aparecen waybar, dunst y el resto. Sin splash ni logo.
 	hl.exec_cmd("session-start '" .. (wallpaper or default_wallpaper) .. "'")
 end)

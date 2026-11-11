@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
 #
-# Arranque visible de la sesion: primero el splash (2-3 s) y despues la barra,
-# el fondo y los servicios. Lo llama una sola vez hypr/modules/autostart.lua.
+# Arranque de la sesion: sin splash ni logo, solo un fundido suave del fondo.
+# Lo llama una sola vez hypr/modules/autostart.lua.
 #
-# Antes cada programa se lanzaba en paralelo desde autostart.lua; waybar y el
-# fondo podian aparecer antes de que Quickshell pintara el overlay. Ahora este
-# script espera a que termine la animacion de entrada y recien entonces arranca
-# el resto. Hyprland ya esta corriendo debajo, pero lo unico visible es el
-# splash sobre el fondo negro.
+# Primero se levanta awww y se restaura el wallpaper con transicion fade; cuando
+# termina, aparecen waybar y los servicios. Asi la sesion entra desde negro
+# hacia el fondo en vez de mostrar una pantalla de carga.
 
 set -u
 
 wallpaper="${1:-$HOME/Pictures/Wallpapers/01.png}"
 
-# session-splash start no regresa hasta que el QML termina y se cierra solo.
-# Si Quickshell no esta, el script sale enseguida y la sesion arranca igual.
-session-splash start || true
+# El fondo primero: el fundido se ve sobre el escritorio vacio y la barra
+# aparece cuando el wallpaper ya esta pintado.
+awww-daemon >/dev/null 2>&1 &
+wallpaper restore "$wallpaper" >/dev/null 2>&1 || true
 
 waybar="${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/launch-waybar.sh"
 [ -x "$waybar" ] && "$waybar" >/dev/null 2>&1 &
@@ -24,8 +23,3 @@ dunst >/dev/null 2>&1 &
 nm-applet >/dev/null 2>&1 &
 wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
 wl-paste --type image --watch cliphist store >/dev/null 2>&1 &
-
-awww-daemon >/dev/null 2>&1 &
-
-# wallpaper espera a que awww-daemon responda; no hace falta dormir aqui.
-wallpaper restore "$wallpaper" >/dev/null 2>&1 &
