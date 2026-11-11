@@ -2,8 +2,8 @@
 
 Tema de arranque y apagado para Ubuntu. Usa el modulo `two-step`:
 
-- `animation-*.png` / `throbber-*.png`: wordmark Mytical y tres puntos neon.
-- `shutdown-animation-*.png`: la pantalla se agrieta y se oscurece al apagar/reiniciar.
+- `animation-*.png` / `throbber-*.png`: solo el wordmark Mytical, con un brillo blanco pulsante.
+- `shutdown-animation-*.png`: el mismo nombre pulsante al apagar/reiniciar.
 
 ## Instalar
 
