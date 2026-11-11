@@ -242,6 +242,12 @@ in
     };
   };
 
+  # direnv: instala el binario y engancha su hook en zsh.
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   # Zsh + Oh My Zsh desde Nix. Los plugins son los que trae Oh My Zsh; no hay
   # que clonar nada a mano ni mantener un ~/.oh-my-zsh fuera del perfil.
   programs.zsh = {
