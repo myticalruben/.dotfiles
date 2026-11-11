@@ -46,5 +46,7 @@ PY
 fi
 
 # Waybar relee el CSS con SIGUSR2. El binario puede llevar "-s ..." detras.
-pids=$(ps -eo pid=,args= | awk '$2 ~ /\/bin\/waybar$/ { print $1 }')
-[ -n "$pids" ] && kill -USR2 $pids 2>/dev/null || true
+mapfile -t pids < <(ps -eo pid=,args= | awk '$2 ~ /\/bin\/waybar$/ { print $1 }')
+if [ "${#pids[@]}" -gt 0 ]; then
+    kill -USR2 "${pids[@]}" 2>/dev/null || true
+fi
