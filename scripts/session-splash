@@ -14,6 +14,7 @@
 # va con él; en el cierre espera a que el overlay esté pintado y a que termine
 # el fundido, y solo entonces ejecuta la acción. Si Quickshell no está, el
 # arranque sigue sin splash y el cierre ejecuta la acción directamente.
+# En el cierre ya no se pinta el logo: el overlay solo funde a negro.
 #
 # El logo sale de /etc/os-release. Los glifos son de Nerd Font y se pueden
 # desactivar con SESSION_SPLASH_ICONS=0 (queda solo el nombre).
@@ -185,7 +186,7 @@ run_start() {
 }
 
 run_exit() {
-    local action=$1 qs_pid="" exit_wait=${SESSION_SPLASH_EXIT_WAIT:-1.05}
+    local action=$1 qs_pid="" exit_wait=${SESSION_SPLASH_EXIT_WAIT:-0.45}
 
     prepare_env exit
 

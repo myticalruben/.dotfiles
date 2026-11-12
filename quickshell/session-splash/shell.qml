@@ -4,8 +4,8 @@
 // stealing keyboard focus. scripts/session-splash passes the distro data and
 // the mode through the environment and decides when the session action runs.
 // This file only draws: on startup it fades out and quits by itself; on exit
-// it leaves the black backdrop up until the session actually goes away, so
-// there is no flash of the desktop between the fade and the logout/reboot.
+// it no longer shows the logo, only a smooth fade to black before the session
+// action lands.
 
 import Quickshell
 import Quickshell.Wayland
@@ -19,7 +19,7 @@ PanelWindow {
     readonly property string accent: Quickshell.env("SESSION_SPLASH_ACCENT") || "#FFFFFF"
     readonly property bool exitMode: Quickshell.env("SESSION_SPLASH_MODE") === "exit"
     // Arranque: 250 ms de fade-in + 2,2 s de espera + 300 ms de fade-out.
-    // Salida: se queda en 450 ms para no retrasar el logout.
+    // Salida: solo 320 ms de fundido a negro, sin logo ni puntos.
     readonly property int holdMs: {
         var v = parseInt(Quickshell.env("SESSION_SPLASH_HOLD_MS") || "")
         return isNaN(v) ? 2200 : v
@@ -71,6 +71,7 @@ PanelWindow {
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
         spacing: 14
+        visible: !root.exitMode
         opacity: root.contentOpacity
         scale: root.logoScale
 
@@ -137,11 +138,9 @@ PanelWindow {
         }
     }
 
-    // 250 ms fade in, 2,2 s hold on startup (450 ms on exit), 300 ms fade out.
-    // The exit path never fades
-    // the black backdrop out: only the logo content goes away.
+    // Arranque: 250 ms fade in, 2,2 s hold, 300 ms fade out.
     SequentialAnimation {
-        running: true
+        running: !root.exitMode
 
         ParallelAnimation {
             NumberAnimation {
@@ -170,7 +169,7 @@ PanelWindow {
             }
         }
 
-        PauseAnimation { duration: root.exitMode ? 450 : root.holdMs }
+        PauseAnimation { duration: root.holdMs }
 
         ParallelAnimation {
             NumberAnimation {
@@ -183,7 +182,7 @@ PanelWindow {
             NumberAnimation {
                 target: root
                 property: "overlayOpacity"
-                to: root.exitMode ? 1 : 0
+                to: 0
                 duration: 300
                 easing.type: Easing.InCubic
             }
@@ -194,6 +193,21 @@ PanelWindow {
                 if (!root.exitMode)
                     Qt.quit()
             }
+        }
+    }
+
+    // Salida: el unico contenido es un fundido a negro. No hay logo, texto
+    // ni puntos; el script espera este tiempo antes de ejecutar la accion.
+    SequentialAnimation {
+        running: root.exitMode
+
+        NumberAnimation {
+            target: root
+            property: "overlayOpacity"
+            from: 0
+            to: 1
+            duration: 320
+            easing.type: Easing.InOutQuad
         }
     }
 
