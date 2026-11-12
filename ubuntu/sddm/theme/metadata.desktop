@@ -1,0 +1,15 @@
+[SddmGreeterTheme]
+Name=Mytical Neon
+Description=Mytical neon futuristic SDDM theme
+Author=keyitdev
+Website=https://github.com/Keyitdev/sddm-astronaut-theme
+License=GPL-3.0-or-later
+Type=sddm-theme
+Version=1.4
+ConfigFile=Themes/mytical.conf
+Screenshot=
+MainScript=Main.qml
+TranslationsDirectory=translations
+Theme-Id=mytical-neon
+Theme-API=2.0
+QtVersion=6
