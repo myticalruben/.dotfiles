@@ -70,6 +70,7 @@ command -v sddm >/dev/null || die "SDDM no esta instalado (apt install sddm)"
 install -d -m 755 /usr/local/bin "$state_base" /etc/sddm.conf.d /usr/share/sddm/themes
 rm -rf "$theme_dir"
 cp -a "$here/theme" "$theme_dir"
+install -m 755 "$here/palette.py" "$theme_dir/palette.py"
 chmod -R a+rX "$theme_dir"
 install -m 755 "$here/mytical-sddm-sync" /usr/local/bin/mytical-sddm-sync
 

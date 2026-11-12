@@ -20,6 +20,7 @@ El instalador:
 - Copia el tema a `/usr/share/sddm/themes/mytical`.
 - Deja `Current=mytical` en `/etc/sddm.conf.d/90-mytical.conf`.
 - Copia el wallpaper actual a `Backgrounds/wallpaper`.
+- Regenera las claves de color del tema desde la misma paleta neon de Waybar.
 - Activa `mytical-sddm.path` para seguirlo cuando cambie en Hyprland.
 - Cambia el display manager de GDM a SDDM y guarda el anterior.
 

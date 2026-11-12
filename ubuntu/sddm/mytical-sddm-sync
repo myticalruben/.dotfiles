@@ -45,3 +45,9 @@ install -d -m 755 "$theme/Backgrounds"
 # a Backgrounds/wallpaper.
 install -m 644 "$img" "$theme/Backgrounds/wallpaper"
 chmod 644 "$theme/Backgrounds/wallpaper"
+
+# Misma paleta que Waybar: actualiza las claves de color del tema.
+palette="$home/.cache/waybar/palette.css"
+if [ -r "$theme/palette.py" ]; then
+    python3 "$theme/palette.py" "$palette" "$theme/Themes/mytical.conf"
+fi
