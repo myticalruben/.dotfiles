@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Copia el wallpaper actual del usuario al tema SDDM. Lo dispara un
+# systemd.path cuando cambia el estado de Hyprland.
+set -euo pipefail
+
+user="${MYTICAL_SDDM_USER:-}"
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --user)
+            [ "$#" -ge 2 ] || { echo "falta el usuario" >&2; exit 2; }
+            user=$2
+            shift 2
+            ;;
+        --help)
+            echo "uso: mytical-sddm-sync [--user USUARIO]"
+            exit 0
+            ;;
+        *)
+            echo "opcion desconocida: $1" >&2
+            exit 2
+            ;;
+    esac
+done
+[ -n "$user" ] || user="${SUDO_USER:-}"
+if [ -z "$user" ] || [ "$user" = root ]; then
+    echo "uso: sudo mytical-sddm-sync --user USUARIO" >&2
+    exit 2
+fi
+
+home=$(getent passwd "$user" | cut -d: -f6)
+[ -n "$home" ] || { echo "no existe el usuario $user" >&2; exit 2; }
+
+state="$home/.local/state/hypr/wallpaper"
+img=""
+[ -r "$state" ] && img=$(head -n 1 "$state")
+if [ -z "$img" ] || [ ! -r "$img" ]; then
+    img="$home/Pictures/Wallpapers/01.png"
+fi
+[ -r "$img" ] || { echo "no hay wallpaper legible para $user" >&2; exit 1; }
+
+theme=/usr/share/sddm/themes/mytical
+[ -d "$theme" ] || { echo "falta el tema $theme" >&2; exit 1; }
+install -d -m 755 "$theme/Backgrounds"
+# Sin extension: Qt detecta el formato por contenido. El tema apunta siempre
+# a Backgrounds/wallpaper.
+install -m 644 "$img" "$theme/Backgrounds/wallpaper"
+chmod 644 "$theme/Backgrounds/wallpaper"
