@@ -46,6 +46,17 @@ install -d -m 755 "$theme/Backgrounds"
 install -m 644 "$img" "$theme/Backgrounds/wallpaper"
 chmod 644 "$theme/Backgrounds/wallpaper"
 
+# La cache de waybar puede ser de un fondo anterior si este sync corre antes
+# que scripts/wallpaper. Regenerarla como el usuario evita que SDDM use una
+# paleta vieja.
+refresh_palette() {
+    local theme_sh="$home/.config/waybar/scripts/theme.sh"
+    [ -x "$theme_sh" ] || return 0
+    command -v runuser >/dev/null 2>&1 || return 0
+    runuser -u "$user" -- env         HOME="$home"         XDG_CACHE_HOME="$home/.cache"         XDG_CONFIG_HOME="$home/.config"         XDG_STATE_HOME="$home/.local/state"         PATH="$home/.nix-profile/bin:/usr/local/bin:/usr/bin:/bin"         "$theme_sh" "$img" >/dev/null 2>&1 || true
+}
+refresh_palette
+
 # Misma paleta que Waybar: actualiza las claves de color del tema.
 palette="$home/.cache/waybar/palette.css"
 if [ -r "$theme/palette.py" ]; then
