@@ -4,7 +4,7 @@ Tema de arranque para Ubuntu con el estilo visual del logo de CachyOS:
 wordmark **MYTICAL** en 3D, degradado azul, bisel y extrusion
 (https://github.com/CachyOS/plymouth-theme). Usa el modulo `two-step`:
 
-- `animation-*.png`: 178 frames: MYTICAL 3D se arma, se mantiene ~3 s y se desintegra (unos 6 s en total).
+- `animation-*.png`: MYTICAL 3D en azul que se arma y se desintegra.
 - `fonts/Audiowide-Regular.ttf`: tipografia geometrica usada para generar el wordmark (OFL).
 - `throbber-*.png`: el throbber azul de CachyOS.
 - Sin animacion propia de apagado; se deja el comportamiento de CachyOS.
