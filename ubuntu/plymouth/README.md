@@ -1,9 +1,10 @@
 # Plymouth Mytical (Ubuntu)
 
-Tema de arranque y apagado para Ubuntu. Usa el modulo `two-step`:
+Tema de arranque para Ubuntu basado en la animacion de CachyOS
+(https://github.com/CachyOS/plymouth-theme). Usa el modulo `two-step`:
 
-- `animation-*.png` / `throbber-*.png`: solo el wordmark Mytical, con un brillo blanco pulsante.
-- `shutdown-animation-*.png`: el mismo nombre pulsante al apagar/reiniciar.
+- `animation-*.png` / `throbber-*.png`: la animacion azul de CachyOS.
+- Sin animacion propia de apagado; se deja el comportamiento de CachyOS.
 
 ## Instalar
 
