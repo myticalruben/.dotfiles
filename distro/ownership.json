@@ -41,6 +41,7 @@
     "brightnessctl",
     "imagemagick",
     "jq",
-    "nerd-fonts-jetbrains-mono"
+    "nerd-fonts-jetbrains-mono",
+    "hypridle"
   ]
 }

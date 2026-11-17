@@ -16,6 +16,7 @@ wallpaper="${1:-$HOME/Pictures/Wallpapers/01.png}"
 awww-daemon >/dev/null 2>&1 &
 wallpaper restore "$wallpaper" >/dev/null 2>&1 || true
 
+hypridle >/dev/null 2>&1 &
 waybar="${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/launch-waybar.sh"
 [ -x "$waybar" ] && "$waybar" >/dev/null 2>&1 &
 

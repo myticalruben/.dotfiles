@@ -308,6 +308,7 @@ in
       jq
       imagemagick # magick/convert for quickshell thumbnails
       btop
+      hypridle
       awww # the fork the config calls; nixpkgs renamed swww to this
 
       # waybar, rofi y hyprlock piden "JetBrainsMono Nerd Font". El paquete de
@@ -323,7 +324,6 @@ in
           waybar
           rofi
           kitty
-          alacritty
           dunst
           wlogout
           quickshell
