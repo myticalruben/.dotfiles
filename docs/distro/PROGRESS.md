@@ -26,3 +26,10 @@
 
 - `SUPER+O` ya no depende de `hyprshot` (no empaquetado): usa `grim` + `slurp`.
 - Se retiró `hyprshot` de la matriz de propiedad hasta empaquetarlo.
+
+## 2026-11-17 — Sesión endurecida
+
+- `mytical-session` ahora trae postinst/postrm seguros.
+- Test `distro/tests/test_session.sh`: wrapper, desktop, conffiles, ausencia de
+  GNOME/Ubuntu y simulación de systemctl.
+- `make -C distro test` pasa completo.

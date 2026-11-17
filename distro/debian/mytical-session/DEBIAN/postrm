@@ -1,0 +1,7 @@
+#!/bin/sh
+# Mytical session postrm: no elimina configuración del usuario.
+# La configuración de SDDM es un conffile y la gestiona dpkg; este script no
+# toca directorios personales ni ejecuta borrados recursivos.
+set -eu
+
+exit 0
