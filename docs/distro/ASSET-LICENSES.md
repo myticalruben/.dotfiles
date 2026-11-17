@@ -413,3 +413,10 @@ c7c0f2b0f6fad8c623e31772ce79f94a4edb9321ffce9fce978ea892d20ae730  ubuntu/plymout
   con ImageMagick por el proyecto.
 - Siguen pendientes: wallpapers sin procedencia, licencia raíz y revisión de la
   configuración Plymouth derivada.
+
+## Set de wallpapers propio
+
+- Añadido `distro/branding/wallpapers/mytical-01..04.png`, generado por el
+  proyecto y dedicado a CC0-1.0.
+- Los 22 wallpapers personales de `Wallpapers/` quedan excluidos de la ISO y
+  de los paquetes hasta acreditar autoría/licencia.

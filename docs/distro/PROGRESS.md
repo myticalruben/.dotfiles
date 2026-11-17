@@ -91,3 +91,9 @@
 - `mytical-welcome --check`: python3, nix, home-manager, hyprctl, kitty,
   sddm y wallpaper en OK.
 - La guía explica APT/Nix y permite elegir wallpaper sin root.
+
+## 2026-11-17 — Set de wallpapers propio
+
+- Cuatro wallpapers originales CC0 en `distro/branding/wallpapers/`.
+- Los wallpapers personales quedan fuera de la distribución.
+- Licencia raíz del código sigue pendiente de decisión.
