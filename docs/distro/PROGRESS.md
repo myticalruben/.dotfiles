@@ -77,3 +77,10 @@
 - Reemplazados los 41 throbbers de CachyOS por un anillo animado propio.
 - Reemplazados los 5 iconos de wlogout por line-art propio.
 - Los wallpapers y la licencia raíz siguen bloqueando la publicación.
+
+## 2026-11-17 — Meta de escritorio y duplicados
+
+- `mytical-desktop` instalado; Thunar y nm-applet pasan a ser de APT.
+- Se retiraron `thunar` y `networkmanagerapplet` del perfil Nix para no duplicar
+  binarios ni entradas de lanzador.
+- zsh de login sigue Nix en la Preview; en la ISO será del sistema (ADR 0002).

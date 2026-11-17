@@ -331,9 +331,7 @@ in
           wlogout
           quickshell
           pavucontrol
-          networkmanagerapplet # nm-applet
           brave
-          thunar
           hyprlock
         ]
       ))

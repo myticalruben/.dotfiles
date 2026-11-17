@@ -12,3 +12,15 @@ Reglas:
 - Ningún paquete puede estar a la vez en `apt` y `nix`.
 
 Ver `docs/adr/` y `docs/superpowers/plans/2026-11-12-mytical-distro-v1.md`.
+
+## Instalación del overlay
+
+```sh
+sudo apt install ./mytical-session_*.deb
+sudo apt install ./mytical-desktop_*.deb
+```
+
+Si APT pregunta por `/etc/zsh/zshrc` en una instalación existente, usar
+`DEBIAN_FRONTEND=noninteractive dpkg --force-confold --configure -a` para
+conservar la configuración local. No ejecutar `autoremove` como parte de la
+instalación.
