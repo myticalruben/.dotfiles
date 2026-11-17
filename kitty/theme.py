@@ -10,6 +10,7 @@ DEFAULTS = {
     "neon_accent1": "#00f0ff",
     "neon_accent2": "#ff2bd6",
     "neon_text": "#d9fbff",
+    "neon_muted": "#5e6b86",
     "neon_power": "#ff4d6d",
 }
 
@@ -54,6 +55,7 @@ def main():
     accent1 = c["neon_accent1"]
     accent2 = c["neon_accent2"]
     text = lighten(c["neon_text"], 0.25)
+    muted = c["neon_muted"]
     power = c["neon_power"]
 
     normal = [
@@ -67,7 +69,7 @@ def main():
         text,
     ]
     bright = [lighten(v, 0.22) for v in normal]
-    bright[0] = "#7d8aa5"
+    bright[0] = muted
     bright[7] = "#ffffff"
 
     print("# Generado por kitty/theme.py desde waybar; no editar a mano.")

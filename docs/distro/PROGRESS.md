@@ -33,3 +33,8 @@
 - Test `distro/tests/test_session.sh`: wrapper, desktop, conffiles, ausencia de
   GNOME/Ubuntu y simulación de systemctl.
 - `make -C distro test` pasa completo.
+
+## 2026-11-17 — Tests de Kitty
+
+- 7 tests de paleta, fallback y cache.
+- Corregido color8 para usar `neon_muted` de la paleta.
