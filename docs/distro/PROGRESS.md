@@ -102,3 +102,10 @@
 
 - ADR 0008 deja la licencia raíz como decisión pendiente; bloquea publicación,
   no las pruebas locales.
+
+## 2026-11-17 — Instalador overlay
+
+- `distro/install-overlay.sh` instala los tres paquetes, resuelve zsh con
+  `--force-confold`, no ejecuta autoremove y deja Nix/Home Manager como paso
+  separado.
+- Dry-run verificado en la VM: encuentra session, welcome y desktop.
