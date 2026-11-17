@@ -115,15 +115,22 @@ def _link(source: Path, target: Path) -> None:
     _results["linked"] += 1
 
 
-def ccf(name: str, type: Type) -> None:
+def ccf(name: str, type: Type, target_name: str | None = None) -> None:
     source = dotfiles_dir / name
     if type is Type.BIN:
         # Link name is the basename, so ccf("scripts/volume") lands on
         # ~/.local/bin/volume rather than ~/.local/bin/scripts/volume.
-        target = local_bin_dir / source.name
+        target = local_bin_dir / (target_name or source.name)
     else:
-        target = config_dir / name
+        target = config_dir / (target_name or name)
 
+    _remove(source, target) if unlink else _link(source, target)
+
+
+def home_ccf(name: str, target_name: str) -> None:
+    """Link a repo directory into $HOME (for Pictures/Wallpapers)."""
+    source = dotfiles_dir / name
+    target = Path.home() / target_name
     _remove(source, target) if unlink else _link(source, target)
 
 

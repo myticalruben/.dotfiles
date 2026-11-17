@@ -29,7 +29,7 @@ if unknown:
     print(f"Opción desconocida: {unknown[0]} (prueba --help)", file=sys.stderr)
     raise SystemExit(2)
 
-from utils import ccf, summary, unlink, Type  # noqa: E402
+from utils import ccf, home_ccf, summary, unlink, Type  # noqa: E402
 
 print("Quitando los enlaces de estos dotfiles" if unlink
       else "Setting up Hyprland Dotfiles")
@@ -40,10 +40,16 @@ ccf("dunst", Type.FOLDER)
 ccf("hypr", Type.FOLDER)
 ccf("waybar", Type.FOLDER)
 ccf("wlogout", Type.FOLDER)
-ccf("btop", Type.FOLDER)
+ccf("gtk", Type.FOLDER, "gtk-theme")
+ccf("btop", Type.FOLDER, "btop-theme")
+ccf("btop/btop.conf", Type.FILE, "btop/btop.conf")
 ccf("quickshell", Type.FOLDER)
 ccf("scripts/volume", Type.BIN)
 ccf("scripts/wallpaper", Type.BIN)
+ccf("scripts/session-start", Type.BIN)
+ccf("scripts/session-splash", Type.BIN)
+ccf("scripts/set-zsh-shell", Type.BIN)
+home_ccf("Wallpapers", "Pictures/Wallpapers")
 
 code = summary()
 

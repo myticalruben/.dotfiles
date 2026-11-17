@@ -8,3 +8,6 @@ hypr/modules/local.lua
 
 # btop writes its log to ~/.local/state; this one was a stale copy.
 btop/btop.log
+
+# graphify genera un grafo enorme y dependiente de la máquina; no es fuente.
+graphify-out/
