@@ -155,8 +155,13 @@ cd "$CHECKOUT"
 nix run ".#home-manager" -- switch --flake ".#default" --impure -b backup
 
 say "Registrando la entrada de sesion"
-"$HOME/.nix-profile/bin/install-hyprland-session" --dry-run
-sudo "$HOME/.nix-profile/bin/install-hyprland-session"
+if command -v dpkg >/dev/null 2>&1 && dpkg -s mytical-session >/dev/null 2>&1; then
+    echo "    mytical-session ya está instalado por APT; se omite la entrada Nix"
+    echo "    para no duplicar Mytical en SDDM."
+else
+    "$HOME/.nix-profile/bin/install-hyprland-session" --dry-run
+    sudo "$HOME/.nix-profile/bin/install-hyprland-session"
+fi
 
 say "Poniendo zsh como shell por defecto"
 "$HOME/.nix-profile/bin/set-zsh-shell"
