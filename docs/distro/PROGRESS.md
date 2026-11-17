@@ -53,3 +53,13 @@
 - `flake.lock` actualizado desde la VM.
 - Auditoría de assets en `docs/distro/ASSET-LICENSES.md`; la ISO no es publicable
   hasta resolver throbbers CachyOS, wallpapers, iconos wlogout y licencia raíz.
+
+## 2026-11-17 — VM y Nix 26.05
+
+- `mytical-session` instalado en Ubuntu 26.04; SDDM muestra solo
+  `Mytical (Wayland)`.
+- `nix flake check` y build de `homeConfigurations.default` con
+  `nixos-26.05`/`release-26.05` terminan OK.
+- Fijado `gtk.gtk4.theme` para conservar el comportamiento legacy sin warning.
+- La auditoría legal mantiene bloqueada la publicación de la ISO hasta resolver
+  assets P0.

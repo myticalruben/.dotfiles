@@ -240,6 +240,9 @@ in
       name = "JetBrainsMono Nerd Font";
       size = 10;
     };
+    # Fijado explícitamente: stateVersion 24.11 conserva el comportamiento
+    # legacy de GTK4; evita el warning de Home Manager 26.05.
+    gtk4.theme = config.gtk.theme;
   };
 
   # direnv: instala el binario y engancha su hook en zsh.
