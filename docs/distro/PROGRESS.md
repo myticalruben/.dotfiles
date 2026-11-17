@@ -128,3 +128,8 @@
 - Kitty 0.49 rechazaba `globinclude`; se cambió a `include` y se añadió test.
 - `mytical-welcome` arrancó en Kitty en el primer login y mostró la guía.
 - Sesión de prueba cerrada; SDDM volvió al login normal.
+
+## 2026-11-17 — Release notes
+
+- `CHANGELOG.md` y `distro/RELEASE.md` con build, instalación, verificación y
+  límites de publicación.
