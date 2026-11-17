@@ -4,7 +4,7 @@ Section: metapackages
 Priority: optional
 Architecture: all
 Maintainer: Mytical <dev@mytical.invalid>
-Depends: mytical-session, sddm, xserver-xorg, xwayland, network-manager, network-manager-gnome, pipewire, pipewire-pulse, wireplumber, xdg-desktop-portal-hyprland, xdg-desktop-portal-gtk, gnome-keyring, libpam-gnome-keyring, gvfs, gvfs-backends, gvfs-fuse, polkitd, policykit-1-gnome, thunar, zsh, direnv, fonts-jetbrains-mono
+Depends: mytical-session, mytical-welcome, sddm, xserver-xorg, xwayland, network-manager, network-manager-gnome, pipewire, pipewire-pulse, wireplumber, xdg-desktop-portal-hyprland, xdg-desktop-portal-gtk, gnome-keyring, libpam-gnome-keyring, gvfs, gvfs-backends, gvfs-fuse, polkitd, policykit-1-gnome, thunar, zsh, direnv, fonts-jetbrains-mono
 Description: Mytical desktop system metapackage
  Pulls the APT-owned base of the Mytical desktop: login, ports, audio,
  network, keyring, file manager and fonts. The Hyprland/Kitty layer is Nix

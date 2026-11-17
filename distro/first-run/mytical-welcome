@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+"""Primer arranque de Mytical.
+
+TUI mínima y sin dependencias: verifica el sistema, elige un wallpaper y
+explica la separación APT/Nix. No necesita root y no ejecuta autoremove.
+"""
+
+import json
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+STATE = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "mytical" / "first-run.json"
+
+
+def have(cmd):
+    if shutil.which(cmd):
+        return True
+    home = Path.home()
+    extra = {
+        "nix": [Path("/nix/var/nix/profiles/default/bin/nix"), home / ".nix-profile/bin/nix"],
+        "home-manager": [home / ".nix-profile/bin/home-manager"],
+        "wallpaper": [home / ".local/bin/wallpaper", home / ".nix-profile/bin/wallpaper"],
+        "hyprctl": [home / ".nix-profile/bin/hyprctl"],
+        "kitty": [home / ".nix-profile/bin/kitty"],
+        "sddm": [Path("/usr/sbin/sddm"), Path("/usr/bin/sddm")],
+    }
+    return any(p.is_file() and os.access(p, os.X_OK) for p in extra.get(cmd, []))
+
+
+def check():
+    checks = {
+        "python3": have("python3"),
+        "nix": have("nix"),
+        "home-manager": have("home-manager"),
+        "hyprctl": have("hyprctl"),
+        "kitty": have("kitty"),
+        "sddm": have("sddm"),
+        "wallpaper": have("wallpaper"),
+    }
+    for name, ok in checks.items():
+        print(("  OK   " if ok else "  FALTA") + " " + name)
+    return checks
+
+
+def wallpapers():
+    root = Path.home() / "Pictures" / "Wallpapers"
+    return sorted(root.glob("*.png")) + sorted(root.glob("*.jpg")) + sorted(root.glob("*.jpeg"))
+
+
+def choose():
+    items = wallpapers()
+    if not items:
+        print("No hay wallpapers en ~/Pictures/Wallpapers.")
+        return None
+    print("\nWallpapers disponibles:")
+    for i, item in enumerate(items, 1):
+        print("  %d. %s" % (i, item.name))
+    print("  0. dejar el actual")
+    try:
+        value = input("\nElegí uno: ").strip()
+    except EOFError:
+        return None
+    if value in ("", "0"):
+        return None
+    try:
+        return items[int(value) - 1]
+    except (ValueError, IndexError):
+        print("Opción inválida.")
+        return None
+
+
+def save(data):
+    STATE.parent.mkdir(parents=True, exist_ok=True)
+    STATE.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def main():
+    check_only = "--check" in sys.argv
+    print("Mytical — primer arranque\n")
+    checks = check()
+    if check_only:
+        return 0 if checks["python3"] else 1
+    current = {}
+    if STATE.exists():
+        try:
+            current = json.loads(STATE.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            current = {}
+    if not current.get("completed"):
+        print("\nAPT instala el sistema, kernel, drivers y seguridad.")
+        print("Nix fija Hyprland, Waybar, Quickshell, Kitty y tus apps de usuario.")
+        print("No hay GNOME ni sesión Ubuntu: SDDM solo ofrece Mytical.\n")
+        chosen = choose()
+        if chosen and have("wallpaper"):
+            subprocess.run(["wallpaper", "set", str(chosen)], check=False)
+            current["wallpaper"] = str(chosen)
+        current["completed"] = True
+        current["apt"] = have("apt-get")
+        current["nix"] = have("nix")
+        save(current)
+        print("\nListo. Podés volver a abrir esta guía con `mytical-welcome`.")
+    else:
+        print("\nPrimer arranque ya completado. Usá `mytical-welcome --check` para revisar.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

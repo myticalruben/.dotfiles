@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Mytical Welcome
+Comment=Primer arranque y guía de Mytical
+Exec=mytical-welcome
+Icon=system-help
+Terminal=true
+Type=Application
+Categories=System;

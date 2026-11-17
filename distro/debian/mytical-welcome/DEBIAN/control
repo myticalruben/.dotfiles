@@ -1,0 +1,10 @@
+Package: mytical-welcome
+Version: 0.1.0-1~resolute1
+Section: misc
+Priority: optional
+Architecture: all
+Maintainer: Mytical <dev@mytical.invalid>
+Depends: python3
+Description: Mytical first-run guide
+ Small TUI that checks the Mytical stack, explains the APT/Nix split and
+ lets the user pick a wallpaper on first login. No root, no telemetry.

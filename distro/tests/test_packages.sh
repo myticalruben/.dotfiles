@@ -12,3 +12,6 @@ if printf '%s\n' "$depends" | grep -Eq 'gnome-shell|ubuntu-session|gdm3'; then
     echo "dependencia GNOME prohibida" >&2; exit 1
 fi
 echo "OK: paquete mytical-session"
+[ -f "$root/distro/build/mytical-welcome_0.1.0-1~resolute1_all.deb" ] || { echo "falta mytical-welcome" >&2; exit 1; }
+dpkg-deb -c "$root/distro/build/mytical-welcome_0.1.0-1~resolute1_all.deb" | grep -q usr/bin/mytical-welcome
+echo "OK: paquete mytical-welcome"
