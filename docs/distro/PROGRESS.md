@@ -84,3 +84,10 @@
 - Se retiraron `thunar` y `networkmanagerapplet` del perfil Nix para no duplicar
   binarios ni entradas de lanzador.
 - zsh de login sigue Nix en la Preview; en la ISO será del sistema (ADR 0002).
+
+## 2026-11-17 — mytical-welcome
+
+- Paquete `mytical-welcome` construido, instalado y verificado en la VM.
+- `mytical-welcome --check`: python3, nix, home-manager, hyprctl, kitty,
+  sddm y wallpaper en OK.
+- La guía explica APT/Nix y permite elegir wallpaper sin root.
