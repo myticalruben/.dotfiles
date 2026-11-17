@@ -97,3 +97,8 @@
 - Cuatro wallpapers originales CC0 en `distro/branding/wallpapers/`.
 - Los wallpapers personales quedan fuera de la distribución.
 - Licencia raíz del código sigue pendiente de decisión.
+
+## 2026-11-17 — Licencia raíz
+
+- ADR 0008 deja la licencia raíz como decisión pendiente; bloquea publicación,
+  no las pruebas locales.
