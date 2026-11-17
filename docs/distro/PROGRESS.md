@@ -21,3 +21,8 @@
 - Tests de paquete y de ownership pasan.
 - La VM 10.0.0.146 no estaba accesible al intentar instalar el paquete; queda
   pendiente el smoke test de instalación.
+
+## 2026-11-17 — Atajo de captura
+
+- `SUPER+O` ya no depende de `hyprshot` (no empaquetado): usa `grim` + `slurp`.
+- Se retiró `hyprshot` de la matriz de propiedad hasta empaquetarlo.

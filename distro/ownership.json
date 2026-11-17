@@ -26,8 +26,6 @@
   "nix": [
     "hyprland",
     "hyprlock",
-    "hypridle",
-    "hyprshot",
     "waybar",
     "quickshell",
     "rofi",

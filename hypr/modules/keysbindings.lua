@@ -6,7 +6,7 @@ local home = os.getenv("HOME")
 local mod         = "SUPER"
 local terminal    = "kitty"
 local fileManager = "thunar"
-local hyprshot    = "hyprshot -m region"
+local screenshot  = "grim -g \"$(slurp)\" \"$HOME/Pictures/$(date +%s).png\""
 local menu        = "rofi -show drun"
 -- The apt package installs "brave-browser", the AUR one installs "brave", so
 -- neither name is portable. Pick the first that actually exists on this box.
@@ -31,7 +31,7 @@ end
 local browser = first_available("brave", "brave-browser", "firefox")
 
 hl.bind(mod .. " + return"              , hl.dsp.exec_cmd(terminal))
-hl.bind(mod .. " + o"                   , hl.dsp.exec_cmd(hyprshot))
+hl.bind(mod .. " + o"                   , hl.dsp.exec_cmd(screenshot))
 hl.bind(mod .. " + E"                   , hl.dsp.exec_cmd(fileManager))
 hl.bind(mod .. " + Tab"					, hl.dsp.exec_cmd("hyprlock"))
 hl.bind(mod .. " + GRAVE"				, hl.dsp.exec_cmd("wlogout -b 5 -c 20 -r 20 -n"))
