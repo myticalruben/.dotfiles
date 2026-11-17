@@ -4,9 +4,10 @@
   Se conserva su LICENSE y se distribuye la fuente en este repositorio.
 - Tipografía Audiowide, SIL Open Font License 1.1; ver
   `ubuntu/plymouth/fonts/OFL.txt`.
-- Animación de Plymouth basada en CachyOS/plymouth-theme; se debe verificar y
-  conservar la licencia upstream antes de publicar una ISO.
-- Wallpapers e iconos de wlogout: procedencia pendiente de auditoría.
+- Animación de Plymouth propia; los throbbers fueron regenerados y ya no son
+  copias de CachyOS.
+- Iconos de wlogout propios; los wallpapers personales no se distribuyen.
 - Ubuntu es una marca de Canonical. Mytical se declara basada en Ubuntu, no
   afiliada ni oficial.
-- La licencia raíz del código de Mytical está pendiente de decisión legal.
+- El código propio de Mytical se distribuye bajo GPL-3.0-or-later; ver LICENSE
+  y COPYRIGHT.

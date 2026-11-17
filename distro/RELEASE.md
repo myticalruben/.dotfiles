@@ -34,6 +34,5 @@ mytical-welcome --check
 
 ## Publicación
 
-No publicar hasta que `docs/adr/0008-license-pending.md` esté aceptado, el repo
-APT tenga clave de producción y `docs/distro/ASSET-LICENSES.md` no tenga P0
-abiertos.
+La licencia raíz ya está aceptada (GPL-3.0-or-later). Antes de publicar faltan
+la clave APT de producción y la revisión final de assets.

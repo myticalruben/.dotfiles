@@ -246,3 +246,9 @@ El resto lo cubre [`.github/workflows/check.yml`](.github/workflows/check.yml):
 
 Los comentarios dentro del código siguen en inglés, que es el idioma de los
 proyectos que configuran; esta documentación está en español.
+
+## Licencia
+
+El código propio de Mytical se distribuye bajo **GPL-3.0-or-later**. Ver
+`LICENSE`, `COPYRIGHT` y `THIRD_PARTY_NOTICES`. Los assets de terceros conservan
+sus licencias originales.

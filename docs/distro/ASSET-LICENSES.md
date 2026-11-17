@@ -420,3 +420,9 @@ c7c0f2b0f6fad8c623e31772ce79f94a4edb9321ffce9fce978ea892d20ae730  ubuntu/plymout
   proyecto y dedicado a CC0-1.0.
 - Los 22 wallpapers personales de `Wallpapers/` quedan excluidos de la ISO y
   de los paquetes hasta acreditar autoría/licencia.
+
+## Resolución de licencia raíz — 2026-11-17
+
+El código propio queda bajo GPL-3.0-or-later (`LICENSE`, `COPYRIGHT`). Los
+assets de terceros conservan GPL/OFL; los generados son CC0. Queda pendiente la
+clave APT de producción, no la licencia.

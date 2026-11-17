@@ -15,7 +15,7 @@
 
 ### Limitaciones conocidas
 
-- La licencia raíz está pendiente (ADR 0008); no publicar ISO.
+- Licencia raíz: GPL-3.0-or-later (ADR 0008).
 - Los wallpapers personales no se distribuyen.
 - La ISO V1.1 queda fuera de esta entrega.
 - El repo APT usa una clave efímera en tests; producción requiere clave real.

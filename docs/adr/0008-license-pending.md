@@ -1,6 +1,6 @@
 # ADR 0008 — Licencia raíz pendiente
 
-**Estado:** propuesto (2026-11-17)
+**Estado:** aceptado (2026-11-17) — GPL-3.0-or-later
 
 ## Contexto
 
@@ -20,13 +20,13 @@ para el código de Mytical.
 
 ## Decisión
 
-Pendiente de aprobación del owner. Hasta entonces:
-
-- no se publica una ISO;
-- no se elimina la obligación de incluir `LICENSE` y `THIRD_PARTY_NOTICES`;
-- los assets propios se identifican como CC0 en `distro/branding/LICENSES.md`.
+El código propio se distribuye bajo **GPL-3.0-or-later**. Los assets de terceros
+mantienen sus licencias: el tema SDDM sigue en GPL-3.0-or-later, Audiowide en
+OFL-1.1 y los assets generados por el proyecto se dedican a CC0-1.0.
 
 ## Consecuencias
 
-La V1.0 puede probarse localmente, pero la distribución pública queda bloqueada
-hasta que se acepte una de las opciones 1 o 2.
+- `LICENSE` y `COPYRIGHT` están en la raíz.
+- `THIRD_PARTY_NOTICES` y `distro/branding/LICENSES.md` conservan la autoría.
+- La licencia ya no bloquea la publicación; quedan la clave APT de producción y
+  la verificación final de assets.

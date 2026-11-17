@@ -133,3 +133,9 @@
 
 - `CHANGELOG.md` y `distro/RELEASE.md` con build, instalación, verificación y
   límites de publicación.
+
+## 2026-11-17 — Licencia aceptada
+
+- El owner eligió GPL-3.0-or-later.
+- Añadidos LICENSE y COPYRIGHT; ADR 0008 aceptado.
+- Actualizados avisos, changelog y guía de release.
