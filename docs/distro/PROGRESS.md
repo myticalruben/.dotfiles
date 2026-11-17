@@ -122,3 +122,9 @@
 
 - `session-start` abre `mytical-welcome` en Kitty si no existe
   `~/.config/mytical/first-run.json`; no se repite tras completarlo.
+
+## 2026-11-17 — First-run en vivo
+
+- Kitty 0.49 rechazaba `globinclude`; se cambió a `include` y se añadió test.
+- `mytical-welcome` arrancó en Kitty en el primer login y mostró la guía.
+- Sesión de prueba cerrada; SDDM volvió al login normal.

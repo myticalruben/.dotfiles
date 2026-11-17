@@ -264,6 +264,11 @@ class KittyThemeTest(unittest.TestCase):
             self.assertEqual(theme["cursor"], PALETTE_B["neon_accent1"])
             self.assertEqual(theme["selection_background"], PALETTE_B["neon_accent2"])
 
+    def test_kitty_conf_uses_supported_include(self):
+        text = (ROOT / "kitty" / "kitty.conf").read_text(encoding="utf-8")
+        self.assertNotIn("globinclude", text)
+        self.assertIn("include ~/.cache/kitty/neon.conf", text)
+
 
 if __name__ == "__main__":
     unittest.main()
