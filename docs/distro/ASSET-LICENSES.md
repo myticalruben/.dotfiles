@@ -404,3 +404,12 @@ c7c0f2b0f6fad8c623e31772ce79f94a4edb9321ffce9fce978ea892d20ae730  ubuntu/plymout
   creado es este documento.
 - Las URLs de upstream se citan como evidencia, no como concesión de licencia.
   La ausencia de `LICENSE` en un repo no se interpreta como permiso.
+
+## Resolución parcial — 2026-11-17
+
+- Los **41 throbbers de Plymouth** fueron reemplazados por una animación de anillo
+  generada por el proyecto; ya no son blobs de CachyOS.
+- Los **5 iconos de wlogout** fueron reemplazados por dibujos line-art generados
+  con ImageMagick por el proyecto.
+- Siguen pendientes: wallpapers sin procedencia, licencia raíz y revisión de la
+  configuración Plymouth derivada.

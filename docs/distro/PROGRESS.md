@@ -71,3 +71,9 @@
   quedaron activos, wallpaper restaurado e hypridle en ejecución.
 - `grim` confirmó 1280x800 y la sesión completa.
 - Autologin retirado y SDDM vuelto a dejar en el login normal.
+
+## 2026-11-17 — Assets propios
+
+- Reemplazados los 41 throbbers de CachyOS por un anillo animado propio.
+- Reemplazados los 5 iconos de wlogout por line-art propio.
+- Los wallpapers y la licencia raíz siguen bloqueando la publicación.
