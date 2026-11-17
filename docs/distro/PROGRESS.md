@@ -109,3 +109,11 @@
   `--force-confold`, no ejecuta autoremove y deja Nix/Home Manager como paso
   separado.
 - Dry-run verificado en la VM: encuentra session, welcome y desktop.
+
+## 2026-11-17 — Instalador real
+
+- `install-overlay.sh` ejecutado como root en la VM con los tres `.deb`.
+- Reinstalación idempotente de `mytical-desktop` y resolución de dependencias OK.
+- SDDM activo, solo `mytical.desktop`; los tres paquetes `install ok installed`.
+- `mytical-welcome --check`: python3, nix, home-manager, hyprctl, kitty, sddm
+  y wallpaper OK.
