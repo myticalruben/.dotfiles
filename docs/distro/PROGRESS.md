@@ -38,3 +38,11 @@
 
 - 7 tests de paleta, fallback y cache.
 - Corregido color8 para usar `neon_muted` de la paleta.
+
+## 2026-11-17 — Repo APT
+
+- `distro/apt/Makefile` construye, firma y prueba un repo local con
+  `apt-ftparchive` y GnuPG.
+- Test real: `apt-get update` en un root temporal resuelve `mytical-session`
+  y descarga un `.deb` idéntico.
+- `distro/apt/public/` queda ignorado.
