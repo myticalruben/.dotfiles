@@ -278,6 +278,7 @@ in
     "wlogout".source = link "wlogout";
     "quickshell".source = link "quickshell";
     "gtk-theme".source = link "gtk";
+    "kitty".source = link "kitty";
     "btop/btop.conf".text = builtins.readFile ../btop/btop.conf;
     "btop-theme".source = link "btop";
   };

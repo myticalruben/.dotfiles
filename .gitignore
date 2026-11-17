@@ -11,3 +11,6 @@ btop/btop.log
 
 # graphify genera un grafo enorme y dependiente de la máquina; no es fuente.
 graphify-out/
+
+# Paquetes generados
+distro/build/

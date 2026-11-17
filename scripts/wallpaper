@@ -55,6 +55,11 @@ apply_btop_theme() {
     [ -x "$script" ] && "$script" "$1" >/dev/null 2>&1 || true
 }
 
+apply_kitty_theme() {
+    local script="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/theme.sh"
+    [ -x "$script" ] && "$script" "$1" >/dev/null 2>&1 || true
+}
+
 # awww-daemon se lanza en el mismo bloque de arranque que esto, así que cuando
 # `restore` corre todavía puede no aceptar conexiones. Antes había un `sleep 1`
 # a ojo; esto espera a que el demonio responda de verdad, y como mucho 10 s.
@@ -76,6 +81,7 @@ case "${1:-}" in
         apply_theme "$path"
         apply_gtk_theme "$path"
         apply_btop_theme "$path"
+        apply_kitty_theme "$path"
         ;;
 
     restore)
@@ -98,6 +104,7 @@ case "${1:-}" in
         apply_theme "$path"
         apply_gtk_theme "$path"
         apply_btop_theme "$path"
+        apply_kitty_theme "$path"
         ;;
 
     *)

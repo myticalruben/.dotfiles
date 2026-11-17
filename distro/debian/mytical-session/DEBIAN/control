@@ -1,0 +1,13 @@
+Package: mytical-session
+Version: 0.1.0-1~resolute1
+Section: x11
+Priority: optional
+Architecture: all
+Maintainer: Mytical <dev@mytical.invalid>
+Depends: sddm, xserver-xorg, xdg-desktop-portal-hyprland, xdg-desktop-portal-gtk, gnome-keyring, gvfs, polkitd
+Conflicts: ubuntu-session, gdm3
+Description: Mytical Hyprland session entry and wrapper
+ Installs the single Mytical Wayland session, its /usr/bin wrapper and
+ SDDM's session/theme configuration. It does not ship a compositor: in the
+ Preview the wrapper finds Hyprland in the Nix profile; in the ISO it finds
+ the APT package.

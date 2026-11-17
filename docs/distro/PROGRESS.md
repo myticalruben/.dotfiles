@@ -10,3 +10,14 @@
   `gtk-theme`, `btop-theme`, `btop.conf` y `Pictures/Wallpapers`.
 - Pendiente P0: licencia raíz, ramas, graphify tracking, `hyprshot`,
   `hypridle`, tests de `utils.py`, paquetes `mytical-*`.
+
+## 2026-11-17 — Paquetes y Kitty
+
+- Creado `kitty/kitty.conf` + `kitty/theme.py` + `kitty/theme.sh`; la paleta
+  se regenera con el wallpaper y `scripts/wallpaper` la aplica.
+- Creados `mytical-session` y `mytical-desktop` con `dpkg-deb` (sin debhelper).
+- `mytical-session` instala el wrapper `/usr/bin/mytical-session`, la sesión
+  única y la configuración de SDDM.
+- Tests de paquete y de ownership pasan.
+- La VM 10.0.0.146 no estaba accesible al intentar instalar el paquete; queda
+  pendiente el smoke test de instalación.

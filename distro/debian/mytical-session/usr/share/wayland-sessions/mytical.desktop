@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Mytical
+Comment=Hyprland session for Mytical
+Exec=/usr/bin/mytical-session
+TryExec=/usr/bin/mytical-session
+Type=Application
+DesktopNames=Hyprland

@@ -1,0 +1,26 @@
+#!/bin/sh
+# Mytical session wrapper. ADR 0006: the greeter must not depend on
+# ~/.nix-profile directly; this wrapper decides which Hyprland to launch.
+set -eu
+
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin${PATH:+:$PATH}"
+export PATH
+if [ -d "$HOME/.nix-profile/bin" ]; then
+    PATH="$HOME/.nix-profile/bin:$PATH"
+    export PATH
+fi
+
+# Preview: Home Manager installs this wrapper in the user's Nix profile.
+if [ -x "$HOME/.nix-profile/bin/hyprland-session" ]; then
+    exec "$HOME/.nix-profile/bin/hyprland-session"
+fi
+# ISO: APT owns the compositor.
+if command -v Hyprland >/dev/null 2>&1; then
+    exec Hyprland
+fi
+if command -v start-hyprland >/dev/null 2>&1; then
+    exec start-hyprland --no-nixgl
+fi
+
+printf 'Mytical: no se encontro Hyprland ni hyprland-session en PATH\n' >&2
+exit 1
