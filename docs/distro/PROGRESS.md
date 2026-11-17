@@ -63,3 +63,11 @@
 - Fijado `gtk.gtk4.theme` para conservar el comportamiento legacy sin warning.
 - La auditoría legal mantiene bloqueada la publicación de la ISO hasta resolver
   assets P0.
+
+## 2026-11-17 — Smoke real de sesión
+
+- Perfil Nix 26.05 activado en la VM (`Hyprland 0.55.4`).
+- Autologin temporal de SDDM a `mytical`: Hyprland arrancó, Waybar y dunst
+  quedaron activos, wallpaper restaurado e hypridle en ejecución.
+- `grim` confirmó 1280x800 y la sesión completa.
+- Autologin retirado y SDDM vuelto a dejar en el login normal.
