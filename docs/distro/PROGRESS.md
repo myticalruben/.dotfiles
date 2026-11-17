@@ -117,3 +117,8 @@
 - SDDM activo, solo `mytical.desktop`; los tres paquetes `install ok installed`.
 - `mytical-welcome --check`: python3, nix, home-manager, hyprctl, kitty, sddm
   y wallpaper OK.
+
+## 2026-11-17 — Primer arranque automático
+
+- `session-start` abre `mytical-welcome` en Kitty si no existe
+  `~/.config/mytical/first-run.json`; no se repite tras completarlo.

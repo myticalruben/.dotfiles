@@ -22,5 +22,12 @@ waybar="${XDG_CONFIG_HOME:-$HOME/.config}/waybar/scripts/launch-waybar.sh"
 
 dunst >/dev/null 2>&1 &
 nm-applet >/dev/null 2>&1 &
+
+# Primer arranque: una sola vez, en Kitty. Si el usuario cierra sin completar,
+# el marcador no existe y se vuelve a ofrecer en el próximo login.
+welcome_state="${XDG_CONFIG_HOME:-$HOME/.config}/mytical/first-run.json"
+if [ ! -f "$welcome_state" ] && command -v mytical-welcome >/dev/null 2>&1; then
+    kitty --title "Mytical - Primer arranque" -e mytical-welcome >/dev/null 2>&1 &
+fi
 wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
 wl-paste --type image --watch cliphist store >/dev/null 2>&1 &
