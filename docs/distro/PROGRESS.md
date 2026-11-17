@@ -46,3 +46,10 @@
 - Test real: `apt-get update` en un root temporal resuelve `mytical-session`
   y descarga un `.deb` idéntico.
 - `distro/apt/public/` queda ignorado.
+
+## 2026-11-17 — Nix 26.05 y auditoría legal
+
+- `flake.nix` fijado a `nixos-26.05` y Home Manager `release-26.05`.
+- `flake.lock` actualizado desde la VM.
+- Auditoría de assets en `docs/distro/ASSET-LICENSES.md`; la ISO no es publicable
+  hasta resolver throbbers CachyOS, wallpapers, iconos wlogout y licencia raíz.
