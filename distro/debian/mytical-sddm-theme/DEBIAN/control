@@ -1,0 +1,11 @@
+Package: mytical-sddm-theme
+Version: 0.1.0-1~resolute1
+Section: x11
+Priority: optional
+Architecture: all
+Maintainer: Mytical <dev@mytical.invalid>
+Depends: sddm, qml6-module-qtquick, qml6-module-qtquick-controls, qml6-module-qtquick-layouts, qml6-module-qtquick-effects, qml6-module-qtmultimedia, qml6-module-qtquick-templates, qml6-module-qtquick-window, fonts-open-sans
+Description: Mytical SDDM theme
+ Astronaut-derived SDDM theme for Mytical, with Mytical colors, a default
+ CC0 background and the QML dependencies SDDM needs. The theme is installed
+ under /usr/share/sddm/themes/mytical and owned by root.

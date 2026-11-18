@@ -15,3 +15,8 @@ echo "OK: paquete mytical-session"
 [ -f "$root/distro/build/mytical-welcome_0.1.0-1~resolute1_all.deb" ] || { echo "falta mytical-welcome" >&2; exit 1; }
 dpkg-deb -c "$root/distro/build/mytical-welcome_0.1.0-1~resolute1_all.deb" | grep -q usr/bin/mytical-welcome
 echo "OK: paquete mytical-welcome"
+theme_deb="$root/distro/build/mytical-sddm-theme_0.1.0-1~resolute1_all.deb"
+[ -f "$theme_deb" ] || { echo "falta mytical-sddm-theme" >&2; exit 1; }
+dpkg-deb -c "$theme_deb" | grep -q usr/share/sddm/themes/mytical/Main.qml
+dpkg-deb -c "$theme_deb" | grep -q usr/share/sddm/themes/mytical/Backgrounds/wallpaper
+echo "OK: paquete mytical-sddm-theme"

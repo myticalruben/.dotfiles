@@ -1,4 +1,4 @@
-PACKAGES := mytical-session mytical-welcome mytical-desktop
+PACKAGES := mytical-sddm-theme mytical-session mytical-welcome mytical-desktop
 BUILD := build
 
 .PHONY: packages test clean

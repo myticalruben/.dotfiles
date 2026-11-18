@@ -28,7 +28,7 @@ done
 [ "${ID:-}" = ubuntu ] || die "este overlay asume Ubuntu"
 [ "${VERSION_ID:-}" = "26.04" ] || die "este overlay asume Ubuntu 26.04 (encontrado ${VERSION_ID:-?})"
 
-packages=(mytical-session mytical-welcome mytical-desktop)
+packages=(mytical-sddm-theme mytical-session mytical-welcome mytical-desktop)
 for package in "${packages[@]}"; do
     deb=$(find "$build" -maxdepth 1 -name "${package}_*.deb" -print -quit)
     [ -n "$deb" ] || die "falta el .deb de $package en $build"

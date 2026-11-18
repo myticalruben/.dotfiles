@@ -139,3 +139,10 @@
 - El owner eligió GPL-3.0-or-later.
 - Añadidos LICENSE y COPYRIGHT; ADR 0008 aceptado.
 - Actualizados avisos, changelog y guía de release.
+
+## 2026-11-17 — Tema SDDM faltante
+
+- La máquina nueva 10.0.0.154 no tenía `/usr/share/sddm/themes`; el paquete
+  `mytical-session` solo escribía `Current=mytical`, no instalaba el tema.
+- Añadido `mytical-sddm-theme` con tema, fondo CC0 y dependencias QML.
+- `mytical-session` ahora depende del tema; `install-overlay` lo instala primero.
